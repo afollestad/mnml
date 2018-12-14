@@ -17,45 +17,33 @@ package com.afollestad.mnmlscreenrecord.engine.loader
 
 import android.annotation.SuppressLint
 import android.app.Application
-import androidx.lifecycle.Lifecycle.Event.ON_START
-import androidx.lifecycle.Lifecycle.Event.ON_STOP
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
 import com.afollestad.rxkprefs.Pref
 import java.io.File
 
 const val VIDEOS_URI = "content://media/external/video/media"
 
+interface RecordingManager {
+
+  fun getRecordings(): List<Recording>
+
+  fun deleteRecording(recording: Recording)
+}
+
 /**
- * Handles loading recordings from the [recordingsFolderPref] folder.
+ * Handles loading and deleting recordings from the [recordingsFolderPref] folder.
  *
  * @author Aidan Follestad (@afollestad)
  */
-class RecordingQueryer(
+class RealRecordingManager(
   app: Application,
   private val recordingsFolderPref: Pref<String>
-) : LifecycleObserver {
+) : RecordingManager {
 
-  private var isStarted = false
   private val contentResolver = app.contentResolver
 
-  @OnLifecycleEvent(ON_START)
-  fun onStart() {
-    isStarted = true
-  }
-
-  @OnLifecycleEvent(ON_STOP)
-  fun onStop() {
-    isStarted = false
-  }
-
   @SuppressLint("Recycle")
-  fun queryRecordings(): List<Recording> {
-    if (!isStarted) {
-      return emptyList()
-    }
-
+  override fun getRecordings(): List<Recording> {
     val folder = File(recordingsFolderPref.get())
     val cursor = contentResolver.query(
         VIDEOS_URI.toUri(), // uri
@@ -69,13 +57,15 @@ class RecordingQueryer(
       return mutableListOf<Recording>().also { list ->
         if (it.moveToFirst()) {
           do {
-            if (!isStarted) {
-              break
-            }
             list.add(Recording.pull(it))
           } while (cursor.moveToNext())
         }
       }
     }
+  }
+
+  override fun deleteRecording(recording: Recording) {
+    File(recording.path).delete()
+    contentResolver.delete(recording.toUri(), null, null)
   }
 }

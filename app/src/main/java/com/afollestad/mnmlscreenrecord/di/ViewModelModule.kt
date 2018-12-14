@@ -13,30 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.afollestad.mnmlscreenrecord.common
+package com.afollestad.mnmlscreenrecord.di
 
 import com.afollestad.mnmlscreenrecord.common.Qualifiers.IO_DISPATCHER
 import com.afollestad.mnmlscreenrecord.common.Qualifiers.MAIN_DISPATCHER
-import com.afollestad.mnmlscreenrecord.common.files.FileScanner
-import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
-import com.afollestad.mnmlscreenrecord.common.permissions.RealPermissionChecker
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import com.afollestad.mnmlscreenrecord.ui.main.MainViewModel
+import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
-object Qualifiers {
-  const val MAIN_DISPATCHER = "main_dispatcher"
-  const val IO_DISPATCHER = "io_dispatcher"
-}
-
 /** @author Aidan Follestad (@afollestad) */
-val commonModule = module {
+val viewModelModule = module {
 
-  factory<CoroutineDispatcher>(name = MAIN_DISPATCHER) { Dispatchers.Main }
-
-  factory(name = IO_DISPATCHER) { Dispatchers.IO }
-
-  single { FileScanner(get()) }
-
-  factory { RealPermissionChecker(get()) } bind PermissionChecker::class
+  viewModel {
+    MainViewModel(
+        get(name = MAIN_DISPATCHER),
+        get(name = IO_DISPATCHER),
+        get(),
+        get(),
+        get(),
+        get(),
+        get(),
+        get()
+    )
+  }
 }

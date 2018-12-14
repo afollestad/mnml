@@ -21,6 +21,8 @@ import android.app.Application
 import com.afollestad.mnmlscreenrecord.BuildConfig.DEBUG
 import com.afollestad.mnmlscreenrecord.common.commonModule
 import com.afollestad.mnmlscreenrecord.common.prefModule
+import com.afollestad.mnmlscreenrecord.di.mainModule
+import com.afollestad.mnmlscreenrecord.di.viewModelModule
 import com.afollestad.mnmlscreenrecord.engine.engineModule
 import com.afollestad.mnmlscreenrecord.notifications.notificationsModule
 import org.koin.android.ext.android.startKoin
@@ -38,15 +40,16 @@ class MnmlApp : Application() {
     }
 
     val modules = listOf(
-      commonModule,
-      notificationsModule,
-      prefModule,
-      engineModule,
-      mainModule
+        commonModule,
+        notificationsModule,
+        prefModule,
+        engineModule,
+        mainModule,
+        viewModelModule
     )
     startKoin(
-      androidContext = this,
-      modules = modules
+        androidContext = this,
+        modules = modules
     )
   }
 }

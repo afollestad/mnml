@@ -27,7 +27,7 @@ import timber.log.Timber.d as log
 abstract class DarkModeSwitchActivity : AppCompatActivity() {
 
   private var isDark: Boolean = false
-  protected val darkModePref by inject<Pref<Boolean>>(name = PREF_DARK_MODE)
+  private val darkModePref by inject<Pref<Boolean>>(name = PREF_DARK_MODE)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     isDark = darkModePref.get()
@@ -42,6 +42,12 @@ abstract class DarkModeSwitchActivity : AppCompatActivity() {
         }
         .attachLifecycle(this)
   }
+
+  fun setDarkMode(dark: Boolean) = darkModePref.set(dark)
+
+  fun isDarkMode() = darkModePref.get()
+
+  fun toggleDarkMode() = setDarkMode(!isDarkMode())
 
   private fun themeRes() = if (darkModePref.get()) {
     R.style.AppTheme_Dark

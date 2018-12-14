@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.afollestad.mnmlscreenrecord
+package com.afollestad.mnmlscreenrecord.di
 
 import com.afollestad.mnmlscreenrecord.engine.service.BackgroundService.Companion.MAIN_ACTIVITY_CLASS
 import com.afollestad.mnmlscreenrecord.ui.main.MainActivity

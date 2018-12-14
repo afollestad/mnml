@@ -26,8 +26,11 @@ import com.afollestad.mnmlscreenrecord.common.misc.systemService
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
-import com.afollestad.mnmlscreenrecord.engine.loader.RecordingQueryer
+import com.afollestad.mnmlscreenrecord.engine.loader.RealRecordingManager
+import com.afollestad.mnmlscreenrecord.engine.loader.RecordingManager
 import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
+import com.afollestad.mnmlscreenrecord.engine.service.RealServiceController
+import com.afollestad.mnmlscreenrecord.engine.service.ServiceController
 import org.koin.dsl.module.module
 
 /** @author Aidan Follestad (@afollestad) */
@@ -46,9 +49,13 @@ val engineModule = module {
     get<Application>().systemService(MEDIA_PROJECTION_SERVICE)
   }
 
-  factory { RecordingQueryer(get(), get(name = PREF_RECORDINGS_FOLDER)) }
+  factory {
+    RealRecordingManager(get(), get(name = PREF_RECORDINGS_FOLDER))
+  } bind RecordingManager::class
 
   single { CaptureEngine(get(), get(), get(name = PREF_RECORDINGS_FOLDER)) }
 
   factory { OverlayManager(get(), get(), get(name = PREF_COUNTDOWN)) }
+
+  factory { RealServiceController(get()) } bind ServiceController::class
 }

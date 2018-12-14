@@ -29,12 +29,12 @@ class SettingsActivity : DarkModeSwitchActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_settings)
     toolbarTitle.setText(R.string.settings)
-    if (!darkModePref.get()) {
+    if (!isDarkMode()) {
       appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
     }
 
     toolbar.setNavigationIcon(
-        if (darkModePref.get()) {
+        if (isDarkMode()) {
           R.drawable.ic_back_darktheme
         } else {
           R.drawable.ic_back_lighttheme
