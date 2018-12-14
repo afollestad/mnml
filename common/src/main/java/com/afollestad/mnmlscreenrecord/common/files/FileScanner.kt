@@ -30,8 +30,13 @@ class FileScanner(private val app: Application) {
 
   private var onScanSubject = PublishSubject.create<Uri>()
 
+  /** A global callback observable that emits whenever a file is scanned. */
   fun onScan(): Observable<Uri> = onScanSubject
 
+  /**
+   * Tells the system to scan a file and add it to the media content provider, optionally
+   * invoking a callback when it's finished.
+   */
   fun scan(
     file: File,
     cb: UriCallback = null

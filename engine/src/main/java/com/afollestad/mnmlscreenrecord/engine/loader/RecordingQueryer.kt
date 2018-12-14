@@ -27,13 +27,17 @@ import java.io.File
 
 const val VIDEOS_URI = "content://media/external/video/media"
 
+/**
+ * Handles loading recordings from the [recordingsFolderPref] folder.
+ *
+ * @author Aidan Follestad (@afollestad)
+ */
 class RecordingQueryer(
   app: Application,
   private val recordingsFolderPref: Pref<String>
 ) : LifecycleObserver {
 
   private var isStarted = false
-  private var isQuerying = false
   private val contentResolver = app.contentResolver
 
   @OnLifecycleEvent(ON_START)
@@ -51,7 +55,6 @@ class RecordingQueryer(
     if (!isStarted) {
       return emptyList()
     }
-    isQuerying = true
 
     val folder = File(recordingsFolderPref.get())
     val cursor = contentResolver.query(
@@ -72,10 +75,7 @@ class RecordingQueryer(
             list.add(Recording.pull(it))
           } while (cursor.moveToNext())
         }
-        isQuerying = false
       }
     }
   }
-
-  fun isQuerying() = isQuerying
 }

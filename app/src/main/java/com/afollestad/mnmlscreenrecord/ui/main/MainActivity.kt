@@ -33,6 +33,7 @@ import com.afollestad.mnmlscreenrecord.common.files.FileScanner
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
 import com.afollestad.mnmlscreenrecord.common.misc.toast
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
+import com.afollestad.mnmlscreenrecord.common.view.onDebouncedClick
 import com.afollestad.mnmlscreenrecord.common.view.onScroll
 import com.afollestad.mnmlscreenrecord.common.view.scopeWhileAttached
 import com.afollestad.mnmlscreenrecord.common.view.showOrHide
@@ -158,7 +159,7 @@ class MainActivity : DarkModeSwitchActivity() {
   }
 
   private fun setupFab() {
-    fab.setOnClickListener {
+    fab.onDebouncedClick {
       if (captureEngine.isStarted()) {
         sendBroadcast(Intent(STOP_ACTION).apply {
           putExtra(EXTRA_STOP_FOREGROUND, true)

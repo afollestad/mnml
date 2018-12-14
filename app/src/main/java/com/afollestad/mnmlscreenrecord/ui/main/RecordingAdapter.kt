@@ -18,11 +18,11 @@ package com.afollestad.mnmlscreenrecord.ui.main
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.mnmlscreenrecord.R
+import com.afollestad.mnmlscreenrecord.common.view.onDebouncedClick
 import com.afollestad.mnmlscreenrecord.engine.loader.Recording
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -33,9 +33,7 @@ import kotlinx.android.synthetic.main.list_item_recording.view.thumbnail
 class RecordingViewHolder(
   itemView: View,
   private val adapter: RecordingAdapter
-) : RecyclerView.ViewHolder(itemView), OnClickListener, OnLongClickListener {
-
-  override fun onClick(v: View) = adapter.itemClicked(adapterPosition, false)
+) : RecyclerView.ViewHolder(itemView), OnLongClickListener {
 
   override fun onLongClick(v: View?): Boolean {
     adapter.itemClicked(adapterPosition, true)
@@ -43,10 +41,13 @@ class RecordingViewHolder(
   }
 
   init {
-    itemView.setOnClickListener(this)
+    itemView.onDebouncedClick { adapter.itemClicked(adapterPosition, false) }
     itemView.setOnLongClickListener(this)
   }
 
+  /**
+   * Binds a recording to this list item's view.
+   */
   @SuppressLint("SetTextI18n")
   fun bind(recording: Recording) {
     Glide.with(itemView.thumbnail)
@@ -66,12 +67,12 @@ class RecordingAdapter(
 
   private var recordings = mutableListOf<Recording>()
 
-  fun itemClicked(
+  internal fun itemClicked(
     position: Int,
     long: Boolean
   ) = onClick(recordings[position], long)
 
-  fun set(recordings: List<Recording>) {
+  internal fun set(recordings: List<Recording>) {
     this.recordings = recordings.toMutableList()
     notifyDataSetChanged()
   }

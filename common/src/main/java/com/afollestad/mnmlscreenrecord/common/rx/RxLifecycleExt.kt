@@ -30,12 +30,22 @@ class LifecycleAwareDisposable(
   fun dispose() = disposable.dispose()
 }
 
-/** @author Aidan Follestad (afollestad) */
+/**
+ * Wraps [disposable] so that it is disposed of when the receiving [LifecycleOwner]
+ * is destroyed.
+ *
+ * @author Aidan Follestad (afollestad)
+ */
 fun LifecycleOwner.ownRx(disposable: Disposable) {
   this.lifecycle.addObserver(LifecycleAwareDisposable(disposable))
 }
 
-/** @author Aidan Follestad (afollestad) */
+/**
+ * Attaches the receiving [Disposable] so that it is disposed of when [lifecycleOwner]
+ * is destroyed.
+ *
+ * @author Aidan Follestad (afollestad)
+ */
 fun Disposable.attachLifecycle(lifecycleOwner: LifecycleOwner) {
   lifecycleOwner.ownRx(this)
 }

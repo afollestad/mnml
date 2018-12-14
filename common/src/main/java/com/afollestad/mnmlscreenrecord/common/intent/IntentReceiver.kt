@@ -29,7 +29,7 @@ import timber.log.Timber.d as log
 /** @author Aidan Follestad (@afollestad) */
 class IntentReceiver<T>(
   context: T,
-  constructor: Builder.() -> Unit
+  constructor: IntentFilterBuilder.() -> Unit
 ) : LifecycleObserver where T : Context, T : LifecycleOwner {
 
   private val appContext = context.applicationContext
@@ -37,7 +37,7 @@ class IntentReceiver<T>(
   private val instructions: List<Instructions>
 
   init {
-    val builder = Builder()
+    val builder = IntentFilterBuilder()
     constructor(builder)
     filter = builder.filter()
     instructions = builder.instructions()

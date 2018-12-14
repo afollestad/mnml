@@ -18,7 +18,11 @@ package com.afollestad.mnmlscreenrecord.notifications
 import androidx.core.app.NotificationManagerCompat.IMPORTANCE_DEFAULT
 import androidx.core.app.NotificationManagerCompat.IMPORTANCE_HIGH
 
-/** @author Aidan Follestad (@afollestad) */
+/**
+ * Keeps a set of notification channels that the app uses.
+ *
+ * @author Aidan Follestad (@afollestad)
+ */
 enum class Channel(
   val id: String,
   val title: String,

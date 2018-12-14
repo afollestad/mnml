@@ -42,7 +42,11 @@ import java.io.File
 import java.util.Date
 import timber.log.Timber.d as log
 
-/** @author Aidan Follestad (@afollestad) */
+/**
+ * Handles core screen capture logic.
+ *
+ * @author Aidan Follestad (@afollestad)
+ */
 class CaptureEngine(
   private val windowManager: WindowManager,
   private val projectionManager: MediaProjectionManager,

@@ -42,7 +42,11 @@ abstract class DebouncedOnClickListener(
   abstract fun onDebouncedClick(v: View)
 }
 
-/** @author Aidan Follestad (@afollestad) */
+/**
+ * Sets a click listener that prevents quick repeated clicks.
+ *
+ * @author Aidan Follestad (@afollestad)
+ */
 fun View.onDebouncedClick(
   delayBetweenClicks: Long = DEFAULT_DEBOUNCE_INTERVAL,
   click: (view: View) -> Unit

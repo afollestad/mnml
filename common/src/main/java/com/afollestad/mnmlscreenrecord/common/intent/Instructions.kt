@@ -19,13 +19,20 @@ import android.content.Intent
 
 typealias Execution = (Intent) -> Unit
 
-/** @author Aidan Follestad (@afollestad) */
+/**
+ * A single instruction for a [IntentFilterBuilder]/[IntentReceiver].
+ *
+ * @author Aidan Follestad (@afollestad)
+ */
 sealed class Instructions {
 
+  /** Return true if an Intent matches the instruction. */
   abstract fun matches(intent: Intent): Boolean
 
+  /** The block to execute of [matches] returns true. */
   abstract fun execution(): Execution
 
+  /** An instruction which matches intent actions. */
   data class OnAction(
     val action: String,
     val execution: Execution
@@ -38,6 +45,7 @@ sealed class Instructions {
     override fun execution() = execution
   }
 
+  /** An instruction which matches intent data schemes. */
   data class OnDataScheme(
     val scheme: String,
     val execution: Execution
@@ -49,6 +57,7 @@ sealed class Instructions {
     override fun execution() = execution
   }
 
+  /** An instruction which matches intent categories. */
   data class OnCategory(
     val category: String,
     val execution: Execution

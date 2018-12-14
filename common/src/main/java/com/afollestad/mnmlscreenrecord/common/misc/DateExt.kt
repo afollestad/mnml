@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/** Converts a Date to a timestamp string that can be used for file names, etc. */
 fun Date.timestampString(): String {
   if (time <= 0) {
     return "Invalid"
@@ -27,6 +28,7 @@ fun Date.timestampString(): String {
   return df.format(this)
 }
 
+/** Converts milliseconds into a human readable date string. */
 fun Long.friendlyDate(): String {
   if (this <= 0) {
     return "Invalid"

@@ -19,12 +19,14 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import timber.log.Timber
 
+/** Wraps data for [displayInfo]. */
 data class DisplayInfo(
   val width: Int,
   val height: Int,
   val density: Int
 )
 
+/** Retrieves a [DisplayInfo] instance from a [WindowManager]. */
 fun WindowManager.displayInfo(): DisplayInfo {
   val metrics = DisplayMetrics()
   defaultDisplay.getRealMetrics(metrics)

@@ -45,12 +45,26 @@ const val EXTRA_STOP_FOREGROUND = "stop_foreground"
 const val DELETE_ACTION = "com.afollestad.mnmlscreenrecord.service.DELETE_RECORDING"
 const val EXIT_ACTION = "com.afollestad.mnmlscreenrecord.service.EXIT_FOREGROUND"
 
+/**
+ * Manages all-things-notifications in the app.
+ *
+ * @author Aidan Follestad (@afollestad)
+ */
 interface Notifications {
 
+  /**
+   * Marks whether the app is visible - when visible, post-record notifications aren't shown.
+   */
   fun setIsAppOpen(open: Boolean)
 
+  /**
+   * Creates all notification channels within the [Channel] enum.
+   */
   fun createChannels()
 
+  /**
+   * Creates the persistent notification used when the background service is foregrounded.
+   */
   fun createWidgetServiceNotification(
     mainActivity: Class<*>,
     backgroundService: Class<*>,
@@ -58,12 +72,22 @@ interface Notifications {
     isRecording: Boolean
   ): Notification
 
+  /**
+   * Shows a notification for a screen recording that was just completed.
+   */
   fun showPostRecordNotification(uri: Uri)
 
+  /**
+   * Cancels any visible notification created by [showPostRecordNotification].
+   */
   fun cancelPostRecordNotification()
 }
 
-/** @author Aidan Follestad (@afollestad) */
+/**
+ * Manages all-things-notifications in the app.
+ *
+ * @author Aidan Follestad (@afollestad)
+ */
 class RealNotifications(
   private val app: Application,
   private val stockManager: NotificationManager

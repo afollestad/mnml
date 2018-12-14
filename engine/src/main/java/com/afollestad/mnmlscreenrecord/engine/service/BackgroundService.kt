@@ -35,7 +35,12 @@ import com.afollestad.mnmlscreenrecord.notifications.STOP_ACTION
 import org.koin.android.ext.android.inject
 import timber.log.Timber.d as log
 
-/** @author Aidan Follestad (@afollestad) */
+/**
+ * The background service which foregrounds itself with a persistent notification to do screen
+ * capture, even if the app isn't visible.
+ *
+ * @author Aidan Follestad (@afollestad)
+ */
 class BackgroundService : Service(), LifecycleOwner {
 
   companion object {

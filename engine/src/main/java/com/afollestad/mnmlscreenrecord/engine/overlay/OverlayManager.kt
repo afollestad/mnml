@@ -24,7 +24,7 @@ import android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
 import android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
 import android.widget.TextView
-import com.afollestad.mnmlscreenrecord.common.misc.inflate
+import com.afollestad.mnmlscreenrecord.common.misc.inflateAs
 import com.afollestad.mnmlscreenrecord.engine.R
 import com.afollestad.rxkprefs.Pref
 
@@ -38,6 +38,10 @@ class OverlayManager(
     private const val SECOND = 1000L
   }
 
+  /**
+   * Counts down starting at the value of the [countdownPref], showing a red number in the middle
+   * of the screen for each second. The given [finished] callback is invoked when we reach 0.
+   */
   fun countdown(finished: () -> Unit) {
     val time = countdownPref.get()
     if (time <= 0) {
@@ -45,7 +49,7 @@ class OverlayManager(
       return
     }
 
-    val textView: TextView = layoutInflater.inflate(R.layout.countdown_textview)
+    val textView: TextView = layoutInflater.inflateAs(R.layout.countdown_textview)
     textView.text = "$time"
 
     val params = LayoutParams(

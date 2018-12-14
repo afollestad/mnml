@@ -21,11 +21,12 @@ import com.afollestad.mnmlscreenrecord.common.intent.Instructions.OnCategory
 import com.afollestad.mnmlscreenrecord.common.intent.Instructions.OnDataScheme
 
 /** @author Aidan Follestad (@afollestad) */
-class Builder internal constructor() {
+class IntentFilterBuilder internal constructor() {
 
   private val filter = IntentFilter()
   private val instructions = mutableListOf<Instructions>()
 
+  /** Adds an Intent action to the filter. */
   fun onAction(
     action: String,
     execution: Execution
@@ -34,6 +35,7 @@ class Builder internal constructor() {
     instructions.add(OnAction(action, execution))
   }
 
+  /** Adds a data scheme, like "http", to the filter. */
   fun onDataScheme(
     scheme: String,
     execution: Execution
@@ -42,6 +44,7 @@ class Builder internal constructor() {
     instructions.add(OnDataScheme(scheme, execution))
   }
 
+  /** Adds a Intent category to the filter. */
   fun onCategory(
     category: String,
     execution: Execution

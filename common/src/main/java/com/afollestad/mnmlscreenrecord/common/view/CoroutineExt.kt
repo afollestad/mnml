@@ -20,6 +20,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
+/**
+ * A DSL which scopes coroutine jobs launched within it so that they are cancelled when the
+ * receiving [View] is detached from its window.
+ */
 fun View.scopeWhileAttached(
   context: CoroutineContext,
   exec: CoroutineScope.() -> Unit
