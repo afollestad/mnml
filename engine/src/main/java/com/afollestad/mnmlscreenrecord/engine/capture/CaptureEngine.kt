@@ -188,8 +188,8 @@ class CaptureEngine(
     handler.postDelayed({
       recorder!!.start()
     }, 150)
-    onStart.onNext(Unit)
     isStarted = true
+    onStart.onNext(Unit)
     log("Media recorder started")
   }
 

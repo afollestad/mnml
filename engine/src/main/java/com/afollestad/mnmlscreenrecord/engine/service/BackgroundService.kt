@@ -90,7 +90,8 @@ class BackgroundService : Service(), LifecycleOwner {
       }
       onAction(STOP_ACTION) {
         captureEngine.stop()
-        if (it.getBooleanExtra(EXTRA_STOP_FOREGROUND, false)) {
+        if (notifications.isAppOpen() ||
+            it.getBooleanExtra(EXTRA_STOP_FOREGROUND, false)) {
           stopForeground(true)
           stopSelf()
         }

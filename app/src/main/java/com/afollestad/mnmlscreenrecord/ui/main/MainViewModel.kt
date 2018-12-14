@@ -177,6 +177,9 @@ class MainViewModel(
       fabColorRes.value = R.color.red
       fabIconRes.value = R.drawable.ic_stop_32dp
       fabTextRes.value = R.string.stop_recording
+      if (fabEnabled.value == false) {
+        fabEnabled.value = true
+      }
     } else {
       fabColorRes.value = R.color.colorAccent
       fabIconRes.value = R.drawable.ic_record_32dp

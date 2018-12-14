@@ -58,6 +58,11 @@ interface Notifications {
   fun setIsAppOpen(open: Boolean)
 
   /**
+   * Returns the last value given to [setIsAppOpen], or the default value of false.
+   */
+  fun isAppOpen(): Boolean
+
+  /**
    * Creates all notification channels within the [Channel] enum.
    */
   fun createChannels()
@@ -106,12 +111,14 @@ class RealNotifications(
     private const val DELETE_REQUEST = 96
   }
 
-  private var isAppOpen: Boolean = false
+  private var currentIsAppOpen: Boolean = false
 
   override fun setIsAppOpen(open: Boolean) {
     log("Is app open? $open")
-    isAppOpen = open
+    currentIsAppOpen = open
   }
+
+  override fun isAppOpen(): Boolean = currentIsAppOpen
 
   override fun createChannels() {
     Channel.values()
@@ -169,7 +176,7 @@ class RealNotifications(
 
   @ExperimentalCoroutinesApi
   override fun showPostRecordNotification(uri: Uri) {
-    if (isAppOpen) {
+    if (isAppOpen()) {
       log("App is open, won't create a post-record notification.")
       return
     }
