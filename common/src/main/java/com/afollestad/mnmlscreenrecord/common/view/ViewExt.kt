@@ -26,6 +26,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.EditText
+import android.widget.SeekBar
 import androidx.annotation.DimenRes
 import androidx.annotation.IntRange
 import androidx.recyclerview.widget.RecyclerView
@@ -144,5 +145,19 @@ fun RecyclerView.onScroll(scroll: (Int) -> Unit) {
       super.onScrolled(recyclerView, dx, dy)
       scroll(computeVerticalScrollOffset())
     }
+  })
+}
+
+fun SeekBar.onProgressChanged(cb: (Int) -> Unit) {
+  setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+    override fun onProgressChanged(
+      seekBar: SeekBar?,
+      progress: Int,
+      fromUser: Boolean
+    ) = cb(progress)
+
+    override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+
+    override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
   })
 }

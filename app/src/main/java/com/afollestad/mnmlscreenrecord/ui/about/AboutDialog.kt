@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.afollestad.mnmlscreenrecord.ui
+package com.afollestad.mnmlscreenrecord.ui.about
 
 import android.app.Dialog
 import android.os.Bundle
@@ -30,7 +30,9 @@ class AboutDialog : DialogFragment() {
 
     fun show(context: AppCompatActivity) {
       val dialog = AboutDialog()
-      dialog.show(context.supportFragmentManager, TAG)
+      dialog.show(context.supportFragmentManager,
+          TAG
+      )
     }
   }
 

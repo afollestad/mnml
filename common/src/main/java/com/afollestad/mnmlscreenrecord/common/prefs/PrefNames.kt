@@ -19,4 +19,5 @@ package com.afollestad.mnmlscreenrecord.common.prefs
 object PrefNames {
   const val PREF_DARK_MODE = "dark_mode"
   const val PREF_COUNTDOWN = "countdown"
+  const val PREF_RECORDINGS_FOLDER = "recordings_folder"
 }

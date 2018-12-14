@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.afollestad.mnmlscreenrecord.ui
+package com.afollestad.mnmlscreenrecord.ui.main
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

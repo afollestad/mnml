@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.afollestad.mnmlscreenrecord.ui
+package com.afollestad.mnmlscreenrecord.ui.main
 
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
@@ -45,17 +45,19 @@ import com.afollestad.mnmlscreenrecord.notifications.Notifications
 import com.afollestad.mnmlscreenrecord.notifications.RECORD_ACTION
 import com.afollestad.mnmlscreenrecord.notifications.STOP_ACTION
 import com.afollestad.mnmlscreenrecord.theming.DarkModeSwitchActivity
+import com.afollestad.mnmlscreenrecord.ui.about.AboutDialog
+import com.afollestad.mnmlscreenrecord.ui.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_main.fab
 import kotlinx.android.synthetic.main.activity_main.list
-import kotlinx.android.synthetic.main.activity_main.toolbar
+import kotlinx.android.synthetic.main.include_appbar.toolbar
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import java.io.File
-import kotlinx.android.synthetic.main.activity_main.app_toolbar as appToolbar
 import kotlinx.android.synthetic.main.activity_main.empty_view as emptyText
+import kotlinx.android.synthetic.main.include_appbar.app_toolbar as appToolbar
 
 /** @author Aidan Follestad (afollestad) */
 class MainActivity : DarkModeSwitchActivity() {
@@ -78,56 +80,16 @@ class MainActivity : DarkModeSwitchActivity() {
     setContentView(R.layout.activity_main)
 
     // Toolbar
-    toolbar.inflateMenu(R.menu.main)
-    toolbar.menu.findItem(R.id.dark_mode_toggle)
-        .isChecked = darkModePref.get()
-    toolbar.setOnMenuItemClickListener { item ->
-      when (item.itemId) {
-        R.id.dark_mode_toggle -> darkModePref.set(!darkModePref.get())
-        R.id.about -> AboutDialog.show(this)
-      }
-      true
-    }
-
+    setupToolbar()
     // Notifications
     notifications.createChannels()
-
     // Lifecycle
     lifecycle.addObserver(recordingQueryer)
-
     // Recycler View Grid
-    adapter = RecordingAdapter { recording, longClick ->
-      if (longClick) {
-        showRecordingOptions(recording)
-      } else {
-        openRecording(recording)
-      }
-    }
-    list.layoutManager = GridLayoutManager(this, resources.getInteger(R.integer.grid_span))
-    list.adapter = adapter
-    if (!darkModePref.get()) {
-      appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
-      list.onScroll {
-        if (it > (toolbar.measuredHeight / 2)) {
-          appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
-        } else {
-          appToolbar.elevation = 0f
-        }
-      }
-    }
-
+    setupGrid()
     // FAB
-    fab.setOnClickListener {
-      if (captureEngine.isStarted()) {
-        sendBroadcast(Intent(STOP_ACTION))
-      } else {
-        maybeAskForSystemOverlayPermission()
-        if (!isAskingPermissions) {
-          startService(true)
-        }
-      }
-      fab.isEnabled = false
-    }
+    setupFab()
+
     captureEngine.onStart()
         .subscribe {
           fab.isEnabled = true
@@ -143,6 +105,68 @@ class MainActivity : DarkModeSwitchActivity() {
     fileScanner.onScan()
         .subscribe { refreshRecordings() }
         .attachLifecycle(this)
+  }
+
+  private fun setupToolbar() = toolbar.run {
+    inflateMenu(R.menu.main)
+    menu.findItem(R.id.dark_mode_toggle)
+        .isChecked = darkModePref.get()
+
+    setOnMenuItemClickListener { item ->
+      when (item.itemId) {
+        R.id.dark_mode_toggle -> {
+          darkModePref.set(!darkModePref.get())
+        }
+        R.id.about -> {
+          AboutDialog.show(this@MainActivity)
+        }
+        R.id.settings -> {
+          startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+        }
+      }
+      true
+    }
+  }
+
+  private fun setupGrid() {
+    adapter = RecordingAdapter { recording, longClick ->
+      if (longClick) {
+        showRecordingOptions(recording)
+      } else {
+        openRecording(recording)
+      }
+    }
+
+    list.layoutManager = GridLayoutManager(this, resources.getInteger(R.integer.grid_span))
+    list.adapter = adapter
+
+    if (!darkModePref.get()) {
+      appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
+      list.onScroll { invalidateToolbarElevation() }
+    }
+  }
+
+  private fun invalidateToolbarElevation() {
+    val scrollPosition = list.computeVerticalScrollRange()
+    if (!darkModePref.get() || scrollPosition > (toolbar.measuredHeight / 2)) {
+      appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
+    } else {
+      appToolbar.elevation = 0f
+    }
+  }
+
+  private fun setupFab() {
+    fab.setOnClickListener {
+      if (captureEngine.isStarted()) {
+        sendBroadcast(Intent(STOP_ACTION))
+      } else {
+        maybeAskForSystemOverlayPermission()
+        if (!isAskingPermissions) {
+          startService(true)
+        }
+      }
+      fab.isEnabled = false
+    }
   }
 
   private fun refreshRecordings() {
@@ -162,6 +186,7 @@ class MainActivity : DarkModeSwitchActivity() {
       refreshRecordings()
     }
     invalidateFab()
+    invalidateToolbarElevation()
     notifications.setIsAppOpen(true)
   }
 
@@ -182,34 +207,37 @@ class MainActivity : DarkModeSwitchActivity() {
   private fun maybeAskForSystemOverlayPermission() {
     if (!canDrawOverlays(this)) {
       isAskingPermissions = true
-      MaterialDialog(this)
-          .title(R.string.overlay_permission_prompt)
-          .message(R.string.overlay_permission_prompt_desc)
-          .cancelOnTouchOutside(false)
-          .positiveButton(R.string.okay) {
-            val intent = Intent(
-                ACTION_MANAGE_OVERLAY_PERMISSION,
-                "package:$packageName".toUri()
-            )
-            startActivityForResult(intent, DRAW_OVER_OTHER_APP_PERMISSION)
-          }
-          .show()
+      MaterialDialog(this).show {
+        title(R.string.overlay_permission_prompt)
+        message(R.string.overlay_permission_prompt_desc)
+        cancelOnTouchOutside(false)
+        positiveButton(R.string.okay) {
+          val intent = Intent(
+              ACTION_MANAGE_OVERLAY_PERMISSION,
+              "package:$packageName".toUri()
+          )
+          startActivityForResult(
+              intent,
+              DRAW_OVER_OTHER_APP_PERMISSION
+          )
+        }
+      }
     } else if (!isAllGranted(WRITE_EXTERNAL_STORAGE)) {
       isAskingPermissions = true
-      MaterialDialog(this)
-          .title(R.string.storage_permission_prompt)
-          .message(R.string.storage_permission_prompt_desc)
-          .cancelOnTouchOutside(false)
-          .positiveButton(R.string.okay) {
-            askForPermissions(WRITE_EXTERNAL_STORAGE, requestCode = STORAGE_PERMISSION) { res ->
-              isAskingPermissions = false
-              if (!res.isAllGranted(WRITE_EXTERNAL_STORAGE)) {
-                sendBroadcast(Intent(PERMISSION_DENIED))
-                toast(R.string.permission_denied_note)
-              }
+      MaterialDialog(this).show {
+        title(R.string.storage_permission_prompt)
+        message(R.string.storage_permission_prompt_desc)
+        cancelOnTouchOutside(false)
+        positiveButton(R.string.okay) {
+          askForPermissions(WRITE_EXTERNAL_STORAGE, requestCode = STORAGE_PERMISSION) { res ->
+            isAskingPermissions = false
+            if (!res.isAllGranted(WRITE_EXTERNAL_STORAGE)) {
+              sendBroadcast(Intent(PERMISSION_DENIED))
+              toast(R.string.permission_denied_note)
             }
           }
-          .show()
+        }
+      }
     }
   }
 
@@ -241,17 +269,17 @@ class MainActivity : DarkModeSwitchActivity() {
   }
 
   private fun showRecordingOptions(recording: Recording) {
-    MaterialDialog(this)
-        .title(text = recording.name)
-        .listItems(R.array.recording_options_dialog) { _, index, _ ->
-          when (index) {
-            0 -> startActivity(Intent(Intent.ACTION_SEND).apply {
-              setDataAndType(recording.toUri(), "video/*")
-            })
-            1 -> deleteRecording(recording)
-          }
+    MaterialDialog(this).show {
+      title(text = recording.name)
+      listItems(R.array.recording_options_dialog) { _, index, _ ->
+        when (index) {
+          0 -> startActivity(Intent(Intent.ACTION_SEND).apply {
+            setDataAndType(recording.toUri(), "video/*")
+          })
+          1 -> deleteRecording(recording)
         }
-        .show()
+      }
+    }
   }
 
   private fun deleteRecording(recording: Recording) {

@@ -29,25 +29,24 @@ import android.media.MediaRecorder.VideoEncoder.H264
 import android.media.MediaRecorder.VideoSource.SURFACE
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
-import android.os.Environment.getExternalStorageDirectory
 import android.os.Handler
 import android.view.WindowManager
 import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.afollestad.mnmlscreenrecord.common.misc.timestampString
+import com.afollestad.rxkprefs.Pref
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.io.File
 import java.util.Date
 import timber.log.Timber.d as log
 
-const val CAPTURE_FOLDER_NAME = "MNML Screen Recorder"
-
 /** @author Aidan Follestad (@afollestad) */
 class CaptureEngine(
   private val windowManager: WindowManager,
-  private val projectionManager: MediaProjectionManager
+  private val projectionManager: MediaProjectionManager,
+  private val recordingsFolderPref: Pref<String>
 ) : LifecycleObserver {
 
   private lateinit var recordingInfo: RecordingInfo
@@ -153,7 +152,7 @@ class CaptureEngine(
       setVideoSize(recordingInfo.width, recordingInfo.height)
       setVideoEncodingBitRate(8 * 1000 * 1000)
 
-      val outputFolder = File(getExternalStorageDirectory(), CAPTURE_FOLDER_NAME).apply {
+      val outputFolder = File(recordingsFolderPref.get()).apply {
         mkdirs()
       }
       val now = Date().timestampString()

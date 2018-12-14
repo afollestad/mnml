@@ -19,7 +19,7 @@
       tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
     <activity
-        android:name=".ui.MainActivity"
+        android:name=".ui.main.MainActivity"
         android:launchMode="singleInstance">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -27,6 +27,9 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+
+    <activity android:name=".ui.settings.SettingsActivity"/>
+
     <meta-data
         android:name="preloaded_fonts"
         android:resource="@array/preloaded_fonts"/>

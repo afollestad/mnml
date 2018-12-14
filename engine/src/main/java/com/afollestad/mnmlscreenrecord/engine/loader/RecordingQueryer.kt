@@ -22,11 +22,15 @@ import androidx.lifecycle.Lifecycle.Event.ON_STOP
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
-import com.afollestad.mnmlscreenrecord.engine.capture.CAPTURE_FOLDER_NAME
+import com.afollestad.rxkprefs.Pref
+import java.io.File
 
 const val VIDEOS_URI = "content://media/external/video/media"
 
-class RecordingQueryer(app: Application) : LifecycleObserver {
+class RecordingQueryer(
+  app: Application,
+  private val recordingsFolderPref: Pref<String>
+) : LifecycleObserver {
 
   private var isStarted = false
   private var isQuerying = false
@@ -49,11 +53,12 @@ class RecordingQueryer(app: Application) : LifecycleObserver {
     }
     isQuerying = true
 
+    val folder = File(recordingsFolderPref.get())
     val cursor = contentResolver.query(
         VIDEOS_URI.toUri(), // uri
         null, // projection
         "bucket_display_name = ?", // selection
-        arrayOf(CAPTURE_FOLDER_NAME), // selectionArgs
+        arrayOf(folder.name), // selectionArgs
         "date_added DESC" // sortOrder
     )!!
 

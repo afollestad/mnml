@@ -8,4 +8,7 @@
       android:checkable="true"
       android:checked="false"
       android:title="@string/dark_mode"/>
+  <item
+      android:id="@+id/settings"
+      android:title="@string/settings"/>
 </menu>

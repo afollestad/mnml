@@ -15,11 +15,14 @@
  */
 package com.afollestad.mnmlscreenrecord.common
 
+import android.os.Environment.getExternalStorageDirectory
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.rxkprefs.RxkPrefs
 import com.afollestad.rxkprefs.rxkPrefs
 import org.koin.dsl.module.module
+import java.io.File
 
 /** @author Aidan Follestad (@afollestad) */
 val prefModule = module {
@@ -32,5 +35,10 @@ val prefModule = module {
 
   factory(name = PREF_COUNTDOWN) {
     get<RxkPrefs>().integer(PREF_COUNTDOWN, 3)
+  }
+
+  factory(name = PREF_RECORDINGS_FOLDER) {
+    val default = File(getExternalStorageDirectory(), "MNML Screen Recorder")
+    get<RxkPrefs>().string(PREF_RECORDINGS_FOLDER, default.absolutePath)
   }
 }

@@ -1,0 +1,15 @@
+<resources>
+
+  <string name="about">About</string>
+  <string name="dismiss">Dismiss</string>
+  <string name="about_body"><![CDATA[
+        MNML, designed by <b>Aidan Follestad</b>.<br/>
+        <a href=\'http://aidanfollestad.com\'>Website</a>&nbsp;&nbsp;
+        <a href=\'https://twitter.com/afollestad\'>Twitter</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/afollestad\'>GitHub</a>&nbsp;&nbsp;
+        <a href=\'https://www.linkedin.com/in/afollestad\'>LinkedIn</a><br/><br/>
+        This project is <a href=\'https://github.com/afollestad/mnml\'>open source</a>, and is
+        licensed under Apache 2.0.
+  ]]></string>
+
+</resources>

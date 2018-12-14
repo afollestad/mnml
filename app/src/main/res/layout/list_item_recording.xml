@@ -8,7 +8,7 @@
     android:foreground="@drawable/accent_ripple"
     app:cardBackgroundColor="?cardBackground"
     app:cardUseCompatPadding="true"
-    app:contentPadding="16dp"
+    app:contentPadding="@dimen/content_inset"
     >
 
   <LinearLayout
@@ -21,7 +21,7 @@
         android:id="@+id/thumbnail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/content_inset"
         android:scaleType="centerCrop"
         tools:background="#400099CC"
         />

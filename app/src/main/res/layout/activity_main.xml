@@ -6,34 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.MainActivity"
+    tools:context=".ui.main.MainActivity"
     >
 
-  <FrameLayout
-      android:id="@+id/app_toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="?colorPrimary"
-      android:elevation="0dp"
-      android:gravity="center"
-      >
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:elevation="0dp"
-        />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:gravity="center"
-        android:text="@string/app_name_short"
-        android:textAppearance="@style/AppTheme.TextAppearance.Title"
-        />
-
-  </FrameLayout>
+  <include layout="@layout/include_appbar"/>
 
   <FrameLayout
       android:layout_width="match_parent"
@@ -55,14 +31,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="@dimen/content_inset_more"
         android:orientation="vertical"
         >
 
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginBottom="8dp"
+          android:layout_marginBottom="@dimen/content_inset_half"
           android:text="@string/recordings_empty_text"
           android:textAppearance="@style/AppTheme.TextAppearance.EmptyText"
           />
@@ -82,11 +58,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="@dimen/content_inset"
+        android:layout_marginEnd="@dimen/content_inset_more"
         android:minHeight="64dp"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
+        android:paddingHorizontal="@dimen/content_inset"
+        android:paddingVertical="@dimen/content_inset_half"
         android:text="@string/start_recording"
         app:cornerRadius="32dp"
         app:icon="@drawable/ic_record_32dp"

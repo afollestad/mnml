@@ -24,6 +24,7 @@ import android.view.WindowManager
 import androidx.appcompat.view.ContextThemeWrapper
 import com.afollestad.mnmlscreenrecord.common.misc.systemService
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.loader.RecordingQueryer
 import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
@@ -45,9 +46,9 @@ val engineModule = module {
     get<Application>().systemService(MEDIA_PROJECTION_SERVICE)
   }
 
-  factory { RecordingQueryer(get()) }
+  factory { RecordingQueryer(get(), get(name = PREF_RECORDINGS_FOLDER)) }
 
-  single { CaptureEngine(get(), get()) }
+  single { CaptureEngine(get(), get(), get(name = PREF_RECORDINGS_FOLDER)) }
 
   factory { OverlayManager(get(), get(), get(name = PREF_COUNTDOWN)) }
 }

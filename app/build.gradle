@@ -23,6 +23,7 @@ dependencies {
   implementation project(':notifications')
   implementation project(':theming')
 
+  implementation 'androidx.preference:preference:' + versions.androidx
   kapt 'androidx.lifecycle:lifecycle-compiler:' + versions.lifecycle
 
   implementation 'org.koin:koin-androidx-scope:' + versions.koin

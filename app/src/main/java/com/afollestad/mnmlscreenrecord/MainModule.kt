@@ -16,7 +16,7 @@
 package com.afollestad.mnmlscreenrecord
 
 import com.afollestad.mnmlscreenrecord.engine.service.BackgroundService.Companion.MAIN_ACTIVITY_CLASS
-import com.afollestad.mnmlscreenrecord.ui.MainActivity
+import com.afollestad.mnmlscreenrecord.ui.main.MainActivity
 import org.koin.dsl.module.module
 
 /** @author Aidan Follestad (@afollestad) */
