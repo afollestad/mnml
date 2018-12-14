@@ -170,6 +170,11 @@ class MainActivity : DarkModeSwitchActivity() {
   }
 
   private fun invalidateToolbarElevation() {
+    if (!isDarkMode()) {
+      appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
+      return
+    }
+
     val scrollPosition = list.computeVerticalScrollRange()
     if (scrollPosition > (toolbar.measuredHeight / 2)) {
       appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
