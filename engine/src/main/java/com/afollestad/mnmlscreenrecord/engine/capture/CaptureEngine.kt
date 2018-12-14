@@ -58,11 +58,14 @@ class CaptureEngine(
   private var pendingFile: File? = null
   private var onStart = PublishSubject.create<Unit>()
   private var onStop = PublishSubject.create<File>()
+  private var onCancel = PublishSubject.create<Unit>()
   private var isStarted: Boolean = false
 
   fun onStart(): Observable<Unit> = onStart
 
   fun onStop(): Observable<File> = onStop
+
+  fun onCancel(): Observable<Unit> = onCancel
 
   fun isStarted() = isStarted
 
@@ -102,6 +105,7 @@ class CaptureEngine(
 
   fun cancel() {
     if (pendingFile == null) {
+      onCancel.onNext(Unit)
       return
     }
     log("cancel()")
@@ -118,6 +122,7 @@ class CaptureEngine(
   @OnLifecycleEvent(ON_DESTROY)
   fun stop() {
     if (recorder == null) {
+      onCancel.onNext(Unit)
       return
     }
     isStarted = false
@@ -137,9 +142,12 @@ class CaptureEngine(
     display = null
     projection = null
 
-    pendingFile?.let {
-      log("Recorded to $it")
-      onStop.onNext(it)
+    val fileToSend = pendingFile
+    if (fileToSend != null) {
+      log("Recorded to $fileToSend")
+      onStop.onNext(fileToSend)
+    } else {
+      onCancel.onNext(Unit)
     }
   }
 

@@ -5,6 +5,7 @@
 
   <string name="setting_countdown">Countdown</string>
   <string name="setting_countdown_desc">%1$d seconds before recording begins.</string>
+  <string name="setting_countdown_zero_note">When set to 0, the countdown is disabled.</string>
 
   <string name="setting_recordings_folder">Recordings Folder</string>
   <string name="setting_recordings_folder_desc">Recordings are saved to %1$s</string>

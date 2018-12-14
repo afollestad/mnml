@@ -48,7 +48,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
       setOnPreferenceClickListener {
         showNumberSelector(
             title.toString(),
-            1,
+            0,
             10,
             countdownPref.get()
         ) { selection -> countdownPref.set(selection) }
@@ -99,6 +99,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
   ) {
     val dialog = MaterialDialog(activity!!).show {
       title(text = title)
+      message(R.string.setting_countdown_zero_note)
       customView(R.layout.dialog_number_selector)
       positiveButton(android.R.string.ok) {
         val seekBar = getCustomView()!!.seeker

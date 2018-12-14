@@ -41,6 +41,7 @@ import timber.log.Timber.d as log
 
 const val RECORD_ACTION = "com.afollestad.mnmlscreenrecord.service.START_RECORDING"
 const val STOP_ACTION = "com.afollestad.mnmlscreenrecord.service.STOP_RECORDING"
+const val EXTRA_STOP_FOREGROUND = "stop_foreground"
 const val DELETE_ACTION = "com.afollestad.mnmlscreenrecord.service.DELETE_RECORDING"
 const val EXIT_ACTION = "com.afollestad.mnmlscreenrecord.service.EXIT_FOREGROUND"
 

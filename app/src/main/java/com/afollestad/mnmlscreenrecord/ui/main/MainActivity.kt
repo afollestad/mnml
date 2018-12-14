@@ -41,12 +41,14 @@ import com.afollestad.mnmlscreenrecord.engine.loader.Recording
 import com.afollestad.mnmlscreenrecord.engine.loader.RecordingQueryer
 import com.afollestad.mnmlscreenrecord.engine.service.BackgroundService
 import com.afollestad.mnmlscreenrecord.engine.service.BackgroundService.Companion.PERMISSION_DENIED
+import com.afollestad.mnmlscreenrecord.notifications.EXTRA_STOP_FOREGROUND
 import com.afollestad.mnmlscreenrecord.notifications.Notifications
 import com.afollestad.mnmlscreenrecord.notifications.RECORD_ACTION
 import com.afollestad.mnmlscreenrecord.notifications.STOP_ACTION
 import com.afollestad.mnmlscreenrecord.theming.DarkModeSwitchActivity
 import com.afollestad.mnmlscreenrecord.ui.about.AboutDialog
 import com.afollestad.mnmlscreenrecord.ui.settings.SettingsActivity
+import io.reactivex.Observable.merge
 import kotlinx.android.synthetic.main.activity_main.fab
 import kotlinx.android.synthetic.main.activity_main.list
 import kotlinx.android.synthetic.main.include_appbar.toolbar
@@ -96,7 +98,7 @@ class MainActivity : DarkModeSwitchActivity() {
           invalidateFab()
         }
         .attachLifecycle(this)
-    captureEngine.onStop()
+    merge(captureEngine.onStop(), captureEngine.onCancel())
         .subscribe {
           fab.isEnabled = true
           invalidateFab()
@@ -158,7 +160,9 @@ class MainActivity : DarkModeSwitchActivity() {
   private fun setupFab() {
     fab.setOnClickListener {
       if (captureEngine.isStarted()) {
-        sendBroadcast(Intent(STOP_ACTION))
+        sendBroadcast(Intent(STOP_ACTION).apply {
+          putExtra(EXTRA_STOP_FOREGROUND, true)
+        })
       } else {
         maybeAskForSystemOverlayPermission()
         if (!isAskingPermissions) {

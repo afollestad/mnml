@@ -28,6 +28,7 @@ import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
 import com.afollestad.mnmlscreenrecord.notifications.DELETE_ACTION
 import com.afollestad.mnmlscreenrecord.notifications.EXIT_ACTION
+import com.afollestad.mnmlscreenrecord.notifications.EXTRA_STOP_FOREGROUND
 import com.afollestad.mnmlscreenrecord.notifications.Notifications
 import com.afollestad.mnmlscreenrecord.notifications.RECORD_ACTION
 import com.afollestad.mnmlscreenrecord.notifications.STOP_ACTION
@@ -76,6 +77,7 @@ class BackgroundService : Service(), LifecycleOwner {
     // Intent broadcasts
     IntentReceiver(this) {
       onAction(PERMISSION_DENIED) {
+        captureEngine.cancel()
         updateForeground(false)
       }
       onAction(ACTION_SCREEN_OFF) {
@@ -83,6 +85,10 @@ class BackgroundService : Service(), LifecycleOwner {
       }
       onAction(STOP_ACTION) {
         captureEngine.stop()
+        if (it.getBooleanExtra(EXTRA_STOP_FOREGROUND, false)) {
+          stopForeground(true)
+          stopSelf()
+        }
       }
       onAction(DELETE_ACTION) {
         captureEngine.deleteLastRecording()
