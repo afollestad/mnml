@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string-array name="recording_options_dialog" translatable="false">
+    <item>@string/share</item>
+    <item>@string/delete</item>
+  </string-array>
+
+</resources>

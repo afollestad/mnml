@@ -1,0 +1,39 @@
+apply from: '../dependencies.gradle'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+  compileSdkVersion versions.compileSdk
+
+  defaultConfig {
+    minSdkVersion versions.minSdk
+    targetSdkVersion versions.compileSdk
+    versionCode versions.publishVersionCode
+    versionName versions.publishVersion
+  }
+}
+
+dependencies {
+  implementation project(':common')
+  implementation project(':notifications')
+  implementation project(':theming')
+
+  api 'androidx.appcompat:appcompat:' + versions.androidx
+  api 'com.google.android.material:material:' + versions.androidx
+
+  api 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
+  api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + versions.coroutines
+  api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + versions.coroutines
+
+  api 'androidx.lifecycle:lifecycle-extensions:' + versions.lifecycle
+
+  api 'org.koin:koin-android:' + versions.koin
+  api 'com.jakewharton.timber:timber:' + versions.timber
+
+  testImplementation 'junit:junit:' + versions.junit
+  testImplementation 'org.mockito:mockito-core:' + versions.mockito
+  testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:' + versions.mockitoKotlin
+  testImplementation 'com.google.truth:truth:' + versions.truth
+}
+
+apply from: '../spotless.gradle'

@@ -1,0 +1,24 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.afollestad.mnmlscreenrecord.engine">
+
+  <application>
+    <service
+        android:name=".service.BackgroundService"
+        android:enabled="true"
+        android:exported="false"/>
+    <activity
+        android:name=".capture.CapturePermissionActivity"
+        android:excludeFromRecents="true"
+        android:theme="@style/AppTheme.Transparent"/>
+    <provider
+        android:name="androidx.core.content.FileProvider"
+        android:authorities="com.afollestad.mnmlscreenrecord.provider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+      <meta-data
+          android:name="android.support.FILE_PROVIDER_PATHS"
+          android:resource="@xml/provider_paths"/>
+    </provider>
+  </application>
+
+</manifest>

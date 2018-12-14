@@ -1,0 +1,37 @@
+<resources>
+
+  <string name="app_name">MNML Screen Recorder</string>
+
+  <string name="about">About</string>
+  <string name="dismiss">Dismiss</string>
+  <string name="about_body"><![CDATA[
+        MNML, designed by <b>Aidan Follestad</b>.<br/>
+        <a href=\'http://aidanfollestad.com\'>Website</a>&nbsp;&nbsp;
+        <a href=\'https://twitter.com/afollestad\'>Twitter</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/afollestad\'>GitHub</a>&nbsp;&nbsp;
+        <a href=\'https://www.linkedin.com/in/afollestad\'>LinkedIn</a><br/><br/>
+        This project is <a href=\'https://github.com/afollestad/mnml\'>open source</a>, and is
+        licensed under Apache 2.0.
+    ]]></string>
+
+  <string name="overlay_permission_prompt">Overlay Permission Required</string>
+  <string name="overlay_permission_prompt_desc">
+    MNML needs permission to draw overlays so that it can display things like countdowns and
+    controls over other apps.
+  </string>
+
+  <string name="storage_permission_prompt">Storage Permission Required</string>
+  <string name="storage_permission_prompt_desc">
+    MNML needs permission to access your phone\'s storage so that recordings can be saved and
+    listed again later.
+  </string>
+
+  <string name="permission_denied_note">You won\'t be able to use MNML unless that permission is granted.</string>
+  <string name="okay">Okay!</string>
+
+  <string name="recordings_empty_text">You have no recordings, yet…</string>
+  <string name="recordings_empty_text_emoji">&#x1f614;</string>
+
+  <string name="dark_mode">Dark Mode</string>
+
+</resources>

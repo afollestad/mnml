@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+  <TextView
+      android:id="@+id/notification_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/app_name"
+      style="@style/TextAppearance.Compat.Notification.Title"
+      />
+
+  <TextView
+      android:id="@+id/notification_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/widget_service_notification_text"
+      style="@style/TextAppearance.Compat.Notification"
+      />
+
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:orientation="horizontal"
+      >
+
+    <ImageButton
+        android:id="@+id/action_record"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="12dp"
+        android:background="?android:selectableItemBackground"
+        android:src="@drawable/ic_record_32dp"
+        />
+
+    <ImageButton
+        android:id="@+id/action_stop"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="12dp"
+        android:background="?android:selectableItemBackground"
+        android:src="@drawable/ic_stop_32dp"
+        />
+
+    <ImageButton
+        android:id="@+id/action_exit"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:background="?android:selectableItemBackground"
+        android:src="@drawable/ic_close_32dp"
+        />
+
+  </LinearLayout>
+
+</LinearLayout>

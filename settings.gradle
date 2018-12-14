@@ -1,0 +1,1 @@
+include ':app', ':engine', ':common', ':notifications', ':theming'

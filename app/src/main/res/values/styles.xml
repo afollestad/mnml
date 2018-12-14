@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="AppTheme.TextAppearance.Title" parent="TextAppearance.MaterialComponents.Headline6">
+    <item name="fontFamily">@font/lato_bold</item>
+    <item name="android:fontFamily">@font/lato_bold</item>
+    <item name="android:textColor">?toolbarTitleColor</item>
+  </style>
+
+  <style name="AppTheme.TextAppearance.Subheader" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <item name="fontFamily">@font/lato_bold</item>
+    <item name="android:fontFamily">@font/lato_bold</item>
+    <item name="android:textColor">?android:textColorPrimary</item>
+  </style>
+
+  <style name="AppTheme.TextAppearance.EmptyText" parent="TextAppearance.MaterialComponents.Headline5">
+    <item name="fontFamily">@font/lato_light</item>
+    <item name="android:gravity">center</item>
+    <item name="android:fontFamily">@font/lato_light</item>
+    <item name="android:textColor">?android:textColorPrimary</item>
+  </style>
+
+  <style name="AppTheme.TextAppearance.EmptyTextEmoji" parent="TextAppearance.MaterialComponents.Headline3">
+    <item name="fontFamily">@font/lato_bold</item>
+    <item name="android:gravity">center</item>
+    <item name="android:fontFamily">@font/lato_bold</item>
+    <item name="android:textColor">?android:textColorPrimary</item>
+  </style>
+
+  <style name="AppTheme.TextAppearance.Body" parent="TextAppearance.MaterialComponents.Body1">
+    <item name="fontFamily">@font/lato</item>
+    <item name="android:fontFamily">@font/lato</item>
+    <item name="android:textColor">?android:textColorSecondary</item>
+  </style>
+
+  <style name="AppTheme.TextAppearance.Caption" parent="TextAppearance.MaterialComponents.Caption">
+    <item name="fontFamily">@font/lato_light</item>
+    <item name="android:fontFamily">@font/lato_light</item>
+    <item name="android:textColor">?android:textColorSecondary</item>
+  </style>
+
+</resources>

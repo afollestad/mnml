@@ -1,0 +1,48 @@
+apply from: '../dependencies.gradle'
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+  compileSdkVersion versions.compileSdk
+  buildToolsVersion versions.buildTools
+
+  defaultConfig {
+    applicationId "com.afollestad.mnmlscreenrecord"
+    minSdkVersion versions.minSdk
+    targetSdkVersion versions.compileSdk
+    versionCode versions.publishVersionCode
+    versionName versions.publishVersion
+  }
+}
+
+dependencies {
+  implementation project(':engine')
+  implementation project(':common')
+  implementation project(':notifications')
+  implementation project(':theming')
+
+  kapt 'androidx.lifecycle:lifecycle-compiler:' + versions.lifecycle
+
+  implementation 'org.koin:koin-androidx-scope:' + versions.koin
+  implementation 'org.koin:koin-androidx-viewmodel:' + versions.koin
+
+  implementation 'com.afollestad.material-dialogs:core:' + versions.materialDialogs
+  implementation 'com.afollestad.material-dialogs:files:' + versions.materialDialogs
+  implementation 'com.afollestad:assent:' + versions.assent
+
+  implementation 'com.github.bumptech.glide:glide:' + versions.glide
+  kapt 'com.github.bumptech.glide:compiler:' + versions.glide
+
+  testImplementation 'junit:junit:' + versions.junit
+  testImplementation 'org.mockito:mockito-core:' + versions.mockito
+  testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:' + versions.mockitoKotlin
+  testImplementation 'com.google.truth:truth:' + versions.truth
+  testImplementation 'androidx.arch.core:core-testing:' + versions.archTesting
+
+  androidTestImplementation 'androidx.test:runner:' + versions.androidxTestRunner
+  androidTestImplementation 'androidx.test:rules:' + versions.androidxTestRunner
+}
+
+apply from: '../spotless.gradle'
