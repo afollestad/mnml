@@ -23,6 +23,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.afollestad.mnmlscreenrecord.common.files.FileScanner
 import com.afollestad.mnmlscreenrecord.common.intent.IntentReceiver
 import com.afollestad.mnmlscreenrecord.common.lifecycle.SimpleLifecycle
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
@@ -61,6 +62,9 @@ class BackgroundService : Service(), LifecycleOwner {
   private val mainActivityClass by inject<Class<*>>(name = MAIN_ACTIVITY_CLASS)
 
   private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
+  private val alwaysShowNotificationPref by inject<Pref<Boolean>>(
+      name = PREF_ALWAYS_SHOW_NOTIFICATION
+  )
 
   override fun onBind(intent: Intent?): IBinder? = null
 
@@ -96,8 +100,9 @@ class BackgroundService : Service(), LifecycleOwner {
       }
       onAction(STOP_ACTION) {
         captureEngine.stop()
-        if (notifications.isAppOpen() ||
-            it.getBooleanExtra(EXTRA_STOP_FOREGROUND, false)
+        if (!alwaysShowNotificationPref.get() &&
+            (notifications.isAppOpen() ||
+                it.getBooleanExtra(EXTRA_STOP_FOREGROUND, false))
         ) {
           stopForeground(true)
           stopSelf()
