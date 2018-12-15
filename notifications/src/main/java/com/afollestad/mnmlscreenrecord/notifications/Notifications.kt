@@ -26,7 +26,6 @@ import android.content.Intent.ACTION_SEND
 import android.content.Intent.ACTION_VIEW
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.media.MediaMetadataRetriever
-import android.net.Uri
 import android.os.Build.VERSION_CODES.O
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -43,9 +42,11 @@ import timber.log.Timber.d as log
 
 const val RECORD_ACTION = "com.afollestad.mnmlscreenrecord.service.START_RECORDING"
 const val STOP_ACTION = "com.afollestad.mnmlscreenrecord.service.STOP_RECORDING"
-const val EXTRA_STOP_FOREGROUND = "stop_foreground"
 const val DELETE_ACTION = "com.afollestad.mnmlscreenrecord.service.DELETE_RECORDING"
 const val EXIT_ACTION = "com.afollestad.mnmlscreenrecord.service.EXIT_FOREGROUND"
+
+const val EXTRA_STOP_FOREGROUND = "stop_foreground"
+const val EXTRA_RECORDING = "recording"
 
 /**
  * Manages all-things-notifications in the app.
@@ -82,7 +83,10 @@ interface Notifications {
   /**
    * Shows a notification for a screen recording that was just completed.
    */
-  fun showPostRecordNotification(uri: Uri)
+  fun showPostRecordNotification(
+    recording: RecordingStub,
+    backgroundService: Class<*>
+  )
 
   /**
    * Cancels any visible notification created by [showPostRecordNotification].
@@ -90,11 +94,7 @@ interface Notifications {
   fun cancelPostRecordNotification()
 }
 
-/**
- * Manages all-things-notifications in the app.
- *
- * @author Aidan Follestad (@afollestad)
- */
+/** @author Aidan Follestad (@afollestad) */
 class RealNotifications(
   private val app: Application,
   private val channelBuilder: NotificationChannelBuilder,
@@ -184,19 +184,23 @@ class RealNotifications(
   }
 
   @ExperimentalCoroutinesApi
-  override fun showPostRecordNotification(uri: Uri) {
+  override fun showPostRecordNotification(
+    recording: RecordingStub,
+    backgroundService: Class<*>
+  ) {
     if (isAppOpen()) {
       log("App is open, won't create a post-record notification.")
       return
     }
 
-    log("Creating post-record notification for: $uri")
+    log("Creating post-record notification for: $recording")
     val channel = Channel.VIDEO_RECORDED.id
+
     val viewPendingIntent = PendingIntent.getActivity(
         app,
         VIEW_REQUEST,
         Intent(ACTION_VIEW).apply {
-          setDataAndType(uri, "video/*")
+          setDataAndType(recording.toUri(), "video/*")
         },
         FLAG_CANCEL_CURRENT
     )
@@ -204,11 +208,20 @@ class RealNotifications(
         app,
         SHARE_REQUEST,
         Intent(ACTION_SEND).apply {
-          setDataAndType(uri, "video/*")
+          setDataAndType(recording.toUri(), "video/*")
         },
         FLAG_CANCEL_CURRENT
     )
-    val deletePendingIntent = broadcast(DELETE_REQUEST, DELETE_ACTION)
+    val deletePendingIntent = PendingIntent.getService(
+        app,
+        DELETE_REQUEST,
+        Intent(app, backgroundService).apply {
+          action = DELETE_ACTION
+          putExtra(EXTRA_RECORDING, recording)
+        },
+        FLAG_CANCEL_CURRENT
+    )
+
     val notification = NotificationCompat.Builder(app, channel)
         .setSmallIcon(R.drawable.ic_video_32dp)
         .setContentTitle(app.getString(R.string.app_name))
@@ -225,13 +238,14 @@ class RealNotifications(
             app.getString(R.string.delete),
             deletePendingIntent
         )
+
     stockManager.notify(ID_POST_RECORD, notification.build())
 
     GlobalScope.launch(Unconfined) {
       delay(250)
       val bitmap = withContext(IO) {
         val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(app, uri)
+        retriever.setDataSource(app, recording.toUri())
         retriever.frameAtTime
       }
       val updatedNotification = notification
@@ -247,9 +261,7 @@ class RealNotifications(
     }
   }
 
-  override fun cancelPostRecordNotification() {
-    stockManager.cancel(ID_POST_RECORD)
-  }
+  override fun cancelPostRecordNotification() = stockManager.cancel(ID_POST_RECORD)
 
   private fun broadcast(
     code: Int,

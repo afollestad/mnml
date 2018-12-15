@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.afollestad.mnmlscreenrecord.engine.loader
+package com.afollestad.mnmlscreenrecord.engine.recordings
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.net.Uri
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
 import com.afollestad.rxkprefs.Pref
 import java.io.File
@@ -31,6 +32,11 @@ const val VIDEOS_URI = "content://media/external/video/media"
 interface RecordingManager {
 
   /**
+   * Gets a single recording from its content provider URI.
+   */
+  fun getRecording(uri: Uri): Recording?
+
+  /**
    * Gets a list of saved recordings from the set recordings folder.
    */
   fun getRecordings(): List<Recording>
@@ -42,32 +48,49 @@ interface RecordingManager {
 }
 
 /** @author Aidan Follestad (@afollestad) */
+@SuppressLint("Recycle")
 class RealRecordingManager(
   app: Application,
-  private val recordingsFolderPref: Pref<String>
+  recordingsFolderPref: Pref<String>
 ) : RecordingManager {
 
   private val contentResolver = app.contentResolver
+  private val recordingsBucket = File(recordingsFolderPref.get()).name
 
-  @SuppressLint("Recycle")
+  override fun getRecording(uri: Uri): Recording? {
+    val cursor = contentResolver.query(
+        uri,
+        null, // projection
+        null, // selection
+        null, // selectionArgs
+        null // sortOrder
+    ) ?: throw IllegalStateException()
+
+    var result: Recording? = null
+    if (cursor.moveToFirst()) {
+      result = Recording.pull(cursor)
+    }
+
+    cursor.close()
+    return result
+  }
+
   override fun getRecordings(): List<Recording> {
-    val folder = File(recordingsFolderPref.get())
     val cursor = contentResolver.query(
         VIDEOS_URI.toUri(), // uri
         null, // projection
         "bucket_display_name = ?", // selection
-        arrayOf(folder.name), // selectionArgs
+        arrayOf(recordingsBucket), // selectionArgs
         "date_added DESC" // sortOrder
-    ) ?: return emptyList()
+    ) ?: throw IllegalStateException()
 
-    cursor.use {
-      return mutableListOf<Recording>().also { list ->
-        if (it.moveToFirst()) {
-          do {
-            list.add(Recording.pull(it))
-          } while (cursor.moveToNext())
-        }
+    return mutableListOf<Recording>().also { list ->
+      if (cursor.moveToFirst()) {
+        do {
+          list.add(Recording.pull(cursor))
+        } while (cursor.moveToNext())
       }
+      cursor.close()
     }
   }
 

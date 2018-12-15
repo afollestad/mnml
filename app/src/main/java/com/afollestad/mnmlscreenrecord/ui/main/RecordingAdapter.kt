@@ -23,7 +23,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.view.onDebouncedClick
-import com.afollestad.mnmlscreenrecord.engine.loader.Recording
+import com.afollestad.mnmlscreenrecord.engine.recordings.Recording
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.list_item_recording.view.details

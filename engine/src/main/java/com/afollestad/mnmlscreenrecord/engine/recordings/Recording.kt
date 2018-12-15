@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.afollestad.mnmlscreenrecord.engine.loader
+package com.afollestad.mnmlscreenrecord.engine.recordings
 
 import android.database.Cursor
+import android.os.Parcel
+import android.os.Parcelable.Creator
 import com.afollestad.mnmlscreenrecord.common.misc.friendlyDate
 import com.afollestad.mnmlscreenrecord.common.misc.friendlySize
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
+import com.afollestad.mnmlscreenrecord.notifications.RecordingStub
 
 /** @author Aidan Follestad (@afollestad) */
 data class Recording(
@@ -27,17 +30,55 @@ data class Recording(
   val name: String,
   val timestamp: Long,
   val size: Long
-) {
+) : RecordingStub {
+
+  private val uri = "$VIDEOS_URI/$id".toUri()
+
   companion object {
     fun pull(cursor: Cursor): Recording {
       return Recording(
-          id = cursor.getLong(cursor.getColumnIndex("_id")),
-          path = cursor.getString(cursor.getColumnIndex("_data")),
-          name = cursor.getString(cursor.getColumnIndex("title")),
-          timestamp = cursor.getLong(cursor.getColumnIndex("date_added")),
-          size = cursor.getLong(cursor.getColumnIndex("_size"))
+        id = cursor.getLong(cursor.getColumnIndex("_id")),
+        path = cursor.getString(cursor.getColumnIndex("_data")),
+        name = cursor.getString(cursor.getColumnIndex("title")),
+        timestamp = cursor.getLong(cursor.getColumnIndex("date_added")),
+        size = cursor.getLong(cursor.getColumnIndex("_size"))
       )
     }
+
+    @Suppress("unused")
+    @JvmField
+    val CREATOR = object : Creator<Recording> {
+      override fun createFromParcel(parcel: Parcel): Recording {
+        return Recording(parcel)
+      }
+
+      override fun newArray(size: Int): Array<Recording?> {
+        return arrayOfNulls(size)
+      }
+    }
+  }
+
+  constructor(parcel: Parcel) : this(
+    parcel.readLong(),
+    parcel.readString()!!,
+    parcel.readString()!!,
+    parcel.readLong(),
+    parcel.readLong()
+  )
+
+  override fun writeToParcel(
+    parcel: Parcel,
+    flags: Int
+  ) {
+    parcel.writeLong(id)
+    parcel.writeString(path)
+    parcel.writeString(name)
+    parcel.writeLong(timestamp)
+    parcel.writeLong(size)
+  }
+
+  override fun describeContents(): Int {
+    return 0
   }
 
   /**
@@ -53,5 +94,5 @@ data class Recording(
   /**
    * Gets the content provider URI for this recording.
    */
-  fun toUri() = "$VIDEOS_URI/$id".toUri()
+  override fun toUri() = uri
 }

@@ -31,7 +31,7 @@ import com.afollestad.mnmlscreenrecord.common.misc.toast
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onDebouncedClick
 import com.afollestad.mnmlscreenrecord.common.view.onScroll
-import com.afollestad.mnmlscreenrecord.engine.loader.Recording
+import com.afollestad.mnmlscreenrecord.engine.recordings.Recording
 import com.afollestad.mnmlscreenrecord.engine.service.BackgroundService.Companion.PERMISSION_DENIED
 import com.afollestad.mnmlscreenrecord.theming.DarkModeSwitchActivity
 import com.afollestad.mnmlscreenrecord.ui.about.AboutDialog

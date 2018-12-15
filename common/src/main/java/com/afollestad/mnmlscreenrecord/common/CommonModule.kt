@@ -17,7 +17,6 @@ package com.afollestad.mnmlscreenrecord.common
 
 import com.afollestad.mnmlscreenrecord.common.Qualifiers.IO_DISPATCHER
 import com.afollestad.mnmlscreenrecord.common.Qualifiers.MAIN_DISPATCHER
-import com.afollestad.mnmlscreenrecord.common.files.FileScanner
 import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
 import com.afollestad.mnmlscreenrecord.common.permissions.RealPermissionChecker
 import com.afollestad.mnmlscreenrecord.common.providers.RealSdkProvider
@@ -37,8 +36,6 @@ val commonModule = module {
   factory<CoroutineDispatcher>(name = MAIN_DISPATCHER) { Dispatchers.Main }
 
   factory(name = IO_DISPATCHER) { Dispatchers.IO }
-
-  single { FileScanner(get()) }
 
   factory { RealPermissionChecker(get()) } bind PermissionChecker::class
 

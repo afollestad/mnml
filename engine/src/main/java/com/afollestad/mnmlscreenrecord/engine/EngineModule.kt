@@ -27,9 +27,11 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.capture.RealCaptureEngine
-import com.afollestad.mnmlscreenrecord.engine.loader.RealRecordingManager
-import com.afollestad.mnmlscreenrecord.engine.loader.RecordingManager
 import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
+import com.afollestad.mnmlscreenrecord.engine.recordings.RealRecordingManager
+import com.afollestad.mnmlscreenrecord.engine.recordings.RealRecordingScanner
+import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingManager
+import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingScanner
 import com.afollestad.mnmlscreenrecord.engine.service.RealServiceController
 import com.afollestad.mnmlscreenrecord.engine.service.ServiceController
 import org.koin.dsl.module.module
@@ -53,6 +55,8 @@ val engineModule = module {
   factory {
     RealRecordingManager(get(), get(name = PREF_RECORDINGS_FOLDER))
   } bind RecordingManager::class
+
+  factory { RealRecordingScanner(get(), get()) } bind RecordingScanner::class
 
   single {
     RealCaptureEngine(get(), get(), get(name = PREF_RECORDINGS_FOLDER))

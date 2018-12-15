@@ -36,7 +36,6 @@ import com.afollestad.rxkprefs.Pref
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.io.File
-import java.lang.IllegalStateException
 import java.util.Date
 import timber.log.Timber.d as log
 
@@ -95,11 +94,6 @@ interface CaptureEngine {
    * Cancels screen capture - deleting any previously created file and signaling cancellation.
    */
   fun cancel()
-
-  /**
-   * Deletes the last created recording file.
-   */
-  fun deleteLastRecording()
 
   /**
    * Stops screen capture - commits the capture file and emits into the stop signal.
@@ -179,11 +173,6 @@ class RealCaptureEngine(
     stop()
   }
 
-  override fun deleteLastRecording() {
-    pendingFile?.delete()
-    pendingFile = null
-  }
-
   override fun stop() {
     if (recorder == null) {
       onCancel.onNext(Unit)
@@ -210,6 +199,7 @@ class RealCaptureEngine(
     if (fileToSend != null) {
       log("Recorded to $fileToSend")
       onStop.onNext(fileToSend)
+      pendingFile = null
     } else {
       onCancel.onNext(Unit)
     }

@@ -24,12 +24,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import com.afollestad.mnmlscreenrecord.R
-import com.afollestad.mnmlscreenrecord.common.files.FileScanner
 import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
 import com.afollestad.mnmlscreenrecord.common.rx.plusAssign
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
-import com.afollestad.mnmlscreenrecord.engine.loader.Recording
-import com.afollestad.mnmlscreenrecord.engine.loader.RecordingManager
+import com.afollestad.mnmlscreenrecord.engine.recordings.Recording
+import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingManager
+import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingScanner
 import com.afollestad.mnmlscreenrecord.engine.service.ServiceController
 import com.afollestad.mnmlscreenrecord.notifications.Notifications
 import com.afollestad.mnmlscreenrecord.ui.ScopedViewModel
@@ -53,7 +53,7 @@ class MainViewModel(
   private val permissionChecker: PermissionChecker,
   private val captureEngine: CaptureEngine,
   private val recordingManager: RecordingManager,
-  private val fileScanner: FileScanner,
+  private val recordingScanner: RecordingScanner,
   private val serviceController: ServiceController,
   private val alwaysShowNotificationPref: Pref<Boolean>
 ) : ScopedViewModel(mainDispatcher), LifecycleObserver {
@@ -124,7 +124,7 @@ class MainViewModel(
               invalidateFab()
             }
     disposables +=
-        fileScanner.onScan()
+        recordingScanner.onScan()
             .subscribe { refreshRecordings() }
 
     if (alwaysShowNotificationPref.get()) {
