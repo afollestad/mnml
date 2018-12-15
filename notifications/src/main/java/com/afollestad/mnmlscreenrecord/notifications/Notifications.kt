@@ -165,6 +165,7 @@ class RealNotifications(
         "com.afollestad.mnmlscreenrecord",
         R.layout.foreground_notification
     ).apply {
+      setTextViewText(R.id.notification_text, app.getString(contentText))
       setOnClickPendingIntent(R.id.action_record, recordIntent)
       setViewVisibility(R.id.action_record, !isRecording)
       setOnClickPendingIntent(R.id.action_stop, broadcast(STOP_REQUEST, STOP_ACTION))
@@ -178,8 +179,6 @@ class RealNotifications(
           setContentIntent(appIntent)
           setStyle(NotificationCompat.DecoratedCustomViewStyle())
           setCustomContentView(remoteViews)
-          setContentTitle(app.getString(R.string.app_name))
-          setContentText(app.getString(contentText))
         }
         .build()
   }
