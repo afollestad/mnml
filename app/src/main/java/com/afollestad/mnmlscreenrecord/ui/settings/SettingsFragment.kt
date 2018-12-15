@@ -18,6 +18,9 @@ package com.afollestad.mnmlscreenrecord.ui.settings
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
+import com.afollestad.assent.Permission.WRITE_EXTERNAL_STORAGE
+import com.afollestad.assent.isAllGranted
+import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
@@ -29,8 +32,7 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREE
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onProgressChanged
 import com.afollestad.rxkprefs.Pref
-import kotlinx.android.synthetic.main.dialog_number_selector.view.label
-import kotlinx.android.synthetic.main.dialog_number_selector.view.seeker
+import kotlinx.android.synthetic.main.dialog_number_selector.view.*
 import org.koin.android.ext.android.inject
 import java.io.File
 
@@ -50,47 +52,35 @@ class SettingsFragment : PreferenceFragmentCompat() {
     val countdownEntry = findPreference(PREF_COUNTDOWN).apply {
       setOnPreferenceClickListener {
         showNumberSelector(
-            title.toString(),
-            0,
-            10,
-            countdownPref.get()
+          title.toString(),
+          0,
+          10,
+          countdownPref.get()
         ) { selection -> countdownPref.set(selection) }
         true
       }
     }
     countdownPref.observe()
-        .subscribe {
-          countdownEntry.summary = resources.getString(
-              R.string.setting_countdown_desc, it
-          )
-        }
-        .attachLifecycle(this)
+      .subscribe {
+        countdownEntry.summary = resources.getString(
+          R.string.setting_countdown_desc, it
+        )
+      }
+      .attachLifecycle(this)
 
     val recordingsFolderEntry = findPreference(PREF_RECORDINGS_FOLDER).apply {
       setOnPreferenceClickListener {
-        val initialFolder = File(recordingsFolderPref.get()).apply {
-          mkdirs()
-        }
-        MaterialDialog(activity!!).show {
-          title(text = title.toString())
-          folderChooser(
-              allowFolderCreation = true,
-              initialDirectory = initialFolder
-          ) { _, folder ->
-            recordingsFolderPref.set(folder.absolutePath)
-          }
-          positiveButton(R.string.select)
-        }
+        showOutputFolderSelector(title.toString())
         true
       }
     }
     recordingsFolderPref.observe()
-        .subscribe {
-          recordingsFolderEntry.summary = resources.getString(
-              R.string.setting_recordings_folder_desc, it
-          )
-        }
-        .attachLifecycle(this)
+      .subscribe {
+        recordingsFolderEntry.summary = resources.getString(
+          R.string.setting_recordings_folder_desc, it
+        )
+      }
+      .attachLifecycle(this)
 
     val stopOnScreenOffEntry = findPreference(PREF_STOP_ON_SCREEN_OFF) as SwitchPreference
     stopOnScreenOffEntry.run {
@@ -100,8 +90,31 @@ class SettingsFragment : PreferenceFragmentCompat() {
       }
     }
     stopOnScreenOffPref.observe()
-        .subscribe { stopOnScreenOffEntry.isChecked = it }
-        .attachLifecycle(this)
+      .subscribe { stopOnScreenOffEntry.isChecked = it }
+      .attachLifecycle(this)
+  }
+
+  private fun showOutputFolderSelector(title: String) {
+    if (!isAllGranted(WRITE_EXTERNAL_STORAGE)) {
+      runWithPermissions(WRITE_EXTERNAL_STORAGE) {
+        showOutputFolderSelector(title)
+      }
+      return
+    }
+
+    val initialFolder = File(recordingsFolderPref.get()).apply {
+      mkdirs()
+    }
+    MaterialDialog(activity!!).show {
+      title(text = title)
+      folderChooser(
+        allowFolderCreation = true,
+        initialDirectory = initialFolder
+      ) { _, folder ->
+        recordingsFolderPref.set(folder.absolutePath)
+      }
+      positiveButton(R.string.select)
+    }
   }
 
   private fun showNumberSelector(
