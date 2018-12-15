@@ -23,6 +23,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.afollestad.mnmlscreenrecord.common.files.FileScanner
 import com.afollestad.mnmlscreenrecord.common.intent.IntentReceiver
 import com.afollestad.mnmlscreenrecord.common.lifecycle.SimpleLifecycle
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
@@ -32,6 +33,7 @@ import com.afollestad.mnmlscreenrecord.notifications.EXTRA_STOP_FOREGROUND
 import com.afollestad.mnmlscreenrecord.notifications.Notifications
 import com.afollestad.mnmlscreenrecord.notifications.RECORD_ACTION
 import com.afollestad.mnmlscreenrecord.notifications.STOP_ACTION
+import com.afollestad.rxkprefs.Pref
 import org.koin.android.ext.android.inject
 import timber.log.Timber.d as log
 
@@ -57,6 +59,8 @@ class BackgroundService : Service(), LifecycleOwner {
   private val captureEngine by inject<CaptureEngine>()
   private val uriScanner by inject<FileScanner>()
   private val mainActivityClass by inject<Class<*>>(name = MAIN_ACTIVITY_CLASS)
+
+  private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
 
   override fun onBind(intent: Intent?): IBinder? = null
 
@@ -86,12 +90,15 @@ class BackgroundService : Service(), LifecycleOwner {
         updateForeground(false)
       }
       onAction(ACTION_SCREEN_OFF) {
-        captureEngine.stop()
+        if (stopOnScreenOffPref.get()) {
+          captureEngine.stop()
+        }
       }
       onAction(STOP_ACTION) {
         captureEngine.stop()
         if (notifications.isAppOpen() ||
-            it.getBooleanExtra(EXTRA_STOP_FOREGROUND, false)) {
+            it.getBooleanExtra(EXTRA_STOP_FOREGROUND, false)
+        ) {
           stopForeground(true)
           stopSelf()
         }

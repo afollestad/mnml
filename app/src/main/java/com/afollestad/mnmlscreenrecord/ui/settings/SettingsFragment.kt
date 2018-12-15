@@ -17,6 +17,7 @@ package com.afollestad.mnmlscreenrecord.ui.settings
 
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
@@ -24,6 +25,7 @@ import com.afollestad.materialdialogs.files.folderChooser
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onProgressChanged
 import com.afollestad.rxkprefs.Pref
@@ -37,6 +39,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
   private val countdownPref by inject<Pref<Int>>(name = PREF_COUNTDOWN)
   private val recordingsFolderPref by inject<Pref<String>>(name = PREF_RECORDINGS_FOLDER)
+  private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
 
   override fun onCreatePreferences(
     savedInstanceState: Bundle?,
@@ -87,6 +90,17 @@ class SettingsFragment : PreferenceFragmentCompat() {
               R.string.setting_recordings_folder_desc, it
           )
         }
+        .attachLifecycle(this)
+
+    val stopOnScreenOffEntry = findPreference(PREF_STOP_ON_SCREEN_OFF) as SwitchPreference
+    stopOnScreenOffEntry.run {
+      setOnPreferenceChangeListener { _, newValue ->
+        stopOnScreenOffPref.set(newValue as Boolean)
+        true
+      }
+    }
+    stopOnScreenOffPref.observe()
+        .subscribe { stopOnScreenOffEntry.isChecked = it }
         .attachLifecycle(this)
   }
 

@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <Preference
-      android:key="countdown"
-      android:layout="@layout/custom_preference"
-      android:summary="@string/setting_countdown_desc"
-      android:title="@string/setting_countdown"/>
+  <PreferenceCategory
+      android:layout="@layout/custom_preference_category"
+      android:title="@string/setting_category_recording">
 
-  <Preference
-      android:key="recordings_folder"
-      android:layout="@layout/custom_preference"
-      android:summary="@string/setting_recordings_folder_desc"
-      android:title="@string/setting_recordings_folder"/>
+    <Preference
+        android:key="countdown"
+        android:layout="@layout/custom_preference"
+        android:summary="@string/setting_countdown_desc"
+        android:title="@string/setting_countdown"/>
+
+    <Preference
+        android:key="recordings_folder"
+        android:layout="@layout/custom_preference"
+        android:summary="@string/setting_recordings_folder_desc"
+        android:title="@string/setting_recordings_folder"/>
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:layout="@layout/custom_preference_category"
+      android:title="@string/setting_category_controls">
+
+    <SwitchPreference
+        android:key="stop_on_screen_off"
+        android:layout="@layout/custom_preference"
+        android:summaryOff="@string/setting_stop_on_screen_off_desc_off"
+        android:summaryOn="@string/setting_stop_on_screen_off_desc_on"
+        android:title="@string/setting_stop_on_screen_off"/>
+
+  </PreferenceCategory>
 
 </PreferenceScreen>
