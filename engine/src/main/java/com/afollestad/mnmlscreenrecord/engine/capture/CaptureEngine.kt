@@ -170,7 +170,7 @@ class CaptureEngine(
       val now = Date().timestampString()
       val outputFile = File(outputFolder, "MNML-$now.mp4")
       pendingFile = outputFile
-      setOutputFile(outputFile)
+      setOutputFile(outputFile.absolutePath)
 
       try {
         prepare()

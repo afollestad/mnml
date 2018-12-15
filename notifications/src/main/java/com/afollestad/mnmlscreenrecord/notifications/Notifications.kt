@@ -15,9 +15,9 @@
  */
 package com.afollestad.mnmlscreenrecord.notifications
 
+import android.annotation.TargetApi
 import android.app.Application
 import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_CANCEL_CURRENT
@@ -27,9 +27,11 @@ import android.content.Intent.ACTION_VIEW
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.os.Build.VERSION_CODES.O
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.afollestad.mnmlscreenrecord.common.misc.setViewVisibility
+import com.afollestad.mnmlscreenrecord.notifications.providers.NotificationChannelBuilder
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -95,6 +97,7 @@ interface Notifications {
  */
 class RealNotifications(
   private val app: Application,
+  private val channelBuilder: NotificationChannelBuilder,
   private val stockManager: NotificationManager
 ) : Notifications {
 
@@ -120,9 +123,16 @@ class RealNotifications(
 
   override fun isAppOpen(): Boolean = currentIsAppOpen
 
+  @TargetApi(O)
   override fun createChannels() {
     Channel.values()
-        .forEach(this::createChannel)
+        .map { channelBuilder.createChannel(it) }
+        .filter { it != null }
+        .map { it!! }
+        .forEach {
+          log("Created notification channel ${it.id}")
+          stockManager.createNotificationChannel(it)
+        }
   }
 
   override fun createWidgetServiceNotification(
@@ -240,16 +250,6 @@ class RealNotifications(
 
   override fun cancelPostRecordNotification() {
     stockManager.cancel(ID_POST_RECORD)
-  }
-
-  private fun createChannel(channel: Channel) {
-    val newChannel = NotificationChannel(
-        channel.id,
-        channel.title,
-        channel.importance
-    ).apply { description = channel.description }
-    stockManager.createNotificationChannel(newChannel)
-    log("Created notification channel ${channel.id}")
   }
 
   private fun broadcast(

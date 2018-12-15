@@ -30,8 +30,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center"
         android:layout_marginBottom="@dimen/content_inset_more"
+        android:gravity="center"
         android:orientation="vertical"
         >
 
@@ -61,8 +61,10 @@
         android:layout_marginBottom="@dimen/content_inset"
         android:layout_marginEnd="@dimen/content_inset_more"
         android:minHeight="64dp"
-        android:paddingHorizontal="@dimen/content_inset"
-        android:paddingVertical="@dimen/content_inset_half"
+        android:paddingBottom="@dimen/content_inset_half"
+        android:paddingEnd="@dimen/content_inset"
+        android:paddingStart="@dimen/content_inset"
+        android:paddingTop="@dimen/content_inset_half"
         android:text="@string/start_recording"
         app:cornerRadius="32dp"
         app:icon="@drawable/ic_record_32dp"

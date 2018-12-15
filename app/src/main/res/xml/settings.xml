@@ -8,7 +8,6 @@
     <Preference
         android:key="countdown"
         android:layout="@layout/custom_preference"
-        android:summary="@string/setting_countdown_desc"
         android:title="@string/setting_countdown"/>
 
     <Preference

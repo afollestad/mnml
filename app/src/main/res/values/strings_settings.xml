@@ -7,7 +7,11 @@
   <string name="setting_category_controls">Controls</string>
 
   <string name="setting_countdown">Countdown</string>
-  <string name="setting_countdown_desc">%1$d seconds before recording begins.</string>
+  <plurals name="setting_countdown_desc">
+    <item quantity="one">%1$d second before recording begins.</item>
+    <item quantity="other">%1$d seconds before recording begins.</item>
+  </plurals>
+
   <string name="setting_countdown_zero_note">When set to 0, the countdown is disabled.</string>
 
   <string name="setting_recordings_folder">Recordings Folder</string>
@@ -15,11 +19,11 @@
 
   <string name="setting_stop_on_screen_off">Stop on Screen Off</string>
   <string name="setting_stop_on_screen_off_desc_on">
-    When your screen is turned off, any active screen recording will stop.
-  </string>
+        When your screen is turned off, any active screen recording will stop.
+    </string>
   <string name="setting_stop_on_screen_off_desc_off">
-    When your screen is turned off, nothing special will happen.
-  </string>
+        When your screen is turned off, nothing special will happen.
+    </string>
 
   <string name="select">Select</string>
 

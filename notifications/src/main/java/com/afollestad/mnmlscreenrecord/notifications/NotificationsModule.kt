@@ -19,6 +19,8 @@ import android.app.Application
 import android.app.NotificationManager
 import android.content.Context.NOTIFICATION_SERVICE
 import com.afollestad.mnmlscreenrecord.common.misc.systemService
+import com.afollestad.mnmlscreenrecord.notifications.providers.NotificationChannelBuilder
+import com.afollestad.mnmlscreenrecord.notifications.providers.RealNotificationChannelBuilder
 import org.koin.dsl.module.module
 
 /** @author Aidan Follestad (@afollestad) */
@@ -28,5 +30,11 @@ val notificationsModule = module {
     get<Application>().systemService(NOTIFICATION_SERVICE)
   }
 
-  single { RealNotifications(get(), get()) } bind Notifications::class
+  single {
+    RealNotifications(get(), get(), get())
+  } bind Notifications::class
+
+  factory {
+    RealNotificationChannelBuilder(get())
+  } bind NotificationChannelBuilder::class
 }

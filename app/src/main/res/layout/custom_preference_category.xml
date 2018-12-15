@@ -4,8 +4,9 @@
     android:id="@android:id/title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="@dimen/content_inset"
-    android:paddingTop="@dimen/content_inset_more"
     android:paddingBottom="@dimen/content_inset_half"
+    android:paddingLeft="@dimen/content_inset"
+    android:paddingRight="@dimen/content_inset"
+    android:paddingTop="@dimen/content_inset_more"
     android:textAppearance="@style/AppTheme.TextAppearance.Subheader.Accent"
     />

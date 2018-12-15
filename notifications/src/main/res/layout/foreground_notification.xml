@@ -35,6 +35,7 @@
         android:layout_height="52dp"
         android:layout_marginEnd="@dimen/content_inset_less"
         android:background="?android:selectableItemBackground"
+        android:contentDescription="@string/cd_start_recording"
         android:src="@drawable/ic_record_32dp"
         />
 
@@ -44,6 +45,7 @@
         android:layout_height="52dp"
         android:layout_marginEnd="@dimen/content_inset_less"
         android:background="?android:selectableItemBackground"
+        android:contentDescription="@string/cd_stop_recording"
         android:src="@drawable/ic_stop_32dp"
         />
 
@@ -52,6 +54,7 @@
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:background="?android:selectableItemBackground"
+        android:contentDescription="@string/cd_stop_service"
         android:src="@drawable/ic_close_32dp"
         />
 

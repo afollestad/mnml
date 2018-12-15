@@ -55,7 +55,7 @@ val engineModule = module {
 
   single { CaptureEngine(get(), get(), get(name = PREF_RECORDINGS_FOLDER)) }
 
-  factory { OverlayManager(get(), get(), get(name = PREF_COUNTDOWN)) }
+  factory { OverlayManager(get(), get(), get(name = PREF_COUNTDOWN), get()) }
 
   factory { RealServiceController(get()) } bind ServiceController::class
 }

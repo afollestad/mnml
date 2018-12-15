@@ -15,6 +15,7 @@
  */
 package com.afollestad.mnmlscreenrecord.engine.overlay
 
+import android.annotation.SuppressLint
 import android.graphics.PixelFormat.TRANSLUCENT
 import android.view.LayoutInflater
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -23,8 +24,10 @@ import android.view.WindowManager.LayoutParams
 import android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
 import android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+import android.view.WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
 import android.widget.TextView
 import com.afollestad.mnmlscreenrecord.common.misc.inflateAs
+import com.afollestad.mnmlscreenrecord.common.providers.SdkProvider
 import com.afollestad.mnmlscreenrecord.engine.R
 import com.afollestad.rxkprefs.Pref
 
@@ -32,7 +35,8 @@ import com.afollestad.rxkprefs.Pref
 class OverlayManager(
   private val windowManager: WindowManager,
   private val layoutInflater: LayoutInflater,
-  private val countdownPref: Pref<Int>
+  private val countdownPref: Pref<Int>,
+  private val sdkProvider: SdkProvider
 ) {
   companion object {
     private const val SECOND = 1000L
@@ -52,10 +56,17 @@ class OverlayManager(
     val textView: TextView = layoutInflater.inflateAs(R.layout.countdown_textview)
     textView.text = "$time"
 
+    @Suppress("DEPRECATION")
+    @SuppressLint("InlinedApi")
+    val type = if (sdkProvider.hasAndroidO()) {
+      TYPE_APPLICATION_OVERLAY
+    } else {
+      TYPE_SYSTEM_OVERLAY
+    }
     val params = LayoutParams(
         WRAP_CONTENT, // width
         WRAP_CONTENT, // height
-        TYPE_APPLICATION_OVERLAY, // type
+        type,
         FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL, // flags
         TRANSLUCENT // format
     )

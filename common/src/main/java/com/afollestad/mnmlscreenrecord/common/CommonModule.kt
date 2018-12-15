@@ -20,6 +20,8 @@ import com.afollestad.mnmlscreenrecord.common.Qualifiers.MAIN_DISPATCHER
 import com.afollestad.mnmlscreenrecord.common.files.FileScanner
 import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
 import com.afollestad.mnmlscreenrecord.common.permissions.RealPermissionChecker
+import com.afollestad.mnmlscreenrecord.common.providers.RealSdkProvider
+import com.afollestad.mnmlscreenrecord.common.providers.SdkProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.module.module
@@ -39,4 +41,6 @@ val commonModule = module {
   single { FileScanner(get()) }
 
   factory { RealPermissionChecker(get()) } bind PermissionChecker::class
+
+  factory { RealSdkProvider() } bind SdkProvider::class
 }

@@ -32,7 +32,8 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREE
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onProgressChanged
 import com.afollestad.rxkprefs.Pref
-import kotlinx.android.synthetic.main.dialog_number_selector.view.*
+import kotlinx.android.synthetic.main.dialog_number_selector.view.label
+import kotlinx.android.synthetic.main.dialog_number_selector.view.seeker
 import org.koin.android.ext.android.inject
 import java.io.File
 
@@ -52,21 +53,20 @@ class SettingsFragment : PreferenceFragmentCompat() {
     val countdownEntry = findPreference(PREF_COUNTDOWN).apply {
       setOnPreferenceClickListener {
         showNumberSelector(
-          title.toString(),
-          0,
-          10,
-          countdownPref.get()
+            title = title.toString(),
+            max = 10,
+            current = countdownPref.get()
         ) { selection -> countdownPref.set(selection) }
         true
       }
     }
     countdownPref.observe()
-      .subscribe {
-        countdownEntry.summary = resources.getString(
-          R.string.setting_countdown_desc, it
-        )
-      }
-      .attachLifecycle(this)
+        .subscribe {
+          countdownEntry.summary = resources.getQuantityString(
+              R.plurals.setting_countdown_desc, it, it
+          )
+        }
+        .attachLifecycle(this)
 
     val recordingsFolderEntry = findPreference(PREF_RECORDINGS_FOLDER).apply {
       setOnPreferenceClickListener {
@@ -75,12 +75,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
       }
     }
     recordingsFolderPref.observe()
-      .subscribe {
-        recordingsFolderEntry.summary = resources.getString(
-          R.string.setting_recordings_folder_desc, it
-        )
-      }
-      .attachLifecycle(this)
+        .subscribe {
+          recordingsFolderEntry.summary = resources.getString(
+              R.string.setting_recordings_folder_desc, it
+          )
+        }
+        .attachLifecycle(this)
 
     val stopOnScreenOffEntry = findPreference(PREF_STOP_ON_SCREEN_OFF) as SwitchPreference
     stopOnScreenOffEntry.run {
@@ -90,8 +90,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
       }
     }
     stopOnScreenOffPref.observe()
-      .subscribe { stopOnScreenOffEntry.isChecked = it }
-      .attachLifecycle(this)
+        .subscribe { stopOnScreenOffEntry.isChecked = it }
+        .attachLifecycle(this)
   }
 
   private fun showOutputFolderSelector(title: String) {
@@ -108,8 +108,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
     MaterialDialog(activity!!).show {
       title(text = title)
       folderChooser(
-        allowFolderCreation = true,
-        initialDirectory = initialFolder
+          allowFolderCreation = true,
+          initialDirectory = initialFolder
       ) { _, folder ->
         recordingsFolderPref.set(folder.absolutePath)
       }
@@ -119,7 +119,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
   private fun showNumberSelector(
     title: String,
-    min: Int,
     max: Int,
     current: Int,
     onSelection: (Int) -> Unit
@@ -136,7 +135,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     val customView = dialog.getCustomView() ?: return
     customView.label.text = "$current"
-    customView.seeker.min = min
     customView.seeker.max = max
     customView.seeker.progress = current
     customView.seeker.onProgressChanged {
