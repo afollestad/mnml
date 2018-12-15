@@ -15,9 +15,11 @@
  */
 package com.afollestad.mnmlscreenrecord.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.theming.DarkModeSwitchActivity
+import com.afollestad.mnmlscreenrecord.ui.main.MainActivity
 import kotlinx.android.synthetic.main.include_appbar.toolbar
 import kotlinx.android.synthetic.main.include_appbar.app_toolbar as appToolbar
 import kotlinx.android.synthetic.main.include_appbar.toolbar_title as toolbarTitle
@@ -41,7 +43,9 @@ class SettingsActivity : DarkModeSwitchActivity() {
           R.drawable.ic_back_lighttheme
         }
     )
-    toolbar.setNavigationOnClickListener { finish() }
+    toolbar.setNavigationOnClickListener {
+      navigateUpTo(Intent(this, MainActivity::class.java))
+    }
 
     if (savedInstanceState == null) {
       supportFragmentManager.beginTransaction()
