@@ -50,4 +50,7 @@ class DistinctLiveData<T>(source1: LiveData<T>) : MediatorLiveData<T>() {
   }
 }
 
+/**
+ * Wraps the receiving LiveData instance with a [DistinctLiveData], filtering out duplicates.
+ */
 fun <T> LiveData<T>.distinct(): MediatorLiveData<T> = DistinctLiveData(this)

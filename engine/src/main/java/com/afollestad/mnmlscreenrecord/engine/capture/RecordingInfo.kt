@@ -25,6 +25,11 @@ import com.afollestad.mnmlscreenrecord.common.misc.displayInfo
 import com.afollestad.mnmlscreenrecord.engine.capture.RecordingInfo.Companion
 import timber.log.Timber
 
+/**
+ * Holds settings that will be used to capture the device's screen.
+ *
+ * @author Aidan Follestad (@afollestad)
+ */
 data class RecordingInfo(
   val width: Int,
   val height: Int,
@@ -34,6 +39,9 @@ data class RecordingInfo(
   companion object
 }
 
+/**
+ * Gets an instance of [RecordingInfo], holding settings that fit the current device.
+ */
 fun Companion.get(
   context: Context,
   windowManager: WindowManager

@@ -20,10 +20,21 @@ import android.app.Application
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.provider.Settings
 
+/**
+ * An abstraction layer for checking common permission access.
+ *
+ * @author Aidan Follestad (@afollestad)
+ */
 interface PermissionChecker {
 
+  /**
+   * Returns true if the app has permission to show system overlays.
+   */
   fun hasOverlayPermission(): Boolean
 
+  /**
+   * Returns true if the app has permission to write external storage.
+   */
   fun hasStoragePermission(): Boolean
 }
 

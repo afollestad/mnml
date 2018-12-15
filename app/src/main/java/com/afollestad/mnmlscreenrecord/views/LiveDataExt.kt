@@ -25,11 +25,17 @@ import com.afollestad.mnmlscreenrecord.common.livedata.distinct
 import com.afollestad.mnmlscreenrecord.common.view.showOrHide
 import com.google.android.material.button.MaterialButton
 
+/**
+ * Emissions from the receiving LiveData are set as the [view]'s icon.
+ */
 fun LiveData<Int>.asIcon(
   owner: LifecycleOwner,
   view: MaterialButton
 ) = distinct().observe(owner, Observer { view.setIconResource(it) })
 
+/**
+ * Emissions from the receiving LiveData are set as the [view]'s background tint.
+ */
 fun LiveData<Int>.asBackgroundTint(
   owner: LifecycleOwner,
   view: MaterialButton
@@ -38,16 +44,25 @@ fun LiveData<Int>.asBackgroundTint(
   view.backgroundTintList = valueOf(actualColor)
 })
 
+/**
+ * Emissions from the receiving LiveData are set as the [view]'s text.
+ */
 fun LiveData<Int>.asText(
   owner: LifecycleOwner,
   view: MaterialButton
 ) = distinct().observe(owner, Observer { view.setText(it) })
 
+/**
+ * Emissions from the receiving LiveData are set as the [view]'s enabled state.
+ */
 fun LiveData<Boolean>.asEnabled(
   owner: LifecycleOwner,
   view: View
 ) = distinct().observe(owner, Observer { view.isEnabled = it })
 
+/**
+ * Emissions from the receiving LiveData are set as the [view]'s visibility (visible or gone).
+ */
 fun LiveData<Boolean>.asVisibility(
   owner: LifecycleOwner,
   view: View

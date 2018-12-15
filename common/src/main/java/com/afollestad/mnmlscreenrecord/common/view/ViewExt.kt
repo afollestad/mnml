@@ -27,18 +27,33 @@ data class Size(
   val height: Int
 )
 
+/**
+ * Returns a [Size] containing the width and height of the receiving view.
+ */
 fun View.size() = Size(measuredWidth, measuredHeight)
 
+/**
+ * Sets the receiving view's visibility to [VISIBLE].
+ */
 fun View.show() {
   visibility = VISIBLE
 }
 
+/**
+ * Sets the receiving view's visibility to [GONE].
+ */
 fun View.hide() {
   visibility = GONE
 }
 
+/**
+ * If show is true, calls [show] on the receiving view - else calls [hide].
+ */
 fun View.showOrHide(show: Boolean) = if (show) show() else hide()
 
+/**
+ * Calls the [scroll] callback when the receiving RecyclerView's scroll position is changed.
+ */
 fun RecyclerView.onScroll(scroll: (Int) -> Unit) {
   addOnScrollListener(object : RecyclerView.OnScrollListener() {
     override fun onScrolled(
@@ -52,6 +67,9 @@ fun RecyclerView.onScroll(scroll: (Int) -> Unit) {
   })
 }
 
+/**
+ * Calls the [cb] callback when the receiving SeekBar's value is changed.
+ */
 fun SeekBar.onProgressChanged(cb: (Int) -> Unit) {
   setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
     override fun onProgressChanged(

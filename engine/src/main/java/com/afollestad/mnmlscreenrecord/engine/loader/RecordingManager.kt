@@ -23,18 +23,25 @@ import java.io.File
 
 const val VIDEOS_URI = "content://media/external/video/media"
 
-interface RecordingManager {
-
-  fun getRecordings(): List<Recording>
-
-  fun deleteRecording(recording: Recording)
-}
-
 /**
- * Handles loading and deleting recordings from the [recordingsFolderPref] folder.
+ * Handles loading and deleting recordings.
  *
  * @author Aidan Follestad (@afollestad)
  */
+interface RecordingManager {
+
+  /**
+   * Gets a list of saved recordings from the set recordings folder.
+   */
+  fun getRecordings(): List<Recording>
+
+  /**
+   * Deletes a recording's file and deletes the entry from the system content provider.
+   */
+  fun deleteRecording(recording: Recording)
+}
+
+/** @author Aidan Follestad (@afollestad) */
 class RealRecordingManager(
   app: Application,
   private val recordingsFolderPref: Pref<String>
@@ -51,7 +58,7 @@ class RealRecordingManager(
         "bucket_display_name = ?", // selection
         arrayOf(folder.name), // selectionArgs
         "date_added DESC" // sortOrder
-    )!!
+    ) ?: return emptyList()
 
     cursor.use {
       return mutableListOf<Recording>().also { list ->

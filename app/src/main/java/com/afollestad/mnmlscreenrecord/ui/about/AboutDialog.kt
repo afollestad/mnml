@@ -28,9 +28,11 @@ class AboutDialog : DialogFragment() {
   companion object {
     private const val TAG = "[ABOUT_DIALOG]"
 
+    /** Shows the about dialog inside of [context]. */
     fun show(context: AppCompatActivity) {
       val dialog = AboutDialog()
-      dialog.show(context.supportFragmentManager,
+      dialog.show(
+          context.supportFragmentManager,
           TAG
       )
     }

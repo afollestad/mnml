@@ -78,21 +78,31 @@ class MainViewModel(
   private val fabEnabled = MutableLiveData<Boolean>()
 
   // Expose properties as immutable
+
+  /** Emits when recordings are received to populate the main grid. */
   @CheckResult fun onRecordings(): LiveData<List<Recording>> = recordings
 
+  /** Emits when the empty view's visibility should be changed. */
   @CheckResult fun onEmptyViewVisibility(): LiveData<Boolean> = emptyViewVisibility
 
+  /** Emits when the FAB's background color should be changed. */
   @CheckResult fun onFabColorRes(): LiveData<Int> = fabColorRes
 
+  /** Emits when the FAB's icon should be changed. */
   @CheckResult fun onFabIconRes(): LiveData<Int> = fabIconRes
 
+  /** Emits when the FAB's text should be changed. */
   @CheckResult fun onFabTextRes(): LiveData<Int> = fabTextRes
 
+  /** Emits when the FAB's enabled state should be changed. */
   @CheckResult fun onFabEnabled(): LiveData<Boolean> = fabEnabled
 
   // Expose Subjects
+
+  /** Emits when the app needs permission to write external storage. */
   @CheckResult fun onNeedStoragePermission(): Observable<Unit> = needStoragePermission
 
+  /** Emits when the app needs system overlay permissions. */
   @CheckResult fun onNeedOverlayPermission(): Observable<Unit> = needOverlayPermission
 
   // Lifecycle Events
@@ -146,6 +156,10 @@ class MainViewModel(
     emptyViewVisibility.value = result.isEmpty()
   }
 
+  /**
+   * Deletes a recording's file and content provider entry - refreshes recordings
+   * afterwards, causing an emission to [onRecordings].
+   */
   fun deleteRecording(recording: Recording) = launch {
     withContext(ioDispatcher) {
       recordingManager.deleteRecording(recording)
@@ -153,6 +167,9 @@ class MainViewModel(
     refreshRecordings()
   }
 
+  /**
+   * Call when the FAB is tapped - asking for any required permissions and starting screen capture.
+   */
   fun fabClicked() {
     fabEnabled.value = false
     if (captureEngine.isStarted()) {
@@ -172,6 +189,10 @@ class MainViewModel(
     }
   }
 
+  /**
+   * Notifies that a permission was granted, trying [fabClicked] again if that's what caused
+   * a permission request.
+   */
   fun permissionGranted() {
     if (wantToStartCapture) {
       fabClicked()

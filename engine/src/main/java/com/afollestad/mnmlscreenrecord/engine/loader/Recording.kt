@@ -40,9 +40,18 @@ data class Recording(
     }
   }
 
+  /**
+   * Gets a human-readable string representing the size of this recording in bytes.
+   */
   fun sizeString() = size.friendlySize()
 
+  /**
+   * Gets a timestamp string representing when this recording was saved.
+   */
   fun timestampString() = timestamp.friendlyDate()
 
+  /**
+   * Gets the content provider URI for this recording.
+   */
   fun toUri() = "$VIDEOS_URI/$id".toUri()
 }

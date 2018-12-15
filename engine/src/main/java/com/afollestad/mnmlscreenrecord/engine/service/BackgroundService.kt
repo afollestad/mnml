@@ -119,11 +119,6 @@ class BackgroundService : Service(), LifecycleOwner {
       }
     }
 
-    // Lifecycle observers
-    lifecycle.run {
-      addObserver(captureEngine)
-    }
-
     // Foreground notification
     updateForeground(false)
     lifecycle.onCreate()
@@ -140,7 +135,7 @@ class BackgroundService : Service(), LifecycleOwner {
 
   override fun onDestroy() {
     log("onDestroy()")
-    lifecycle.onDestroy()
+    captureEngine.stop()
     super.onDestroy()
   }
 

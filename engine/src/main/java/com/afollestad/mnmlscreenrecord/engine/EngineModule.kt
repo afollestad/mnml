@@ -26,6 +26,7 @@ import com.afollestad.mnmlscreenrecord.common.misc.systemService
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
+import com.afollestad.mnmlscreenrecord.engine.capture.RealCaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.loader.RealRecordingManager
 import com.afollestad.mnmlscreenrecord.engine.loader.RecordingManager
 import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
@@ -53,7 +54,9 @@ val engineModule = module {
     RealRecordingManager(get(), get(name = PREF_RECORDINGS_FOLDER))
   } bind RecordingManager::class
 
-  single { CaptureEngine(get(), get(), get(name = PREF_RECORDINGS_FOLDER)) }
+  single {
+    RealCaptureEngine(get(), get(), get(name = PREF_RECORDINGS_FOLDER))
+  } bind CaptureEngine::class
 
   factory { OverlayManager(get(), get(), get(name = PREF_COUNTDOWN), get()) }
 

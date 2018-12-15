@@ -31,14 +31,12 @@ import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Handler
 import android.view.WindowManager
-import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
 import com.afollestad.mnmlscreenrecord.common.misc.timestampString
 import com.afollestad.rxkprefs.Pref
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.io.File
+import java.lang.IllegalStateException
 import java.util.Date
 import timber.log.Timber.d as log
 
@@ -47,11 +45,74 @@ import timber.log.Timber.d as log
  *
  * @author Aidan Follestad (@afollestad)
  */
-class CaptureEngine(
+interface CaptureEngine {
+
+  /**
+   * Returns an Observable that emits when capture starts.
+   */
+  fun onStart(): Observable<Unit>
+
+  /**
+   * Returns an Observable that emits when capture stops. The emission is the file
+   * containing the finished screen recording.
+   */
+  fun onStop(): Observable<File>
+
+  /**
+   * Returns an Observable that emits when capture is cancelled, e.g. if permissions
+   * are denied.
+   */
+  fun onCancel(): Observable<Unit>
+
+  /**
+   * Returns true if capture is currently in0-progress.
+   */
+  fun isStarted(): Boolean
+
+  /**
+   * Starts screen capture.
+   */
+  fun start(context: Context)
+
+  /**
+   * Requests permission to capture the screen. Shows the system cast dialog,
+   * prompting to "start now" - unless the user checks the box to not show again.
+   */
+  fun requestPermission(
+    context: Activity,
+    requestCode: Int
+  )
+
+  /**
+   * A delegate from the activity - notifies when capture permission is received.
+   */
+  fun onActivityResult(
+    resultCode: Int,
+    data: Intent
+  )
+
+  /**
+   * Cancels screen capture - deleting any previously created file and signaling cancellation.
+   */
+  fun cancel()
+
+  /**
+   * Deletes the last created recording file.
+   */
+  fun deleteLastRecording()
+
+  /**
+   * Stops screen capture - commits the capture file and emits into the stop signal.
+   */
+  fun stop()
+}
+
+/** @author Aidan Follestad (@afollestad) */
+class RealCaptureEngine(
   private val windowManager: WindowManager,
   private val projectionManager: MediaProjectionManager,
   private val recordingsFolderPref: Pref<String>
-) : LifecycleObserver {
+) : CaptureEngine {
 
   private lateinit var recordingInfo: RecordingInfo
   private val handler = Handler()
@@ -65,15 +126,15 @@ class CaptureEngine(
   private var onCancel = PublishSubject.create<Unit>()
   private var isStarted: Boolean = false
 
-  fun onStart(): Observable<Unit> = onStart
+  override fun onStart(): Observable<Unit> = onStart
 
-  fun onStop(): Observable<File> = onStop
+  override fun onStop(): Observable<File> = onStop
 
-  fun onCancel(): Observable<Unit> = onCancel
+  override fun onCancel(): Observable<Unit> = onCancel
 
-  fun isStarted() = isStarted
+  override fun isStarted(): Boolean = isStarted
 
-  fun start(context: Context) {
+  override fun start(context: Context) {
     log("start($context)")
     recordingInfo = RecordingInfo.get(context, windowManager)
     createAndPrepareRecorder(recordingInfo)
@@ -90,12 +151,12 @@ class CaptureEngine(
     createVirtualDisplayAndStart(recordingInfo)
   }
 
-  fun requestPermission(
+  override fun requestPermission(
     context: Activity,
     requestCode: Int
   ) = context.startActivityForResult(projectionManager.createScreenCaptureIntent(), requestCode)
 
-  fun onActivityResult(
+  override fun onActivityResult(
     resultCode: Int,
     data: Intent
   ) {
@@ -107,7 +168,7 @@ class CaptureEngine(
     createVirtualDisplayAndStart(recordingInfo)
   }
 
-  fun cancel() {
+  override fun cancel() {
     if (pendingFile == null) {
       onCancel.onNext(Unit)
       return
@@ -118,13 +179,12 @@ class CaptureEngine(
     stop()
   }
 
-  fun deleteLastRecording() {
+  override fun deleteLastRecording() {
     pendingFile?.delete()
     pendingFile = null
   }
 
-  @OnLifecycleEvent(ON_DESTROY)
-  fun stop() {
+  override fun stop() {
     if (recorder == null) {
       onCancel.onNext(Unit)
       return
@@ -176,7 +236,7 @@ class CaptureEngine(
         prepare()
         log("Media recorder prepared")
       } catch (e: Throwable) {
-        throw RuntimeException("Unable to prepare the MediaRecorder", e)
+        throw IllegalStateException("Unable to prepare the MediaRecorder", e)
       }
     }
   }
@@ -209,7 +269,7 @@ class CaptureEngine(
   private val projectionCallback = object : MediaProjection.Callback() {
     override fun onStop() {
       log("Got onStop() in projection callback")
-      this@CaptureEngine.stop()
+      stop()
     }
   }
 }
