@@ -43,13 +43,13 @@ abstract class DarkModeSwitchActivity : AppCompatActivity() {
         .attachLifecycle(this)
   }
 
-  fun setDarkMode(dark: Boolean) = darkModePref.set(dark)
-
   fun isDarkMode() = darkModePref.get()
 
   fun toggleDarkMode() = setDarkMode(!isDarkMode())
 
-  private fun themeRes() = if (darkModePref.get()) {
+  private fun setDarkMode(dark: Boolean) = darkModePref.set(dark)
+
+  protected open fun themeRes() = if (darkModePref.get()) {
     R.style.AppTheme_Dark
   } else {
     R.style.AppTheme

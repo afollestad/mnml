@@ -1,35 +1,33 @@
 <resources>
 
-  <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+  <style name="AppThemeParent" parent="Theme.MaterialComponents.Light.NoActionBar">
     <item name="colorPrimary">@color/colorPrimary_lightTheme</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark_lightTheme</item>
     <item name="colorAccent">@color/colorAccent</item>
 
-    <item name="toolbarTitleColor">#000</item>
+    <item name="toolbarTitleColor">#000000</item>
     <item name="cardBackground">@color/card_background_lightTheme</item>
+    <item name="dividerColor">#1f000000</item>
+
     <item name="android:windowBackground">@color/window_background_lightTheme</item>
 
     <item name="android:windowLightStatusBar">true</item>
     <item name="android:statusBarColor">@color/colorPrimary_lightTheme</item>
-
-    <item name="android:navigationBarColor">@color/colorPrimaryDark_lightTheme</item>
-    <item name="android:windowLightNavigationBar">true</item>
   </style>
 
-  <style name="AppTheme.Dark" parent="Theme.MaterialComponents.NoActionBar">
+  <style name="AppThemeParent.Dark" parent="Theme.MaterialComponents.NoActionBar">
     <item name="colorPrimary">@color/colorPrimary_darkTheme</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark_darkTheme</item>
     <item name="colorAccent">@color/colorAccent</item>
 
-    <item name="toolbarTitleColor">#FFF</item>
+    <item name="toolbarTitleColor">#ffffff</item>
     <item name="cardBackground">@color/card_background_darkTheme</item>
+    <item name="dividerColor">#1fffffff</item>
+
     <item name="android:windowBackground">@color/window_background_darkTheme</item>
 
     <item name="android:windowLightStatusBar">false</item>
     <item name="android:statusBarColor">@color/colorPrimary_darkTheme</item>
-
-    <item name="android:navigationBarColor">@color/colorPrimaryDark_darkTheme</item>
-    <item name="android:windowLightNavigationBar">false</item>
   </style>
 
 </resources>

@@ -28,6 +28,7 @@ class SettingsActivity : DarkModeSwitchActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_settings)
+
     toolbarTitle.setText(R.string.settings)
     if (!isDarkMode()) {
       appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)

@@ -28,9 +28,9 @@
   </style>
 
   <style name="AppTheme.TextAppearance.Body" parent="TextAppearance.MaterialComponents.Body1">
-    <item name="fontFamily">@font/lato</item>
-    <item name="android:fontFamily">@font/lato</item>
-    <item name="android:textColor">?android:textColorSecondary</item>
+    <item name="fontFamily">@font/lato_light</item>
+    <item name="android:fontFamily">@font/lato_light</item>
+    <item name="android:textColor">?android:textColorPrimary</item>
   </style>
 
   <style name="AppTheme.TextAppearance.Caption" parent="TextAppearance.MaterialComponents.Caption">
