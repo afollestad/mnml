@@ -19,11 +19,20 @@
 
   <string name="setting_stop_on_screen_off">Stop on Screen Off</string>
   <string name="setting_stop_on_screen_off_desc_on">
-        When your screen is turned off, any active screen recording will stop.
-    </string>
+      When your screen is turned off, any active screen recording will stop.
+  </string>
   <string name="setting_stop_on_screen_off_desc_off">
-        When your screen is turned off, nothing special will happen.
-    </string>
+      When your screen is turned off, nothing special will happen.
+  </string>
+
+  <string name="setting_always_show_notification">Always Show Notification</string>
+  <string name="setting_always_show_notification_on">
+    The persistent controls notification is shown when the app is launched, and won\'t go
+    away until you dismiss it with the \'X\' button.
+  </string>
+  <string name="setting_always_show_notification_off">
+    The persistent controls notification is only show when capture is in-progress.
+  </string>
 
   <string name="select">Select</string>
 

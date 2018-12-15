@@ -33,6 +33,7 @@ import com.afollestad.mnmlscreenrecord.engine.loader.RecordingManager
 import com.afollestad.mnmlscreenrecord.engine.service.ServiceController
 import com.afollestad.mnmlscreenrecord.notifications.Notifications
 import com.afollestad.mnmlscreenrecord.ui.ScopedViewModel
+import com.afollestad.rxkprefs.Pref
 import io.reactivex.Observable
 import io.reactivex.Observable.merge
 import io.reactivex.disposables.CompositeDisposable
@@ -53,7 +54,8 @@ class MainViewModel(
   private val captureEngine: CaptureEngine,
   private val recordingManager: RecordingManager,
   private val fileScanner: FileScanner,
-  private val serviceController: ServiceController
+  private val serviceController: ServiceController,
+  private val alwaysShowNotificationPref: Pref<Boolean>
 ) : ScopedViewModel(mainDispatcher), LifecycleObserver {
 
   private lateinit var disposables: CompositeDisposable
@@ -103,7 +105,6 @@ class MainViewModel(
   fun onResume() {
     disposables = CompositeDisposable()
     notifications.setIsAppOpen(true)
-
     invalidateFab()
 
     disposables +=
@@ -115,6 +116,12 @@ class MainViewModel(
     disposables +=
         fileScanner.onScan()
             .subscribe { refreshRecordings() }
+
+    if (alwaysShowNotificationPref.get()) {
+      serviceController.startService()
+    } else if (!captureEngine.isStarted()) {
+      serviceController.stopService()
+    }
   }
 
   @OnLifecycleEvent(ON_PAUSE)

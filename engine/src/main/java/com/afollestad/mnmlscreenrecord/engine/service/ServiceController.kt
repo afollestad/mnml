@@ -41,6 +41,12 @@ interface ServiceController {
    * the service is also stopped and brought out of the foreground.
    */
   fun stopRecording(stopService: Boolean = false)
+
+  /**
+   * Tells the service to exit, bringing it out of the foreground as well. Any active
+   * capture will stop.
+   */
+  fun stopService()
 }
 
 /** @author Aidan Follestad (afollestad) */
@@ -63,4 +69,6 @@ class RealServiceController(
       putExtra(EXTRA_STOP_FOREGROUND, stopService)
     })
   }
+
+  override fun stopService() = stopRecording(true)
 }

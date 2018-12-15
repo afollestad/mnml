@@ -23,6 +23,13 @@
       android:title="@string/setting_category_controls">
 
     <SwitchPreference
+        android:key="always_show_controls_notification"
+        android:layout="@layout/custom_preference"
+        android:summaryOff="@string/setting_always_show_notification_off"
+        android:summaryOn="@string/setting_always_show_notification_on"
+        android:title="@string/setting_always_show_notification"/>
+
+    <SwitchPreference
         android:key="stop_on_screen_off"
         android:layout="@layout/custom_preference"
         android:summaryOff="@string/setting_stop_on_screen_off_desc_off"
