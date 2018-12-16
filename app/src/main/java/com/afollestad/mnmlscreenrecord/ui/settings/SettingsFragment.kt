@@ -26,11 +26,11 @@ import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.files.folderChooser
 import com.afollestad.mnmlscreenrecord.R
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onProgressChanged
 import com.afollestad.rxkprefs.Pref
@@ -46,8 +46,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
   private val recordingsFolderPref by inject<Pref<String>>(name = PREF_RECORDINGS_FOLDER)
   private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
   private val alwaysShowNotificationPref by inject<Pref<Boolean>>(
-      name = PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
+      name = PREF_ALWAYS_SHOW_NOTIFICATION
   )
+  private val stopOnShakePref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SHAKE)
 
   override fun onCreatePreferences(
     savedInstanceState: Bundle?,
@@ -104,6 +105,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
     alwaysShowNotificationPref.observe()
         .subscribe { alwaysShowNotificationEntry.isChecked = it }
+        .attachLifecycle(this)
+
+    val stopOnShakeEntry = findPreference(PREF_STOP_ON_SHAKE) as SwitchPreference
+    stopOnShakeEntry.setOnPreferenceChangeListener { _, newValue ->
+      stopOnShakePref.set(newValue as Boolean)
+      true
+    }
+    stopOnShakePref.observe()
+        .subscribe { stopOnShakeEntry.isChecked = it }
         .attachLifecycle(this)
   }
 

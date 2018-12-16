@@ -34,6 +34,14 @@
     The persistent controls notification is only show when capture is in-progress.
   </string>
 
+  <string name="setting_stop_on_shake">Stop on Shake</string>
+  <string name="setting_stop_on_shake_on">
+    Shaking your device will stop any active screen recording.
+  </string>
+  <string name="setting_stop_on_shake_off">
+    Shaking your device won\'t do anything special.
+  </string>
+
   <string name="select">Select</string>
 
 </resources>

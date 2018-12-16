@@ -36,6 +36,13 @@
         android:summaryOn="@string/setting_stop_on_screen_off_desc_on"
         android:title="@string/setting_stop_on_screen_off"/>
 
+    <SwitchPreference
+        android:key="stop_on_shake"
+        android:layout="@layout/custom_preference"
+        android:summaryOff="@string/setting_stop_on_shake_off"
+        android:summaryOn="@string/setting_stop_on_shake_on"
+        android:title="@string/setting_stop_on_shake"/>
+
   </PreferenceCategory>
 
 </PreferenceScreen>

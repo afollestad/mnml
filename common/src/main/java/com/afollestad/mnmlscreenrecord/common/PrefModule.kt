@@ -21,6 +21,7 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
 import com.afollestad.rxkprefs.RxkPrefs
 import com.afollestad.rxkprefs.rxkPrefs
 import org.koin.dsl.module.module
@@ -50,5 +51,9 @@ val prefModule = module {
 
   factory(name = PREF_ALWAYS_SHOW_NOTIFICATION) {
     get<RxkPrefs>().boolean(PREF_ALWAYS_SHOW_NOTIFICATION, false)
+  }
+
+  factory(name = PREF_STOP_ON_SHAKE) {
+    get<RxkPrefs>().boolean(PREF_STOP_ON_SHAKE, true)
   }
 }

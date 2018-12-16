@@ -18,14 +18,17 @@ package com.afollestad.mnmlscreenrecord.engine.service
 import android.app.Service
 import android.content.Intent
 import android.content.Intent.ACTION_SCREEN_OFF
+import android.hardware.SensorManager
 import android.os.IBinder
 import androidx.lifecycle.LifecycleOwner
 import com.afollestad.mnmlscreenrecord.common.intent.IntentReceiver
 import com.afollestad.mnmlscreenrecord.common.lifecycle.SimpleLifecycle
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
+import com.afollestad.mnmlscreenrecord.engine.gesture.ShakeListener
 import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
 import com.afollestad.mnmlscreenrecord.engine.recordings.Recording
 import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingManager
@@ -64,11 +67,20 @@ class BackgroundService : Service(), LifecycleOwner {
   private val recordingScanner by inject<RecordingScanner>()
   private val recordingManager by inject<RecordingManager>()
   private val mainActivityClass by inject<Class<*>>(name = MAIN_ACTIVITY_CLASS)
+  private val sensorManager by inject<SensorManager>()
 
   private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
   private val alwaysShowNotificationPref by inject<Pref<Boolean>>(
       name = PREF_ALWAYS_SHOW_NOTIFICATION
   )
+  private val stopOnShakePref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SHAKE)
+
+  private val shakeListener = ShakeListener(sensorManager) {
+    if (it == 2) {
+      log("Got 2 shakes!")
+      stopRecording(false)
+    }
+  }
 
   override fun onBind(intent: Intent?): IBinder? = null
 
@@ -117,14 +129,7 @@ class BackgroundService : Service(), LifecycleOwner {
         }
       }
       onAction(STOP_ACTION) {
-        captureEngine.stop()
-        if (!alwaysShowNotificationPref.get() &&
-            (notifications.isAppOpen() ||
-                it.getBooleanExtra(EXTRA_STOP_FOREGROUND, false))
-        ) {
-          stopForeground(true)
-          stopSelf()
-        }
+        stopRecording(it.getBooleanExtra(EXTRA_STOP_FOREGROUND, false))
       }
       onAction(EXIT_ACTION) {
         captureEngine.cancel()
@@ -135,6 +140,15 @@ class BackgroundService : Service(), LifecycleOwner {
 
     lifecycle.onCreate()
 
+    stopOnShakePref.observe()
+        .subscribe {
+          if (it) {
+            shakeListener.start()
+          } else {
+            shakeListener.stop()
+          }
+        }
+        .attachLifecycle(this)
     captureEngine.onStop()
         .subscribe { file ->
           updateForeground(false)
@@ -143,6 +157,16 @@ class BackgroundService : Service(), LifecycleOwner {
           }
         }
         .attachLifecycle(this)
+  }
+
+  private fun stopRecording(forceStopForeground: Boolean) {
+    captureEngine.stop()
+    if (!alwaysShowNotificationPref.get() &&
+        (notifications.isAppOpen() || forceStopForeground)
+    ) {
+      stopForeground(true)
+      stopSelf()
+    }
   }
 
   override fun onDestroy() {

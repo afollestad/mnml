@@ -30,7 +30,7 @@ import timber.log.Timber
  *
  * @author Aidan Follestad (@afollestad)
  */
-data class RecordingInfo(
+internal data class RecordingInfo(
   val width: Int,
   val height: Int,
   val frameRate: Int,
@@ -42,7 +42,7 @@ data class RecordingInfo(
 /**
  * Gets an instance of [RecordingInfo], holding settings that fit the current device.
  */
-fun Companion.get(
+internal fun Companion.get(
   context: Context,
   windowManager: WindowManager
 ): RecordingInfo {
