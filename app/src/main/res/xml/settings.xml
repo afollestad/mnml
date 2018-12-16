@@ -3,6 +3,17 @@
 
   <PreferenceCategory
       android:layout="@layout/custom_preference_category"
+      android:title="@string/setting_category_quality">
+
+    <Preference
+        android:key="bit_rate"
+        android:layout="@layout/custom_preference"
+        android:title="@string/setting_bitrate"/>
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:layout="@layout/custom_preference_category"
       android:title="@string/setting_category_recording">
 
     <Preference

@@ -3,8 +3,12 @@
   <string name="dark_mode">Dark Mode</string>
   <string name="settings">Settings</string>
 
+  <string name="setting_category_quality">Quality</string>
   <string name="setting_category_recording">Recording</string>
   <string name="setting_category_controls">Controls</string>
+
+  <string name="setting_bitrate">Bit Rate</string>
+  <string name="setting_bitrate_desc">Screen capture will record at %1$s</string>
 
   <string name="setting_countdown">Countdown</string>
   <plurals name="setting_countdown_desc">

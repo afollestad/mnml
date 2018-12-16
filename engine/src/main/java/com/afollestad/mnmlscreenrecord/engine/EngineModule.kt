@@ -25,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.appcompat.view.ContextThemeWrapper
 import com.afollestad.mnmlscreenrecord.common.misc.systemService
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
@@ -63,7 +64,7 @@ val engineModule = module {
   single { RealRecordingScanner(get(), get()) } bind RecordingScanner::class
 
   single {
-    RealCaptureEngine(get(), get(), get(name = PREF_RECORDINGS_FOLDER))
+    RealCaptureEngine(get(), get(), get(name = PREF_RECORDINGS_FOLDER), get(name = PREF_BIT_RATE))
   } bind CaptureEngine::class
 
   factory { OverlayManager(get(), get(), get(name = PREF_COUNTDOWN), get()) }

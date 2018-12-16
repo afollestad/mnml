@@ -17,6 +17,7 @@ package com.afollestad.mnmlscreenrecord.common
 
 import android.os.Environment.getExternalStorageDirectory
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
@@ -55,5 +56,9 @@ val prefModule = module {
 
   factory(name = PREF_STOP_ON_SHAKE) {
     get<RxkPrefs>().boolean(PREF_STOP_ON_SHAKE, true)
+  }
+
+  factory(name = PREF_BIT_RATE) {
+    get<RxkPrefs>().integer(PREF_BIT_RATE, 8_000_000)
   }
 }

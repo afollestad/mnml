@@ -6,4 +6,32 @@
     <item>@string/delete</item>
   </string-array>
 
+  <string-array name="bit_rate_options">
+    <item>24 Mbps</item>
+    <item>20 Mbps</item>
+    <item>18 Mbps</item>
+    <item>16 Mbps</item>
+    <item>15 Mbps</item>
+    <item>12 Mbps</item>
+    <item>10 Mbps</item>
+    <item>8 Mbps</item>
+    <item>6 Mbps</item>
+    <item>4 Mbps</item>
+    <item>2 Mbps</item>
+  </string-array>
+
+  <integer-array name="bit_rate_values" translatable="false">
+    <item>24000000</item>
+    <item>20000000</item>
+    <item>18000000</item>
+    <item>16000000</item>
+    <item>15000000</item>
+    <item>12000000</item>
+    <item>10000000</item>
+    <item>8000000</item>
+    <item>6000000</item>
+    <item>4000000</item>
+    <item>2000000</item>
+  </integer-array>
+
 </resources>

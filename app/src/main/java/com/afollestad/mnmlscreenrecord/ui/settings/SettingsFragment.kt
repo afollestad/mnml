@@ -25,8 +25,10 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.files.folderChooser
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
@@ -42,6 +44,7 @@ import java.io.File
 /** @author Aidan Follestad (afollestad) */
 class SettingsFragment : PreferenceFragmentCompat() {
 
+  private val bitratePref by inject<Pref<Int>>(name = PREF_BIT_RATE)
   private val countdownPref by inject<Pref<Int>>(name = PREF_COUNTDOWN)
   private val recordingsFolderPref by inject<Pref<String>>(name = PREF_RECORDINGS_FOLDER)
   private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
@@ -56,15 +59,40 @@ class SettingsFragment : PreferenceFragmentCompat() {
   ) {
     setPreferencesFromResource(R.xml.settings, rootKey)
 
-    val countdownEntry = findPreference(PREF_COUNTDOWN).apply {
-      setOnPreferenceClickListener {
-        showNumberSelector(
-            title = title.toString(),
-            max = 10,
-            current = countdownPref.get()
-        ) { selection -> countdownPref.set(selection) }
-        true
+    // BIT RATE
+    val bitrateEntry = findPreference(PREF_BIT_RATE)
+    bitrateEntry.setOnPreferenceClickListener {
+      val rawValues = resources.getIntArray(R.array.bit_rate_values)
+      val currentValue = bitratePref.get()
+      val defaultIndex = rawValues.indexOf(currentValue)
+
+      MaterialDialog(activity!!).show {
+        title(R.string.setting_bitrate)
+        listItemsSingleChoice(
+            res = R.array.bit_rate_options,
+            initialSelection = defaultIndex
+        ) { _, which, _ ->
+          bitratePref.set(rawValues[which])
+        }
+        positiveButton(R.string.select)
       }
+      true
+    }
+    bitratePref.observe()
+        .subscribe {
+          bitrateEntry.summary = getString(R.string.setting_bitrate_desc, it.bitRateString())
+        }
+        .attachLifecycle(this)
+
+    // COUNT DOWN
+    val countdownEntry = findPreference(PREF_COUNTDOWN)
+    countdownEntry.setOnPreferenceClickListener {
+      showNumberSelector(
+          title = countdownEntry.title.toString(),
+          max = 10,
+          current = countdownPref.get()
+      ) { selection -> countdownPref.set(selection) }
+      true
     }
     countdownPref.observe()
         .subscribe {
@@ -74,11 +102,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
         .attachLifecycle(this)
 
-    val recordingsFolderEntry = findPreference(PREF_RECORDINGS_FOLDER).apply {
-      setOnPreferenceClickListener {
-        showOutputFolderSelector(title.toString())
-        true
-      }
+    // RECORDINGS FOLDER
+    val recordingsFolderEntry = findPreference(PREF_RECORDINGS_FOLDER)
+    recordingsFolderEntry.setOnPreferenceClickListener {
+      showOutputFolderSelector(recordingsFolderEntry.title.toString())
+      true
     }
     recordingsFolderPref.observe()
         .subscribe {
@@ -88,6 +116,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
         .attachLifecycle(this)
 
+    // STOP ON SCREEN OFF
     val stopOnScreenOffEntry = findPreference(PREF_STOP_ON_SCREEN_OFF) as SwitchPreference
     stopOnScreenOffEntry.setOnPreferenceChangeListener { _, newValue ->
       stopOnScreenOffPref.set(newValue as Boolean)
@@ -97,6 +126,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         .subscribe { stopOnScreenOffEntry.isChecked = it }
         .attachLifecycle(this)
 
+    // ALWAYS SHOW NOTIFICATION
     val alwaysShowNotificationEntry =
       findPreference(PREF_ALWAYS_SHOW_NOTIFICATION) as SwitchPreference
     alwaysShowNotificationEntry.setOnPreferenceChangeListener { _, newValue ->
@@ -107,6 +137,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         .subscribe { alwaysShowNotificationEntry.isChecked = it }
         .attachLifecycle(this)
 
+    // STOP ON SHAKE
     val stopOnShakeEntry = findPreference(PREF_STOP_ON_SHAKE) as SwitchPreference
     stopOnShakeEntry.setOnPreferenceChangeListener { _, newValue ->
       stopOnShakePref.set(newValue as Boolean)
@@ -164,4 +195,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
       customView.label.text = "$it"
     }
   }
+
+  private fun Int.bitRateString() = "${this / 1_000_000}mbps"
 }
