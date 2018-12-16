@@ -3,33 +3,34 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion versions.compileSdk
+  compileSdkVersion versions.compileSdk
 
-    defaultConfig {
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.compileSdk
-        versionCode versions.publishVersionCode
-        versionName versions.publishVersion
-    }
+  defaultConfig {
+    minSdkVersion versions.minSdk
+    targetSdkVersion versions.compileSdk
+    versionCode versions.publishVersionCode
+    versionName versions.publishVersion
+  }
 }
 
 dependencies {
-    api 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + versions.coroutines
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + versions.coroutines
+  // Kotlin
+  implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
+  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + versions.coroutines
+  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + versions.coroutines
 
-    api 'androidx.recyclerview:recyclerview:' + versions.androidx
-    api 'androidx.lifecycle:lifecycle-extensions:' + versions.lifecycle
+  // Google/AndroidX
+  api 'androidx.appcompat:appcompat:' + versions.androidx
+  implementation 'androidx.recyclerview:recyclerview:' + versions.androidx
 
-    api 'org.koin:koin-android:' + versions.koin
-    api 'com.jakewharton.timber:timber:' + versions.timber
+  // Koin
+  api 'org.koin:koin-android:' + versions.koin
 
-    api 'com.afollestad:rxkprefs:' + versions.rxkPrefs
+  // afollestad
+  api 'com.afollestad:rxkprefs:' + versions.rxkPrefs
 
-    testImplementation 'junit:junit:' + versions.junit
-    testImplementation 'org.mockito:mockito-core:' + versions.mockito
-    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:' + versions.mockitoKotlin
-    testImplementation 'com.google.truth:truth:' + versions.truth
+  // Debug
+  api 'com.jakewharton.timber:timber:' + versions.timber
 }
 
 apply from: '../spotless.gradle'

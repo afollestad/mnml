@@ -15,8 +15,6 @@ android {
     versionCode versions.publishVersionCode
     versionName versions.publishVersion
   }
-
-  testOptions.unitTests.includeAndroidResources = true
 }
 
 dependencies {
@@ -25,23 +23,35 @@ dependencies {
   implementation project(':notifications')
   implementation project(':theming')
 
+  // Kotlin
+  implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
+  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + versions.coroutines
+  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + versions.coroutines
+
+  // Google/AndroidX
   implementation 'androidx.preference:preference:' + versions.androidx
+  implementation 'androidx.lifecycle:lifecycle-extensions:' + versions.lifecycle
   kapt 'androidx.lifecycle:lifecycle-compiler:' + versions.lifecycle
 
+  // Koin
   implementation 'org.koin:koin-androidx-scope:' + versions.koin
   implementation 'org.koin:koin-androidx-viewmodel:' + versions.koin
 
+  // afollestad
   implementation 'com.afollestad.material-dialogs:core:' + versions.materialDialogs
   implementation 'com.afollestad.material-dialogs:files:' + versions.materialDialogs
   implementation 'com.afollestad:assent:' + versions.assent
 
+  // Glide
   implementation 'com.github.bumptech.glide:glide:' + versions.glide
   kapt 'com.github.bumptech.glide:compiler:' + versions.glide
 
+  // Test
   testImplementation 'junit:junit:' + versions.junit
   testImplementation 'org.mockito:mockito-core:' + versions.mockito
   testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:' + versions.mockitoKotlin
   testImplementation 'com.google.truth:truth:' + versions.truth
+  testImplementation 'androidx.arch.core:core-testing:' + versions.archTesting
   testImplementation project(':testutil')
 }
 

@@ -12,27 +12,22 @@ android {
     versionName versions.publishVersion
   }
 
-  testOptions {
-    unitTests {
-      includeAndroidResources = true
-    }
-  }
+  //testOptions {
+  //  unitTests {
+  //    includeAndroidResources = true
+  //  }
+  //}
 }
 
 dependencies {
   implementation project(':common')
 
-  api 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
+  // Kotlin
+  implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
+  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + versions.coroutines
+  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + versions.coroutines
 
-  api 'org.koin:koin-android:' + versions.koin
-  api 'com.jakewharton.timber:timber:' + versions.timber
-
-  testImplementation 'junit:junit:' + versions.junit
-  testImplementation 'org.mockito:mockito-core:' + versions.mockito
-  testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:' + versions.mockitoKotlin
-  testImplementation 'com.google.truth:truth:' + versions.truth
-
-  testImplementation 'org.robolectric:robolectric:' + versions.robolectric
+  // testImplementation 'org.robolectric:robolectric:' + versions.robolectric
 }
 
 apply from: '../spotless.gradle'

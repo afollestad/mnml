@@ -16,11 +16,11 @@ android {
 dependencies {
   implementation project(':common')
 
-  api 'androidx.appcompat:appcompat:' + versions.androidx
-  api 'com.google.android.material:material:' + versions.androidx
+  // Kotlin
+  implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
 
-  api 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
-  api 'com.jakewharton.timber:timber:' + versions.timber
+  // Google/AndroidX
+  api 'com.google.android.material:material:' + versions.androidx
 }
 
 apply from: '../spotless.gradle'

@@ -15,10 +15,10 @@ android {
 
 dependencies {
   implementation 'org.koin:koin-android:' + versions.koin
-
   implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
-  implementation 'androidx.lifecycle:lifecycle-extensions:' + versions.lifecycle
   implementation 'junit:junit:' + versions.junit
+  implementation 'androidx.arch.core:core-testing:' + versions.archTesting
+  implementation 'androidx.lifecycle:lifecycle-extensions:' + versions.lifecycle
 }
 
 apply from: '../spotless.gradle'
