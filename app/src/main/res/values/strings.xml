@@ -3,6 +3,5 @@
   <string name="app_name">MNML Screen Recorder</string>
 
   <string name="recordings_empty_text">You have no recordings, yet…</string>
-  <string name="recordings_empty_text_emoji">&#x1f614;</string>
 
 </resources>
