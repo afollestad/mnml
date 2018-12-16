@@ -1,0 +1,17 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="UnusedAttribute">
+
+  <shortcut
+      android:enabled="true"
+      android:icon="@drawable/ic_shortcut_record"
+      android:shortcutId="start_recording"
+      android:shortcutLongLabel="@string/shortcut_record_name"
+      android:shortcutShortLabel="@string/shortcut_record_name_short">
+    <intent
+        android:action="android.intent.action.VIEW"
+        android:targetClass="com.afollestad.mnmlscreenrecord.shortcuts.ShortcutRelayActivity"
+        android:targetPackage="com.afollestad.mnmlscreenrecord"/>
+  </shortcut>
+
+</shortcuts>

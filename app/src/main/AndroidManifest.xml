@@ -26,9 +26,22 @@
 
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
+
+      <meta-data
+          android:name="android.app.shortcuts"
+          android:resource="@xml/shortcuts"/>
     </activity>
 
     <activity android:name=".ui.settings.SettingsActivity"/>
+
+    <activity
+        android:name=".shortcuts.ShortcutRelayActivity"
+        android:excludeFromRecents="true"
+        android:theme="@style/AppTheme.Transparent">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+      </intent-filter>
+    </activity>
 
     <meta-data
         android:name="preloaded_fonts"

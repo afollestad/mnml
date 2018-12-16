@@ -129,6 +129,11 @@ class RealCaptureEngine(
   override fun isStarted(): Boolean = isStarted
 
   override fun start(context: Context) {
+    if (isStarted) {
+      log("start($context) - already started! No-op")
+      return
+    }
+
     log("start($context)")
     recordingInfo = RecordingInfo.get(context, windowManager)
     createAndPrepareRecorder(recordingInfo)

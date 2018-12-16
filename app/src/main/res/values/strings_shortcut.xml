@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="shortcut_record_name">Start Recording</string>
+  <string name="shortcut_record_name_short">Record</string>
+
+</resources>
