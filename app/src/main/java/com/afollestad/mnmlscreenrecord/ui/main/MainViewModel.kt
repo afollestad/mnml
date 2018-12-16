@@ -43,6 +43,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.jetbrains.annotations.TestOnly
+import timber.log.Timber.d as log
 
 /**
  * The view model/presenter for the [MainActivity].
@@ -157,8 +158,10 @@ class MainViewModel(
    */
   @VisibleForTesting(otherwise = PRIVATE)
   fun refreshRecordings() = launch {
+    log("refreshRecordings()")
     if (!permissionChecker.hasStoragePermission()) {
       // Can't access recordings yet
+      log("refreshRecordings() - don't have storage permission yet.")
       emptyViewVisibility.value = true
       needStoragePermission.onNext(Unit)
       return@launch
@@ -176,6 +179,7 @@ class MainViewModel(
    * afterwards, causing an emission to [onRecordings].
    */
   fun deleteRecording(recording: Recording) = launch {
+    log("deleteRecording(${recording.id})")
     withContext(ioDispatcher) {
       recordingManager.deleteRecording(recording)
     }

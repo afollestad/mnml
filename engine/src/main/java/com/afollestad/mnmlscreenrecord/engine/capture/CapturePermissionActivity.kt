@@ -33,7 +33,8 @@ class CapturePermissionActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    captureEngine.requestPermission(this,
+    captureEngine.requestPermission(
+        this,
         PROJECTION_REQUEST
     )
   }

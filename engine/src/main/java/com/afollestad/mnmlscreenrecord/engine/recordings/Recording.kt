@@ -35,11 +35,11 @@ data class Recording(
   companion object {
     fun pull(cursor: Cursor): Recording {
       return Recording(
-        id = cursor.getLong(cursor.getColumnIndex("_id")),
-        path = cursor.getString(cursor.getColumnIndex("_data")),
-        name = cursor.getString(cursor.getColumnIndex("title")),
-        timestamp = cursor.getLong(cursor.getColumnIndex("date_added")),
-        size = cursor.getLong(cursor.getColumnIndex("_size"))
+          id = cursor.getLong(cursor.getColumnIndex("_id")),
+          path = cursor.getString(cursor.getColumnIndex("_data")),
+          name = cursor.getString(cursor.getColumnIndex("title")),
+          timestamp = cursor.getLong(cursor.getColumnIndex("date_added")),
+          size = cursor.getLong(cursor.getColumnIndex("_size"))
       )
     }
 
@@ -57,11 +57,11 @@ data class Recording(
   }
 
   constructor(parcel: Parcel) : this(
-    parcel.readLong(),
-    parcel.readString()!!,
-    parcel.readString()!!,
-    parcel.readLong(),
-    parcel.readLong()
+      parcel.readLong(),
+      parcel.readString()!!,
+      parcel.readString()!!,
+      parcel.readLong(),
+      parcel.readLong()
   )
 
   override fun writeToParcel(

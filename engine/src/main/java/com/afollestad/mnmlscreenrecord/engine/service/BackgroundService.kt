@@ -94,7 +94,7 @@ class BackgroundService : Service(), LifecycleOwner {
         stopForeground(true)
         stopSelf()
       }
-      else -> {
+      else -> if (!captureEngine.isStarted()) {
         updateForeground(false)
       }
     }

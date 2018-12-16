@@ -56,7 +56,7 @@ val engineModule = module {
     RealRecordingManager(get(), get(name = PREF_RECORDINGS_FOLDER))
   } bind RecordingManager::class
 
-  factory { RealRecordingScanner(get(), get()) } bind RecordingScanner::class
+  single { RealRecordingScanner(get(), get()) } bind RecordingScanner::class
 
   single {
     RealCaptureEngine(get(), get(), get(name = PREF_RECORDINGS_FOLDER))
