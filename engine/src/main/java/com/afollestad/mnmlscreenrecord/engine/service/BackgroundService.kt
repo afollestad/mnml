@@ -41,6 +41,7 @@ import com.afollestad.mnmlscreenrecord.notifications.Notifications
 import com.afollestad.mnmlscreenrecord.notifications.RECORD_ACTION
 import com.afollestad.mnmlscreenrecord.notifications.STOP_ACTION
 import com.afollestad.rxkprefs.Pref
+import io.reactivex.Observable.merge
 import org.koin.android.ext.android.inject
 import timber.log.Timber.d as log
 
@@ -140,17 +141,13 @@ class BackgroundService : Service(), LifecycleOwner {
 
     lifecycle.onCreate()
 
-    stopOnShakePref.observe()
-        .subscribe {
-          if (it) {
-            shakeListener.start()
-          } else {
-            shakeListener.stop()
-          }
-        }
+    merge(stopOnShakePref.observe(), captureEngine.onStart())
+        .subscribe { maybeStartShakeListener() }
         .attachLifecycle(this)
+
     captureEngine.onStop()
         .subscribe { file ->
+          shakeListener.stop()
           updateForeground(false)
           recordingScanner.scan(file) { recording ->
             notifications.showPostRecordNotification(recording, this@BackgroundService::class.java)
@@ -171,6 +168,7 @@ class BackgroundService : Service(), LifecycleOwner {
 
   override fun onDestroy() {
     log("onDestroy()")
+    shakeListener.stop()
     captureEngine.stop()
     super.onDestroy()
   }
@@ -192,5 +190,13 @@ class BackgroundService : Service(), LifecycleOwner {
             isRecording = recording
         )
     )
+  }
+
+  private fun maybeStartShakeListener() {
+    if (stopOnShakePref.get() && captureEngine.isStarted()) {
+      shakeListener.start()
+    } else {
+      shakeListener.stop()
+    }
   }
 }

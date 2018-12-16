@@ -41,7 +41,10 @@ internal class ShakeListener(
 
   /** Stops the shake detector. */
   fun stop() {
-    log("stopstart()")
+    if (accelerometer == null) {
+      return
+    }
+    log("stop()")
     sensorManager.unregisterListener(shakeDetector)
     accelerometer = null
   }
