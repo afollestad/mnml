@@ -26,6 +26,7 @@ import android.content.Intent.ACTION_SEND
 import android.content.Intent.ACTION_VIEW
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.media.MediaMetadataRetriever
+import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.O
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -125,10 +126,11 @@ class RealNotifications(
 
   @TargetApi(O)
   override fun createChannels() {
+    if (SDK_INT < O) {
+      return
+    }
     Channel.values()
         .map { channelBuilder.createChannel(it) }
-        .filter { it != null }
-        .map { it!! }
         .forEach {
           log("Created notification channel ${it.id}")
           stockManager.createNotificationChannel(it)

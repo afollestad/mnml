@@ -109,7 +109,7 @@ class RealCaptureEngine(
   private val recordingsFolderPref: Pref<String>
 ) : CaptureEngine {
 
-  private lateinit var recordingInfo: RecordingInfo
+  private var recordingInfo: RecordingInfo? = null
   private val handler = Handler()
 
   private var recorder: MediaRecorder? = null
@@ -137,7 +137,7 @@ class RealCaptureEngine(
 
     log("start($context)")
     recordingInfo = RecordingInfo.get(context, windowManager)
-    createAndPrepareRecorder(recordingInfo)
+    createAndPrepareRecorder(recordingInfo!!)
 
     if (projection == null) {
       log("Projection is null, requesting permission...")
@@ -148,7 +148,7 @@ class RealCaptureEngine(
       return
     }
 
-    createVirtualDisplayAndStart(recordingInfo)
+    createVirtualDisplayAndStart(recordingInfo!!)
   }
 
   override fun requestPermission(
@@ -161,11 +161,16 @@ class RealCaptureEngine(
     data: Intent
   ) {
     log("onActivityResult($resultCode, $data)")
+    if (recordingInfo == null) {
+      log("onActivityResult - recordingInfo is null!")
+      return
+    }
+
     projection = projectionManager.getMediaProjection(resultCode, data)
         .apply {
           registerCallback(projectionCallback, null)
         }
-    createVirtualDisplayAndStart(recordingInfo)
+    createVirtualDisplayAndStart(recordingInfo!!)
   }
 
   override fun cancel() {

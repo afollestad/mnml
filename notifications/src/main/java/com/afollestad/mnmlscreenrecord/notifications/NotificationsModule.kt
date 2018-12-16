@@ -34,7 +34,5 @@ val notificationsModule = module {
     RealNotifications(get(), get(), get())
   } bind Notifications::class
 
-  factory {
-    RealNotificationChannelBuilder(get())
-  } bind NotificationChannelBuilder::class
+  factory { RealNotificationChannelBuilder() } bind NotificationChannelBuilder::class
 }

@@ -18,7 +18,6 @@ package com.afollestad.mnmlscreenrecord.notifications.providers
 import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.os.Build.VERSION_CODES.O
-import com.afollestad.mnmlscreenrecord.common.providers.SdkProvider
 import com.afollestad.mnmlscreenrecord.notifications.Channel
 
 /** @author Aidan Follestad (@afollestad) */
@@ -28,7 +27,7 @@ interface NotificationChannelBuilder {
    * Builds a [NotificationChannel] instance. Returns null
    * if the device doesn't support notification channels.
    */
-  fun createChannel(channel: Channel): NotificationChannel?
+  fun createChannel(channel: Channel): NotificationChannel
 }
 
 /**
@@ -36,15 +35,10 @@ interface NotificationChannelBuilder {
  *
  * @author Aidan Follestad (@afollestad)
  */
-class RealNotificationChannelBuilder(
-  private val sdkProvider: SdkProvider
-) : NotificationChannelBuilder {
+class RealNotificationChannelBuilder : NotificationChannelBuilder {
 
   @TargetApi(O)
-  override fun createChannel(channel: Channel): NotificationChannel? {
-    if (!sdkProvider.hasAndroidO()) {
-      return null
-    }
+  override fun createChannel(channel: Channel): NotificationChannel {
     return NotificationChannel(
         channel.id,
         channel.title,
