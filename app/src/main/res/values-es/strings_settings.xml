@@ -1,0 +1,49 @@
+<resources>
+
+  <string name="dark_mode">Modo oscuro</string>
+  <string name="settings">Ajustes</string>
+
+  <string name="setting_category_recording">Grabación</string>
+  <string name="setting_category_controls">Controles</string>
+
+  <string name="setting_countdown">Cuenta atrás</string>
+  <plurals name="setting_countdown_desc">
+    <item quantity="one">%1$d segundo antes de que la grabación comience.</item>
+    <item quantity="other">%1$d segundos antes de que la grabación comience.</item>
+  </plurals>
+
+  <string name="setting_countdown_zero_note">Cuando se establece a 0, la cuenta atrás estará deshabilitada.</string>
+
+  <string name="setting_recordings_folder">Directorio de las grabaciones</string>
+  <string name="setting_recordings_folder_desc">Las grabaciones se guardan en \"%1$s\"</string>
+
+  <string name="setting_stop_on_screen_off">Detener con la pantalla apagada</string>
+  <string name="setting_stop_on_screen_off_desc_on">
+    Cuando tu pantalla se apague, todas las grabaciones activas se
+    pararán.
+  </string>
+  <string name="setting_stop_on_screen_off_desc_off">
+    Cuando tu pantalla se apague, nada especial ocurrirá.
+  </string>
+
+  <string name="setting_always_show_notification">Mostrar siempre la notificación</string>
+  <string name="setting_always_show_notification_on">
+    La notificación persistente con los controles se mostrará cuando la
+    app se inicie, y no se cerrará hasta que la cierres con el botón \'X\'.
+  </string>
+  <string name="setting_always_show_notification_off">
+    La notificación persistente con los controles solo se mostrará
+    cuando haya una grabación activa.
+  </string>
+
+  <string name="setting_stop_on_shake">Parar al agitar</string>
+  <string name="setting_stop_on_shake_on">
+    Al agitar tu dispositivo cualquier grabación activa se detendrá.
+  </string>
+  <string name="setting_stop_on_shake_off">
+    Agitar tu dispositivo no hará nada especial.
+  </string>
+
+  <string name="select">Seleccionar</string>
+
+</resources>

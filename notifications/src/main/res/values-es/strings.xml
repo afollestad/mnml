@@ -1,0 +1,23 @@
+<resources>
+  <string name="app_name">MNML Screen Recorder</string>
+  <string name="app_name_short">MNML</string>
+
+  <string name="widget_service_notification_text">
+    El servicio de grabación está corriendo. Toca para abrir la app.
+  </string>
+
+  <string name="start_recording">Grabar</string>
+  <string name="stop_recording">Parar</string>
+  <string name="recording_notification_text">Tu pantalla está siendo grabada…</string>
+  <string name="video_recorded_notification_text">
+    ¡Video grabado correctamente! Pulsa para verlo y compartir.
+  </string>
+
+  <string name="share">Compartir</string>
+  <string name="delete">Eliminar</string>
+
+  <string name="cd_start_recording">Comenzar grabación</string>
+  <string name="cd_stop_recording">Parar grabación</string>
+  <string name="cd_stop_service">Parar servicio</string>
+
+</resources>

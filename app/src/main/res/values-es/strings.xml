@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">MNML Screen Recorder</string>
+
+  <string name="overlay_permission_prompt">Se requieren permisos de superposición</string>
+  <string name="overlay_permission_prompt_desc">
+    MNML necesita permisos para dibujar cosas como la cuenta atrás o los
+    controles sobre tus otras aplicaciones.
+  </string>
+
+  <string name="storage_permission_prompt">Requeridos permisos de almacenamiento</string>
+  <string name="storage_permission_prompt_desc">
+    MNML necesita permisos para acceder al almacenamiento de tu teléfono
+    para que las grabaciones puedan ser almacenadas y listadas después.
+  </string>
+
+  <string name="permission_denied_note">No podrás usar MNML a no ser que los permisos sean concedidos.</string>
+  <string name="okay">Vale!</string>
+
+  <string name="recordings_empty_text">No tienes grabaciones, todavía…</string>
+  <string name="recordings_empty_text_emoji">&#x1f614;</string>
+
+</resources>
