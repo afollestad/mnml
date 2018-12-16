@@ -162,8 +162,7 @@ class RealCaptureEngine(
   ) {
     log("onActivityResult($resultCode, $data)")
     if (recordingInfo == null) {
-      log("onActivityResult - recordingInfo is null!")
-      return
+      throw IllegalStateException("onActivityResult - recordingInfo is unexpectedly null!")
     }
 
     projection = projectionManager.getMediaProjection(resultCode, data)
@@ -245,26 +244,33 @@ class RealCaptureEngine(
   @SuppressLint("CheckResult")
   private fun createVirtualDisplayAndStart(recordingInfo: RecordingInfo) {
     display = createVirtualDisplay(recordingInfo)
+
     // Tiny delay so we don't record the cast "start now" dialog.
     handler.postDelayed({
-      recorder!!.start()
+      recorder?.start() ?: throw IllegalStateException(
+          "createVirtualDisplayAndStart - Recorder is unexpectedly null!"
+      )
     }, 150)
+
     isStarted = true
     onStart.onNext(Unit)
     log("Media recorder started")
   }
 
   private fun createVirtualDisplay(recordingInfo: RecordingInfo): VirtualDisplay {
-    return projection!!.createVirtualDisplay(
+    val surface = recorder?.surface ?: throw IllegalStateException(
+        "createVirtualDisplay - Recorder unexpectedly null!"
+    )
+    return projection?.createVirtualDisplay(
         "MNMLCaptureEngine",
         recordingInfo.width,
         recordingInfo.height,
         recordingInfo.density,
         VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-        recorder!!.surface,
+        surface,
         null,
         null
-    )
+    ) ?: throw IllegalStateException("createVirtualDisplay - projection unexpectedly null!")
   }
 
   private val projectionCallback = object : MediaProjection.Callback() {

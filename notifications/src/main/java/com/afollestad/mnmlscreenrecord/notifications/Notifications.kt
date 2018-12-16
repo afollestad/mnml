@@ -246,9 +246,15 @@ class RealNotifications(
     GlobalScope.launch(Unconfined) {
       delay(250)
       val bitmap = withContext(IO) {
+        val uri = recording.toUri()
         val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(app, recording.toUri())
-        retriever.frameAtTime
+        try {
+          retriever.setDataSource(app, uri)
+          retriever.frameAtTime
+        } catch (e: Exception) {
+          log("Failed to retrieve a preview frame for $uri!")
+          null
+        }
       }
       val updatedNotification = notification
           .apply {
