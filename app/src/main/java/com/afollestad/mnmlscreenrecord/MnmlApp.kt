@@ -18,13 +18,16 @@
 package com.afollestad.mnmlscreenrecord
 
 import android.app.Application
+import com.afollestad.mnmlscreenrecord.BuildConfig.BUGSNAG_API_KEY
 import com.afollestad.mnmlscreenrecord.BuildConfig.DEBUG
 import com.afollestad.mnmlscreenrecord.common.commonModule
 import com.afollestad.mnmlscreenrecord.common.prefModule
 import com.afollestad.mnmlscreenrecord.di.mainModule
 import com.afollestad.mnmlscreenrecord.di.viewModelModule
 import com.afollestad.mnmlscreenrecord.engine.engineModule
+import com.afollestad.mnmlscreenrecord.logging.BugsnagTree
 import com.afollestad.mnmlscreenrecord.notifications.notificationsModule
+import com.bugsnag.android.Bugsnag
 import org.koin.android.ext.android.startKoin
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -37,6 +40,10 @@ class MnmlApp : Application() {
 
     if (DEBUG) {
       Timber.plant(DebugTree())
+    }
+    if (BUGSNAG_API_KEY.isNotEmpty()) {
+      Bugsnag.init(this, BUGSNAG_API_KEY)
+      Timber.plant(BugsnagTree())
     }
 
     val modules = listOf(

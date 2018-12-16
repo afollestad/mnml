@@ -4,6 +4,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'com.bugsnag.android.gradle'
+
+def getBugsnagApiKey() {
+  Properties properties = new Properties()
+  properties.load(project.rootProject.file('local.properties').newDataInputStream())
+  return properties.getProperty("bugsnag.apikey") ?: ""
+}
+
 android {
   compileSdkVersion versions.compileSdk
   buildToolsVersion versions.buildTools
@@ -14,6 +22,15 @@ android {
     targetSdkVersion versions.compileSdk
     versionCode versions.publishVersionCode
     versionName versions.publishVersion
+  }
+
+  buildTypes {
+    debug {
+      buildConfigField "String", "BUGSNAG_API_KEY", "\"\""
+    }
+    release {
+      buildConfigField "String", "BUGSNAG_API_KEY", "\"${getBugsnagApiKey()}\""
+    }
   }
 }
 
@@ -45,6 +62,9 @@ dependencies {
   // Glide
   implementation 'com.github.bumptech.glide:glide:' + versions.glide
   kapt 'com.github.bumptech.glide:compiler:' + versions.glide
+
+  // Debug
+  implementation 'com.bugsnag:bugsnag-android:' + versions.bugsnag
 
   // Test
   testImplementation 'junit:junit:' + versions.junit
