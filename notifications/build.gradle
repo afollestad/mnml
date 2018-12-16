@@ -3,28 +3,36 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion versions.compileSdk
+  compileSdkVersion versions.compileSdk
 
-    defaultConfig {
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.compileSdk
-        versionCode versions.publishVersionCode
-        versionName versions.publishVersion
+  defaultConfig {
+    minSdkVersion versions.minSdk
+    targetSdkVersion versions.compileSdk
+    versionCode versions.publishVersionCode
+    versionName versions.publishVersion
+  }
+
+  testOptions {
+    unitTests {
+      includeAndroidResources = true
     }
+  }
 }
 
 dependencies {
-    implementation project(':common')
+  implementation project(':common')
 
-    api 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
+  api 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
 
-    api 'org.koin:koin-android:' + versions.koin
-    api 'com.jakewharton.timber:timber:' + versions.timber
+  api 'org.koin:koin-android:' + versions.koin
+  api 'com.jakewharton.timber:timber:' + versions.timber
 
-    testImplementation 'junit:junit:' + versions.junit
-    testImplementation 'org.mockito:mockito-core:' + versions.mockito
-    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:' + versions.mockitoKotlin
-    testImplementation 'com.google.truth:truth:' + versions.truth
+  testImplementation 'junit:junit:' + versions.junit
+  testImplementation 'org.mockito:mockito-core:' + versions.mockito
+  testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:' + versions.mockitoKotlin
+  testImplementation 'com.google.truth:truth:' + versions.truth
+
+  testImplementation 'org.robolectric:robolectric:' + versions.robolectric
 }
 
 apply from: '../spotless.gradle'

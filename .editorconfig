@@ -1,3 +1,19 @@
-[*.kt]
-indent_size = 2
-continuation_indent_size=4
+[*]
+charset=utf-8
+end_of_line=lf
+insert_final_newline=false
+indent_style=space
+indent_size=2
+
+[{*.sht,*.html,*.shtm,*.shtml,*.htm}]
+indent_style=space
+indent_size=4
+
+[{org.codehaus.groovy.runtime.ExtensionModule,*.properties}]
+indent_style=space
+indent_size=4
+
+[{*.yml,*.yaml}]
+indent_style=space
+indent_size=2
+

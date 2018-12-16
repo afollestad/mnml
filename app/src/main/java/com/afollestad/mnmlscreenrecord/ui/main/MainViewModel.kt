@@ -16,6 +16,8 @@
 package com.afollestad.mnmlscreenrecord.ui.main
 
 import androidx.annotation.CheckResult
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PRIVATE
 import androidx.lifecycle.Lifecycle.Event.ON_CREATE
 import androidx.lifecycle.Lifecycle.Event.ON_PAUSE
 import androidx.lifecycle.Lifecycle.Event.ON_RESUME
@@ -40,6 +42,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import org.jetbrains.annotations.TestOnly
 
 /**
  * The view model/presenter for the [MainActivity].
@@ -58,7 +61,7 @@ class MainViewModel(
   private val alwaysShowNotificationPref: Pref<Boolean>
 ) : ScopedViewModel(mainDispatcher), LifecycleObserver {
 
-  private lateinit var disposables: CompositeDisposable
+  private var disposables: CompositeDisposable? = null
   private var wantToStartCapture: Boolean = false
 
   // One-off Subjects (these do not want to storage values, just emit events)
@@ -80,30 +83,38 @@ class MainViewModel(
   // Expose properties as immutable
 
   /** Emits when recordings are received to populate the main grid. */
-  @CheckResult fun onRecordings(): LiveData<List<Recording>> = recordings
+  @CheckResult
+  fun onRecordings(): LiveData<List<Recording>> = recordings
 
   /** Emits when the empty view's visibility should be changed. */
-  @CheckResult fun onEmptyViewVisibility(): LiveData<Boolean> = emptyViewVisibility
+  @CheckResult
+  fun onEmptyViewVisibility(): LiveData<Boolean> = emptyViewVisibility
 
   /** Emits when the FAB's background color should be changed. */
-  @CheckResult fun onFabColorRes(): LiveData<Int> = fabColorRes
+  @CheckResult
+  fun onFabColorRes(): LiveData<Int> = fabColorRes
 
   /** Emits when the FAB's icon should be changed. */
-  @CheckResult fun onFabIconRes(): LiveData<Int> = fabIconRes
+  @CheckResult
+  fun onFabIconRes(): LiveData<Int> = fabIconRes
 
   /** Emits when the FAB's text should be changed. */
-  @CheckResult fun onFabTextRes(): LiveData<Int> = fabTextRes
+  @CheckResult
+  fun onFabTextRes(): LiveData<Int> = fabTextRes
 
   /** Emits when the FAB's enabled state should be changed. */
-  @CheckResult fun onFabEnabled(): LiveData<Boolean> = fabEnabled
+  @CheckResult
+  fun onFabEnabled(): LiveData<Boolean> = fabEnabled
 
   // Expose Subjects
 
   /** Emits when the app needs permission to write external storage. */
-  @CheckResult fun onNeedStoragePermission(): Observable<Unit> = needStoragePermission
+  @CheckResult
+  fun onNeedStoragePermission(): Observable<Unit> = needStoragePermission
 
   /** Emits when the app needs system overlay permissions. */
-  @CheckResult fun onNeedOverlayPermission(): Observable<Unit> = needOverlayPermission
+  @CheckResult
+  fun onNeedOverlayPermission(): Observable<Unit> = needOverlayPermission
 
   // Lifecycle Events
   @OnLifecycleEvent(ON_CREATE)
@@ -119,10 +130,7 @@ class MainViewModel(
 
     disposables +=
         merge(captureEngine.onStart(), captureEngine.onStop(), captureEngine.onCancel())
-            .subscribe {
-              fabEnabled.value = true
-              invalidateFab()
-            }
+            .subscribe { invalidateFab() }
     disposables +=
         recordingScanner.onScan()
             .subscribe { refreshRecordings() }
@@ -132,16 +140,23 @@ class MainViewModel(
     } else if (!captureEngine.isStarted()) {
       serviceController.stopService()
     }
+
+    refreshRecordings()
   }
 
   @OnLifecycleEvent(ON_PAUSE)
   fun onPause() {
-    disposables.clear()
+    disposables?.clear()
     notifications.setIsAppOpen(false)
   }
 
   // Actions
-  private fun refreshRecordings() = launch {
+
+  /**
+   * Refreshes recordings and notifies the respective live data values.
+   */
+  @VisibleForTesting(otherwise = PRIVATE)
+  fun refreshRecordings() = launch {
     if (!permissionChecker.hasStoragePermission()) {
       // Can't access recordings yet
       emptyViewVisibility.value = true
@@ -200,18 +215,22 @@ class MainViewModel(
   }
 
   // Utility Methods
-  private fun invalidateFab() {
+  @VisibleForTesting(otherwise = PRIVATE)
+  fun invalidateFab() {
+    fabEnabled.value = true
     if (captureEngine.isStarted()) {
       fabColorRes.value = R.color.red
       fabIconRes.value = R.drawable.ic_stop_32dp
       fabTextRes.value = R.string.stop_recording
-      if (fabEnabled.value == false) {
-        fabEnabled.value = true
-      }
     } else {
       fabColorRes.value = R.color.colorAccent
       fabIconRes.value = R.drawable.ic_record_32dp
       fabTextRes.value = R.string.start_recording
     }
+  }
+
+  @TestOnly
+  fun setFabEnabled(enabled: Boolean) {
+    fabEnabled.value = enabled
   }
 }

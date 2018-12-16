@@ -32,8 +32,6 @@ data class Recording(
   val size: Long
 ) : RecordingStub {
 
-  private val uri = "$VIDEOS_URI/$id".toUri()
-
   companion object {
     fun pull(cursor: Cursor): Recording {
       return Recording(
@@ -94,5 +92,5 @@ data class Recording(
   /**
    * Gets the content provider URI for this recording.
    */
-  override fun toUri() = uri
+  override fun toUri() = "$VIDEOS_URI/$id".toUri()
 }

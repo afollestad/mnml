@@ -1,1 +1,1 @@
-include ':app', ':engine', ':common', ':notifications', ':theming'
+include ':app', ':engine', ':common', ':notifications', ':theming', ':testutil'
