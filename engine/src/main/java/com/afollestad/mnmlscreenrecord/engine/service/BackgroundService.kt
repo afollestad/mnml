@@ -18,11 +18,13 @@ package com.afollestad.mnmlscreenrecord.engine.service
 import android.app.Service
 import android.content.Intent
 import android.content.Intent.ACTION_SCREEN_OFF
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.hardware.SensorManager
 import android.os.IBinder
 import androidx.lifecycle.LifecycleOwner
 import com.afollestad.mnmlscreenrecord.common.intent.IntentReceiver
 import com.afollestad.mnmlscreenrecord.common.lifecycle.SimpleLifecycle
+import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
@@ -30,6 +32,8 @@ import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.gesture.ShakeListener
 import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
+import com.afollestad.mnmlscreenrecord.engine.permission.OverlayPermissionActivity
+import com.afollestad.mnmlscreenrecord.engine.permission.StoragePermissionActivity
 import com.afollestad.mnmlscreenrecord.engine.recordings.Recording
 import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingManager
 import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingScanner
@@ -69,6 +73,7 @@ class BackgroundService : Service(), LifecycleOwner {
   private val recordingManager by inject<RecordingManager>()
   private val mainActivityClass by inject<Class<*>>(name = MAIN_ACTIVITY_CLASS)
   private val sensorManager by inject<SensorManager>()
+  private val permissionChecker by inject<PermissionChecker>()
 
   private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
   private val alwaysShowNotificationPref by inject<Pref<Boolean>>(
@@ -94,10 +99,7 @@ class BackgroundService : Service(), LifecycleOwner {
 
     when (intent?.action) {
       RECORD_ACTION -> {
-        overlayManager.countdown {
-          captureEngine.start(this@BackgroundService)
-          updateForeground(true)
-        }
+        startRecording()
       }
       DELETE_ACTION -> {
         val recording: Recording = intent.getParcelableExtra(EXTRA_RECORDING)
@@ -154,6 +156,26 @@ class BackgroundService : Service(), LifecycleOwner {
           }
         }
         .attachLifecycle(this)
+  }
+
+  private fun startRecording() {
+    if (!permissionChecker.hasStoragePermission()) {
+      startActivity(
+          Intent(this, StoragePermissionActivity::class.java)
+              .addFlags(FLAG_ACTIVITY_NEW_TASK)
+      )
+      return
+    } else if (!permissionChecker.hasOverlayPermission()) {
+      startActivity(
+          Intent(this, OverlayPermissionActivity::class.java)
+              .addFlags(FLAG_ACTIVITY_NEW_TASK)
+      )
+      return
+    }
+    overlayManager.countdown {
+      captureEngine.start(this@BackgroundService)
+      updateForeground(true)
+    }
   }
 
   private fun stopRecording(forceStopForeground: Boolean) {

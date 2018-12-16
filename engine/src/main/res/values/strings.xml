@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
   <string name="quick_setting_name">Screen Record</string>
+
+  <string name="overlay_permission_prompt">Overlay Permission Required</string>
+  <string name="overlay_permission_prompt_desc">
+        MNML needs permission to draw overlays so that it can display things like countdowns and
+        controls over other apps.
+    </string>
+
+  <string name="storage_permission_prompt">Storage Permission Required</string>
+  <string name="storage_permission_prompt_desc">
+        MNML needs permission to access your phone\'s storage so that recordings can be saved and
+        listed again later.
+    </string>
+
+  <string name="permission_denied_note">You won\'t be able to use MNML unless that permission is granted.</string>
+  <string name="okay">Okay!</string>
+
 </resources>

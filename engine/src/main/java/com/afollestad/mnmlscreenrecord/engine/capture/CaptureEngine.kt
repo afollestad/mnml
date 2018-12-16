@@ -32,6 +32,7 @@ import android.media.projection.MediaProjectionManager
 import android.os.Handler
 import android.view.WindowManager
 import com.afollestad.mnmlscreenrecord.common.misc.timestampString
+import com.afollestad.mnmlscreenrecord.engine.permission.CapturePermissionActivity
 import com.afollestad.rxkprefs.Pref
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject

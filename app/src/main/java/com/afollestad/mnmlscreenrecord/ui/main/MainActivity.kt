@@ -31,6 +31,10 @@ import com.afollestad.mnmlscreenrecord.common.misc.toast
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onDebouncedClick
 import com.afollestad.mnmlscreenrecord.common.view.onScroll
+import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationCallback
+import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationDialog
+import com.afollestad.mnmlscreenrecord.engine.permission.StorageExplanationCallback
+import com.afollestad.mnmlscreenrecord.engine.permission.StorageExplanationDialog
 import com.afollestad.mnmlscreenrecord.engine.recordings.Recording
 import com.afollestad.mnmlscreenrecord.engine.service.BackgroundService.Companion.PERMISSION_DENIED
 import com.afollestad.mnmlscreenrecord.theming.DarkModeSwitchActivity
@@ -49,7 +53,9 @@ import kotlinx.android.synthetic.main.activity_main.empty_view as emptyView
 import kotlinx.android.synthetic.main.include_appbar.app_toolbar as appToolbar
 
 /** @author Aidan Follestad (afollestad) */
-class MainActivity : DarkModeSwitchActivity() {
+class MainActivity : DarkModeSwitchActivity(),
+    StorageExplanationCallback,
+    OverlayExplanationCallback {
   companion object {
     private const val DRAW_OVER_OTHER_APP_PERMISSION = 68
     private const val STORAGE_PERMISSION = 64
@@ -83,40 +89,14 @@ class MainActivity : DarkModeSwitchActivity() {
         .asEnabled(this, fab)
 
     viewModel.onNeedOverlayPermission()
-        .subscribe {
-          MaterialDialog(this).show {
-            title(R.string.overlay_permission_prompt)
-            message(R.string.overlay_permission_prompt_desc)
-            cancelOnTouchOutside(false)
-            positiveButton(R.string.okay) { openOverlaySettings() }
-          }
-        }
+        .subscribe { OverlayExplanationDialog.show(this@MainActivity) }
         .attachLifecycle(this)
-
     viewModel.onNeedStoragePermission()
-        .subscribe {
-          MaterialDialog(this).show {
-            title(R.string.storage_permission_prompt)
-            message(R.string.storage_permission_prompt_desc)
-            cancelOnTouchOutside(false)
-            positiveButton(R.string.okay) { askForStoragePermission() }
-          }
-        }
+        .subscribe { StorageExplanationDialog.show(this@MainActivity) }
         .attachLifecycle(this)
   }
 
-  private fun openOverlaySettings() {
-    val intent = Intent(
-        ACTION_MANAGE_OVERLAY_PERMISSION,
-        "package:$packageName".toUri()
-    )
-    startActivityForResult(
-        intent,
-        DRAW_OVER_OTHER_APP_PERMISSION
-    )
-  }
-
-  private fun askForStoragePermission() {
+  override fun onShouldAskForStoragePermission() {
     askForPermissions(WRITE_EXTERNAL_STORAGE, requestCode = STORAGE_PERMISSION) { res ->
       if (!res.isAllGranted(WRITE_EXTERNAL_STORAGE)) {
         sendBroadcast(Intent(PERMISSION_DENIED))
@@ -125,6 +105,17 @@ class MainActivity : DarkModeSwitchActivity() {
         viewModel.permissionGranted()
       }
     }
+  }
+
+  override fun onShouldAskForOverlayPermission() {
+    val intent = Intent(
+        ACTION_MANAGE_OVERLAY_PERMISSION,
+        "package:$packageName".toUri()
+    )
+    startActivityForResult(
+        intent,
+        DRAW_OVER_OTHER_APP_PERMISSION
+    )
   }
 
   private fun setupToolbar() = toolbar.run {

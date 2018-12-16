@@ -13,29 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.afollestad.mnmlscreenrecord.engine.capture
+package com.afollestad.mnmlscreenrecord.engine.permission
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
 import androidx.appcompat.app.AppCompatActivity
+import com.afollestad.mnmlscreenrecord.common.misc.toUri
 import com.afollestad.mnmlscreenrecord.common.misc.toast
-import com.afollestad.mnmlscreenrecord.engine.service.BackgroundService.Companion.PERMISSION_DENIED
+import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
+import com.afollestad.mnmlscreenrecord.engine.R
+import com.afollestad.mnmlscreenrecord.engine.service.ServiceController
 import org.koin.android.ext.android.inject
 
 /** @author Aidan Follestad (@afollestad) */
-class CapturePermissionActivity : AppCompatActivity() {
-
+class OverlayPermissionActivity : AppCompatActivity(), OverlayExplanationCallback {
   companion object {
-    const val PROJECTION_REQUEST = 97
+    const val OVERLAY_REQUEST = 99
   }
 
-  private val captureEngine by inject<CaptureEngine>()
+  private val serviceController by inject<ServiceController>()
+  private val permissionChecker by inject<PermissionChecker>()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    captureEngine.requestPermission(
-        this,
-        PROJECTION_REQUEST
+    OverlayExplanationDialog.show(this)
+  }
+
+  override fun onShouldAskForOverlayPermission() {
+    val intent = Intent(
+        ACTION_MANAGE_OVERLAY_PERMISSION,
+        "package:$packageName".toUri()
+    )
+    startActivityForResult(
+        intent,
+        OVERLAY_REQUEST
     )
   }
 
@@ -45,17 +57,13 @@ class CapturePermissionActivity : AppCompatActivity() {
     data: Intent?
   ) {
     super.onActivityResult(requestCode, resultCode, data)
-    when {
-      requestCode != PROJECTION_REQUEST -> return
-      resultCode != RESULT_OK -> {
-        toast("Screen cast permission was denied to MNML!")
-        captureEngine.cancel()
-        sendBroadcast(Intent(PERMISSION_DENIED))
+    if (requestCode == OVERLAY_REQUEST) {
+      if (!permissionChecker.hasOverlayPermission()) {
+        toast(R.string.permission_denied_note)
+      } else {
+        serviceController.startRecording()
       }
-      else -> {
-        data?.let { captureEngine.onActivityResult(resultCode, it) }
-      }
+      finish()
     }
-    finish()
   }
 }

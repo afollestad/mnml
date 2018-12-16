@@ -20,7 +20,17 @@
     </service>
 
     <activity
-        android:name=".capture.CapturePermissionActivity"
+        android:name=".permission.CapturePermissionActivity"
+        android:excludeFromRecents="true"
+        android:theme="@style/AppTheme.Transparent"/>
+
+    <activity
+        android:name=".permission.StoragePermissionActivity"
+        android:excludeFromRecents="true"
+        android:theme="@style/AppTheme.Transparent"/>
+
+    <activity
+        android:name=".permission.OverlayPermissionActivity"
         android:excludeFromRecents="true"
         android:theme="@style/AppTheme.Transparent"/>
 
