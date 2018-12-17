@@ -34,6 +34,20 @@
     <item>2000000</item>
   </integer-array>
 
+  <string-array name="audio_bit_rate_options" translatable="false">
+    <item>64 Kbps</item>
+    <item>128 Kbps</item>
+    <item>256 Kbps</item>
+    <item>320 Kbps</item>
+  </string-array>
+
+  <integer-array name="audio_bit_rate_values" translatable="false">
+    <item>64000</item>
+    <item>128000</item>
+    <item>256000</item>
+    <item>320000</item>
+  </integer-array>
+
   <string-array name="frame_rate_options" translatable="false">
     <item>24 FPS</item>
     <item>25 FPS</item>

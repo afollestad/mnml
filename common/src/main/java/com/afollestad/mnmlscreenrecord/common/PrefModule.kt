@@ -17,13 +17,15 @@ package com.afollestad.mnmlscreenrecord.common
 
 import android.os.Environment.getExternalStorageDirectory
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_BIT_RATE
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_AUDIO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
 import com.afollestad.rxkprefs.RxkPrefs
 import com.afollestad.rxkprefs.rxkPrefs
 import org.koin.dsl.module.module
@@ -40,8 +42,12 @@ val prefModule = module {
   }
 
   // Quality
-  factory(name = PREF_BIT_RATE) {
-    get<RxkPrefs>().integer(PREF_BIT_RATE, 8_000_000)
+  factory(name = PREF_VIDEO_BIT_RATE) {
+    get<RxkPrefs>().integer(PREF_VIDEO_BIT_RATE, 8_000_000)
+  }
+
+  factory(name = PREF_AUDIO_BIT_RATE) {
+    get<RxkPrefs>().integer(PREF_AUDIO_BIT_RATE, 128_000)
   }
 
   factory(name = PREF_FRAME_RATE) {
@@ -56,6 +62,10 @@ val prefModule = module {
   factory(name = PREF_RECORDINGS_FOLDER) {
     val default = File(getExternalStorageDirectory(), "MNML Screen Recorder")
     get<RxkPrefs>().string(PREF_RECORDINGS_FOLDER, default.absolutePath)
+  }
+
+  factory(name = PREF_RECORD_AUDIO) {
+    get<RxkPrefs>().boolean(PREF_RECORD_AUDIO, false)
   }
 
   // Controls

@@ -18,6 +18,7 @@ package com.afollestad.mnmlscreenrecord.ui.settings
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
+import com.afollestad.assent.Permission.RECORD_AUDIO
 import com.afollestad.assent.Permission.WRITE_EXTERNAL_STORAGE
 import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.runWithPermissions
@@ -28,12 +29,14 @@ import com.afollestad.materialdialogs.files.folderChooser
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_BIT_RATE
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_AUDIO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onProgressChanged
 import com.afollestad.rxkprefs.Pref
@@ -45,10 +48,15 @@ import java.io.File
 /** @author Aidan Follestad (afollestad) */
 class SettingsFragment : PreferenceFragmentCompat() {
 
-  private val bitRatePref by inject<Pref<Int>>(name = PREF_BIT_RATE)
+  // Quality
+  private val videoBitRatePref by inject<Pref<Int>>(name = PREF_VIDEO_BIT_RATE)
+  private val audioBitRatePref by inject<Pref<Int>>(name = PREF_AUDIO_BIT_RATE)
   private val frameRatePref by inject<Pref<Int>>(name = PREF_FRAME_RATE)
+  // Recording
   private val countdownPref by inject<Pref<Int>>(name = PREF_COUNTDOWN)
+  private val recordAudioPref by inject<Pref<Boolean>>(name = PREF_RECORD_AUDIO)
   private val recordingsFolderPref by inject<Pref<String>>(name = PREF_RECORDINGS_FOLDER)
+  // Controls
   private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
   private val alwaysShowNotificationPref by inject<Pref<Boolean>>(
       name = PREF_ALWAYS_SHOW_NOTIFICATION
@@ -61,11 +69,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
   ) {
     setPreferencesFromResource(R.xml.settings, rootKey)
 
-    // BIT RATE
-    val bitRateEntry = findPreference(PREF_BIT_RATE)
-    bitRateEntry.setOnPreferenceClickListener {
+    // VIDEO BIT RATE
+    val videoBitRateEntry = findPreference(PREF_VIDEO_BIT_RATE)
+    videoBitRateEntry.setOnPreferenceClickListener {
       val rawValues = resources.getIntArray(R.array.bit_rate_values)
-      val currentValue = bitRatePref.get()
+      val currentValue = videoBitRatePref.get()
       val defaultIndex = rawValues.indexOf(currentValue)
 
       MaterialDialog(activity!!).show {
@@ -74,15 +82,41 @@ class SettingsFragment : PreferenceFragmentCompat() {
             res = R.array.bit_rate_options,
             initialSelection = defaultIndex
         ) { _, which, _ ->
-          bitRatePref.set(rawValues[which])
+          videoBitRatePref.set(rawValues[which])
         }
         positiveButton(R.string.select)
       }
       true
     }
-    bitRatePref.observe()
+    videoBitRatePref.observe()
         .subscribe {
-          bitRateEntry.summary = getString(R.string.setting_bitrate_desc, it.bitRateString())
+          videoBitRateEntry.summary = getString(R.string.setting_bitrate_desc, it.bitRateString())
+        }
+        .attachLifecycle(this)
+
+    // AUDIO BIT RATE
+    val audioBitRateEntry = findPreference(PREF_AUDIO_BIT_RATE)
+    audioBitRateEntry.setOnPreferenceClickListener {
+      val rawValues = resources.getIntArray(R.array.audio_bit_rate_values)
+      val currentValue = audioBitRatePref.get()
+      val defaultIndex = rawValues.indexOf(currentValue)
+
+      MaterialDialog(activity!!).show {
+        title(R.string.setting_audio_bitrate)
+        listItemsSingleChoice(
+            res = R.array.audio_bit_rate_options,
+            initialSelection = defaultIndex
+        ) { _, which, _ ->
+          audioBitRatePref.set(rawValues[which])
+        }
+        positiveButton(R.string.select)
+      }
+      true
+    }
+    audioBitRatePref.observe()
+        .subscribe {
+          audioBitRateEntry.summary =
+              getString(R.string.setting_audio_bitrate_desc, it.bitRateString())
         }
         .attachLifecycle(this)
 
@@ -126,6 +160,25 @@ class SettingsFragment : PreferenceFragmentCompat() {
           countdownEntry.summary = resources.getQuantityString(
               R.plurals.setting_countdown_desc, it, it
           )
+        }
+        .attachLifecycle(this)
+
+    // RECORD AUDIO
+    val recordAudioEntry = findPreference(PREF_RECORD_AUDIO) as SwitchPreference
+    recordAudioEntry.setOnPreferenceChangeListener { _, newValue ->
+      if (newValue == true) {
+        runWithPermissions(RECORD_AUDIO) {
+          recordAudioPref.set(newValue as Boolean)
+          recordAudioEntry.isChecked = true
+        }
+        false
+      } else {
+        true
+      }
+    }
+    recordAudioPref.observe()
+        .subscribe {
+          recordAudioEntry.isChecked = it
         }
         .attachLifecycle(this)
 
@@ -223,5 +276,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
   }
 
-  private fun Int.bitRateString() = "${this / 1_000_000}mbps"
+  private fun Int.bitRateString(): String {
+    return if (this >= 1_000_000) {
+      "${this / 1_000_000}mbps"
+    } else {
+      "${this / 1_000}kbps"
+    }
+  }
 }

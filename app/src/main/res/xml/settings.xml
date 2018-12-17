@@ -3,6 +3,30 @@
 
   <PreferenceCategory
       android:layout="@layout/custom_preference_category"
+      android:title="@string/setting_category_recording">
+
+    <Preference
+        android:key="countdown"
+        android:layout="@layout/custom_preference"
+        android:title="@string/setting_countdown"/>
+
+    <SwitchPreference
+        android:key="record_audio"
+        android:layout="@layout/custom_preference"
+        android:summaryOff="@string/setting_record_audio_off"
+        android:summaryOn="@string/setting_record_audio_on"
+        android:title="@string/setting_record_audio"/>
+
+    <Preference
+        android:key="recordings_folder"
+        android:layout="@layout/custom_preference"
+        android:summary="@string/setting_recordings_folder_desc"
+        android:title="@string/setting_recordings_folder"/>
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:layout="@layout/custom_preference_category"
       android:title="@string/setting_category_quality">
 
     <Preference
@@ -12,27 +36,16 @@
         android:title="@string/setting_bitrate"/>
 
     <Preference
+        android:key="audio_bit_rate"
+        android:layout="@layout/custom_preference"
+        android:summary="@string/setting_audio_bitrate_desc"
+        android:title="@string/setting_audio_bitrate"/>
+
+    <Preference
         android:key="frame_rate"
         android:layout="@layout/custom_preference"
         android:summary="@string/setting_framerate_desc"
         android:title="@string/setting_framerate"/>
-
-  </PreferenceCategory>
-
-  <PreferenceCategory
-      android:layout="@layout/custom_preference_category"
-      android:title="@string/setting_category_recording">
-
-    <Preference
-        android:key="countdown"
-        android:layout="@layout/custom_preference"
-        android:title="@string/setting_countdown"/>
-
-    <Preference
-        android:key="recordings_folder"
-        android:layout="@layout/custom_preference"
-        android:summary="@string/setting_recordings_folder_desc"
-        android:title="@string/setting_recordings_folder"/>
 
   </PreferenceCategory>
 

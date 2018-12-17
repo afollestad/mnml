@@ -6,8 +6,11 @@
   <!-- Quality -->
   <string name="setting_category_quality">Quality</string>
 
-  <string name="setting_bitrate">Bit Rate</string>
+  <string name="setting_bitrate">Video Bit Rate</string>
   <string name="setting_bitrate_desc">Screen capture will record at %1$s</string>
+
+  <string name="setting_audio_bitrate">Audio Bit Rate</string>
+  <string name="setting_audio_bitrate_desc">Audio capture will record at %1$s</string>
 
   <string name="setting_framerate">Frame Rate</string>
   <string name="setting_framerate_desc">Screen capture will record at %1$d frames per second.</string>
@@ -21,6 +24,10 @@
     <item quantity="other">%1$d seconds before recording begins.</item>
   </plurals>
   <string name="setting_countdown_zero_note">When set to 0, the countdown is disabled.</string>
+
+  <string name="setting_record_audio">Record Audio</string>
+  <string name="setting_record_audio_on">Audio will be recorded from your microphone during capture.</string>
+  <string name="setting_record_audio_off">Audio will not be recorded during capture.</string>
 
   <string name="setting_recordings_folder">Recordings Folder</string>
   <string name="setting_recordings_folder_desc">Recordings are saved to \"%1$s\"</string>

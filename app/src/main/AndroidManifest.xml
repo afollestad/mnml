@@ -4,9 +4,10 @@
     package="com.afollestad.mnmlscreenrecord">
 
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-  <uses-permission android:name="TASKS"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+  <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+  <uses-permission android:name="TASKS"/>
 
   <application
       android:name=".MnmlApp"

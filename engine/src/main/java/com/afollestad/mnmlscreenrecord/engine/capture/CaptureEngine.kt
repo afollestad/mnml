@@ -24,6 +24,8 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR
 import android.hardware.display.VirtualDisplay
 import android.media.MediaRecorder
+import android.media.MediaRecorder.AudioEncoder.AAC
+import android.media.MediaRecorder.AudioSource.MIC
 import android.media.MediaRecorder.OutputFormat.MPEG_4
 import android.media.MediaRecorder.VideoEncoder.H264
 import android.media.MediaRecorder.VideoSource.SURFACE
@@ -116,8 +118,10 @@ class RealCaptureEngine(
   private val windowManager: WindowManager,
   private val projectionManager: MediaProjectionManager,
   private val recordingsFolderPref: Pref<String>,
-  private val bitRatePref: Pref<Int>,
-  private val frameRatePref: Pref<Int>
+  private val videoBitRatePref: Pref<Int>,
+  private val frameRatePref: Pref<Int>,
+  private val recordAudioPref: Pref<Boolean>,
+  private val audioBitRatePref: Pref<Int>
 ) : CaptureEngine {
 
   private var recordingInfo: RecordingInfo? = null
@@ -175,10 +179,6 @@ class RealCaptureEngine(
     data: Intent
   ) {
     log("onActivityResult($resultCode, $data)")
-    if (recordingInfo == null) {
-      throw IllegalStateException("onActivityResult - recordingInfo is unexpectedly null!")
-    }
-
     projection = projectionManager.getMediaProjection(resultCode, data)
         .apply {
           registerCallback(projectionCallback, null)
@@ -236,6 +236,10 @@ class RealCaptureEngine(
     val recordingInfo = ensureRecordingInfo(context)
     recorder = MediaRecorder().apply {
       setVideoSource(SURFACE)
+      if (recordAudioPref.get()) {
+        log("Recording audio from the mic")
+        setAudioSource(MIC)
+      }
       setOutputFormat(MPEG_4)
 
       val frameRate = frameRatePref.get()
@@ -243,11 +247,18 @@ class RealCaptureEngine(
       log("Frame rate set to $frameRate")
 
       setVideoEncoder(H264)
+      if (recordAudioPref.get()) {
+        setAudioEncoder(AAC)
+      }
       setVideoSize(recordingInfo.width, recordingInfo.height)
 
-      val bitRate = bitRatePref.get()
-      setVideoEncodingBitRate(bitRate)
-      log("Bit rate set to $bitRate")
+      val videoBitRate = videoBitRatePref.get()
+      setVideoEncodingBitRate(videoBitRate)
+      log("Video bit rate set to $videoBitRate")
+
+      val audioBitRate = audioBitRatePref.get()
+      setAudioEncodingBitRate(audioBitRate)
+      log("Audio bit rate set to $audioBitRate")
 
       val outputFolder = File(recordingsFolderPref.get()).apply { mkdirs() }
       val now = Date().timestampString()

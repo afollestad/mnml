@@ -25,10 +25,12 @@ import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.appcompat.view.ContextThemeWrapper
 import com.afollestad.mnmlscreenrecord.common.misc.systemService
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_BIT_RATE
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_AUDIO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.capture.RealCaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
@@ -69,8 +71,10 @@ val engineModule = module {
         get(),
         get(),
         get(name = PREF_RECORDINGS_FOLDER),
-        get(name = PREF_BIT_RATE),
-        get(name = PREF_FRAME_RATE)
+        get(name = PREF_VIDEO_BIT_RATE),
+        get(name = PREF_FRAME_RATE),
+        get(name = PREF_RECORD_AUDIO),
+        get(name = PREF_AUDIO_BIT_RATE)
     )
   } bind CaptureEngine::class
 
