@@ -94,6 +94,8 @@ class MainActivity : DarkModeSwitchActivity(),
     viewModel.onNeedStoragePermission()
         .subscribe { StorageExplanationDialog.show(this@MainActivity) }
         .attachLifecycle(this)
+
+    checkForMediaProjectionAvailability()
   }
 
   override fun onShouldAskForStoragePermission() {
@@ -208,6 +210,23 @@ class MainActivity : DarkModeSwitchActivity(),
           0 -> shareRecording(recording)
           1 -> viewModel.deleteRecording(recording)
         }
+      }
+    }
+  }
+
+  private fun checkForMediaProjectionAvailability() {
+    try {
+      Class.forName("android.media.projection.MediaProjectionManager")
+    } catch (e: ClassNotFoundException) {
+      MaterialDialog(this).show {
+        title(text = "Device Unsupported")
+        message(
+            text = "Your device lacks support for MediaProjectionManager. Either the manufacturer " +
+                "of your device left it out, or you are using an emulator."
+        )
+        positiveButton(android.R.string.ok) { finish() }
+        cancelOnTouchOutside(false)
+        cancelable(false)
       }
     }
   }
