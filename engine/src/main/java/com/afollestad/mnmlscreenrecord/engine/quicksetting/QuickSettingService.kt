@@ -46,7 +46,7 @@ class QuickSettingService : TileService() {
   }
 
   private fun updateTile() {
-    val tile = qsTile
+    val tile = qsTile ?: return
     if (captureEngine.isStarted()) {
       tile.icon = Icon.createWithResource(this, R.drawable.ic_quick_setting_stop)
       tile.label = getString(R.string.cd_stop_recording)

@@ -52,8 +52,8 @@ class CapturePermissionActivity : AppCompatActivity() {
         captureEngine.cancel()
         sendBroadcast(Intent(PERMISSION_DENIED))
       }
-      else -> {
-        data?.let { captureEngine.onActivityResult(resultCode, it) }
+      else -> data?.let {
+        captureEngine.onActivityResult(this@CapturePermissionActivity, resultCode, it)
       }
     }
     finish()

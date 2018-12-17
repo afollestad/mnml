@@ -87,6 +87,7 @@ interface CaptureEngine {
    * A delegate from the activity - notifies when capture permission is received.
    */
   fun onActivityResult(
+    context: Context,
     resultCode: Int,
     data: Intent
   )
@@ -136,10 +137,7 @@ class RealCaptureEngine(
       log("start($context) - already started! No-op")
       return
     }
-
     log("start($context)")
-    recordingInfo = RecordingInfo.get(context, windowManager)
-    createAndPrepareRecorder(recordingInfo!!)
 
     if (projection == null) {
       log("Projection is null, requesting permission...")
@@ -150,7 +148,8 @@ class RealCaptureEngine(
       return
     }
 
-    createVirtualDisplayAndStart(recordingInfo!!)
+    createAndPrepareRecorder(context)
+    createVirtualDisplayAndStart(context)
   }
 
   override fun requestPermission(
@@ -159,6 +158,7 @@ class RealCaptureEngine(
   ) = context.startActivityForResult(projectionManager.createScreenCaptureIntent(), requestCode)
 
   override fun onActivityResult(
+    context: Context,
     resultCode: Int,
     data: Intent
   ) {
@@ -171,7 +171,9 @@ class RealCaptureEngine(
         .apply {
           registerCallback(projectionCallback, null)
         }
-    createVirtualDisplayAndStart(recordingInfo!!)
+
+    createAndPrepareRecorder(context)
+    createVirtualDisplayAndStart(context)
   }
 
   override fun cancel() {
@@ -217,7 +219,8 @@ class RealCaptureEngine(
     }
   }
 
-  private fun createAndPrepareRecorder(recordingInfo: RecordingInfo) {
+  private fun createAndPrepareRecorder(context: Context) {
+    val recordingInfo = ensureRecordingInfo(context)
     recorder = MediaRecorder().apply {
       setVideoSource(SURFACE)
       setOutputFormat(MPEG_4)
@@ -250,8 +253,8 @@ class RealCaptureEngine(
   }
 
   @SuppressLint("CheckResult")
-  private fun createVirtualDisplayAndStart(recordingInfo: RecordingInfo) {
-    display = createVirtualDisplay(recordingInfo)
+  private fun createVirtualDisplayAndStart(context: Context) {
+    display = createVirtualDisplay(context)
 
     // Tiny delay so we don't record the cast "start now" dialog.
     handler.postDelayed({
@@ -265,7 +268,8 @@ class RealCaptureEngine(
     log("Media recorder started")
   }
 
-  private fun createVirtualDisplay(recordingInfo: RecordingInfo): VirtualDisplay {
+  private fun createVirtualDisplay(context: Context): VirtualDisplay {
+    val recordingInfo = ensureRecordingInfo(context)
     val surface = recorder?.surface ?: throw IllegalStateException(
         "createVirtualDisplay - Recorder unexpectedly null!"
     )
@@ -279,6 +283,13 @@ class RealCaptureEngine(
         null,
         null
     ) ?: throw IllegalStateException("createVirtualDisplay - projection unexpectedly null!")
+  }
+
+  private fun ensureRecordingInfo(context: Context): RecordingInfo {
+    if (recordingInfo == null) {
+      recordingInfo = RecordingInfo.get(context, windowManager)
+    }
+    return recordingInfo!!
   }
 
   private val projectionCallback = object : MediaProjection.Callback() {
