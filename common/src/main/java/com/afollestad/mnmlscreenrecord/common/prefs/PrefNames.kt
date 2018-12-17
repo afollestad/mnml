@@ -17,12 +17,20 @@ package com.afollestad.mnmlscreenrecord.common.prefs
 
 /** @author Aidan Follestad (@afollestad) */
 object PrefNames {
+
+  // Misc
   const val PREF_DARK_MODE = "dark_mode"
+
+  // Quality
+  const val PREF_BIT_RATE = "bit_rate"
+  const val PREF_FRAME_RATE = "frame_rate"
+
+  // Recording
   const val PREF_COUNTDOWN = "countdown"
   const val PREF_RECORDINGS_FOLDER = "recordings_folder"
+
+  // Controls
   const val PREF_ALWAYS_SHOW_NOTIFICATION = "always_show_controls_notification"
   const val PREF_STOP_ON_SCREEN_OFF = "stop_on_screen_off"
   const val PREF_STOP_ON_SHAKE = "stop_on_shake"
-  const val PREF_BIT_RATE = "bit_rate"
-  const val PREF_FRAME_RATE = "frame_rate"
 }

@@ -3,9 +3,8 @@
   <string name="dark_mode">Dark Mode</string>
   <string name="settings">Settings</string>
 
+  <!-- Quality -->
   <string name="setting_category_quality">Quality</string>
-  <string name="setting_category_recording">Recording</string>
-  <string name="setting_category_controls">Controls</string>
 
   <string name="setting_bitrate">Bit Rate</string>
   <string name="setting_bitrate_desc">Screen capture will record at %1$s</string>
@@ -13,16 +12,21 @@
   <string name="setting_framerate">Frame Rate</string>
   <string name="setting_framerate_desc">Screen capture will record at %1$d frames per second.</string>
 
+  <!-- Recording -->
+  <string name="setting_category_recording">Recording</string>
+
   <string name="setting_countdown">Countdown</string>
   <plurals name="setting_countdown_desc">
     <item quantity="one">%1$d second before recording begins.</item>
     <item quantity="other">%1$d seconds before recording begins.</item>
   </plurals>
-
   <string name="setting_countdown_zero_note">When set to 0, the countdown is disabled.</string>
 
   <string name="setting_recordings_folder">Recordings Folder</string>
   <string name="setting_recordings_folder_desc">Recordings are saved to \"%1$s\"</string>
+
+  <!-- Controls -->
+  <string name="setting_category_controls">Controls</string>
 
   <string name="setting_stop_on_screen_off">Stop on Screen Off</string>
   <string name="setting_stop_on_screen_off_desc_on">
@@ -49,6 +53,7 @@
     Shaking your device won\'t do anything special.
   </string>
 
+  <!-- Misc -->
   <string name="select">Select</string>
 
 </resources>

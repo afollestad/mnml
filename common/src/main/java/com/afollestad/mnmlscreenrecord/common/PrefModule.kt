@@ -34,10 +34,21 @@ val prefModule = module {
 
   single { rxkPrefs(get(), "settings") }
 
+  // Misc
   factory(name = PREF_DARK_MODE) {
     get<RxkPrefs>().boolean(PREF_DARK_MODE, false)
   }
 
+  // Quality
+  factory(name = PREF_BIT_RATE) {
+    get<RxkPrefs>().integer(PREF_BIT_RATE, 8_000_000)
+  }
+
+  factory(name = PREF_FRAME_RATE) {
+    get<RxkPrefs>().integer(PREF_FRAME_RATE, 30)
+  }
+
+  // Recording
   factory(name = PREF_COUNTDOWN) {
     get<RxkPrefs>().integer(PREF_COUNTDOWN, 3)
   }
@@ -47,6 +58,7 @@ val prefModule = module {
     get<RxkPrefs>().string(PREF_RECORDINGS_FOLDER, default.absolutePath)
   }
 
+  // Controls
   factory(name = PREF_STOP_ON_SCREEN_OFF) {
     get<RxkPrefs>().boolean(PREF_STOP_ON_SCREEN_OFF, true)
   }
@@ -57,13 +69,5 @@ val prefModule = module {
 
   factory(name = PREF_STOP_ON_SHAKE) {
     get<RxkPrefs>().boolean(PREF_STOP_ON_SHAKE, true)
-  }
-
-  factory(name = PREF_BIT_RATE) {
-    get<RxkPrefs>().integer(PREF_BIT_RATE, 8_000_000)
-  }
-
-  factory(name = PREF_FRAME_RATE) {
-    get<RxkPrefs>().integer(PREF_FRAME_RATE, 30)
   }
 }
