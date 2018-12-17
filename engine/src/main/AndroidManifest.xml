@@ -34,6 +34,11 @@
         android:excludeFromRecents="true"
         android:theme="@style/AppTheme.Transparent"/>
 
+    <activity
+        android:name=".service.ErrorDialogActivity"
+        android:excludeFromRecents="true"
+        android:theme="@style/AppTheme.Transparent"/>
+
     <provider
         android:name="androidx.core.content.FileProvider"
         android:authorities="com.afollestad.mnmlscreenrecord.provider"

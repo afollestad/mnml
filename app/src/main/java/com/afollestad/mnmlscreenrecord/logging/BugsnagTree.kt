@@ -38,7 +38,7 @@ class BugsnagTree : Timber.Tree() {
       Bugsnag.leaveBreadcrumb("crash_tag", STATE, mutableMapOf("tag" to tag))
       Bugsnag.notify(t)
     } else {
-      Bugsnag.leaveBreadcrumb("${priority.priorityString()}$tag: $message")
+      Bugsnag.leaveBreadcrumb("${priority.priorityString()}${tag ?: "??"}: $message")
     }
   }
 

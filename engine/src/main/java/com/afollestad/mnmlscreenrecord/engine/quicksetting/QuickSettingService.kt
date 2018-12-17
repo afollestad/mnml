@@ -21,7 +21,6 @@ import android.service.quicksettings.Tile.STATE_ACTIVE
 import android.service.quicksettings.Tile.STATE_INACTIVE
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
-import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
 import com.afollestad.mnmlscreenrecord.engine.R
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.service.ServiceController
@@ -33,7 +32,6 @@ class QuickSettingService : TileService() {
 
   private val captureEngine by inject<CaptureEngine>()
   private val serviceController by inject<ServiceController>()
-  private val permissionChecker by inject<PermissionChecker>()
 
   override fun onTileAdded() {
     super.onTileAdded()

@@ -31,12 +31,14 @@ import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Handler
 import android.view.WindowManager
+import androidx.annotation.CheckResult
 import com.afollestad.mnmlscreenrecord.common.misc.timestampString
 import com.afollestad.mnmlscreenrecord.engine.permission.CapturePermissionActivity
 import com.afollestad.rxkprefs.Pref
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.io.File
+import java.io.FileNotFoundException
 import java.util.Date
 import timber.log.Timber.d as log
 
@@ -63,6 +65,12 @@ interface CaptureEngine {
    * are denied.
    */
   fun onCancel(): Observable<Unit>
+
+  /**
+   * Returns an Observable that emits when an error occurs that should be recoverable, and
+   * displayed to the user.
+   */
+  fun onError(): Observable<Exception>
 
   /**
    * Returns true if capture is currently in0-progress.
@@ -119,9 +127,10 @@ class RealCaptureEngine(
   private var projection: MediaProjection? = null
   private var display: VirtualDisplay? = null
   private var pendingFile: File? = null
-  private var onStart = PublishSubject.create<Unit>()
-  private var onStop = PublishSubject.create<File>()
-  private var onCancel = PublishSubject.create<Unit>()
+  private val onStart = PublishSubject.create<Unit>()
+  private val onStop = PublishSubject.create<File>()
+  private val onCancel = PublishSubject.create<Unit>()
+  private val onError = PublishSubject.create<Exception>()
   private var isStarted: Boolean = false
 
   override fun onStart(): Observable<Unit> = onStart
@@ -129,6 +138,8 @@ class RealCaptureEngine(
   override fun onStop(): Observable<File> = onStop
 
   override fun onCancel(): Observable<Unit> = onCancel
+
+  override fun onError(): Observable<Exception> = onError
 
   override fun isStarted(): Boolean = isStarted
 
@@ -148,8 +159,9 @@ class RealCaptureEngine(
       return
     }
 
-    createAndPrepareRecorder(context)
-    createVirtualDisplayAndStart(context)
+    if (createAndPrepareRecorder(context)) {
+      createVirtualDisplayAndStart(context)
+    }
   }
 
   override fun requestPermission(
@@ -172,8 +184,9 @@ class RealCaptureEngine(
           registerCallback(projectionCallback, null)
         }
 
-    createAndPrepareRecorder(context)
-    createVirtualDisplayAndStart(context)
+    if (createAndPrepareRecorder(context)) {
+      createVirtualDisplayAndStart(context)
+    }
   }
 
   override fun cancel() {
@@ -219,7 +232,7 @@ class RealCaptureEngine(
     }
   }
 
-  private fun createAndPrepareRecorder(context: Context) {
+  @CheckResult private fun createAndPrepareRecorder(context: Context): Boolean {
     val recordingInfo = ensureRecordingInfo(context)
     recorder = MediaRecorder().apply {
       setVideoSource(SURFACE)
@@ -246,10 +259,16 @@ class RealCaptureEngine(
       try {
         prepare()
         log("Media recorder prepared")
-      } catch (e: Throwable) {
-        throw IllegalStateException("Unable to prepare the MediaRecorder", e)
+      } catch (fe: FileNotFoundException) {
+        onError.onNext(Exception("MNML was unable to access your file system. ${fe.message}", fe))
+        return false
+      } catch (t: Throwable) {
+        onError.onNext(Exception("MNML was unable to prepare for recording. $t", t))
+        return false
       }
     }
+
+    return true
   }
 
   @SuppressLint("CheckResult")

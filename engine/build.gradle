@@ -24,6 +24,9 @@ dependencies {
   // afollestad
   implementation 'com.afollestad.material-dialogs:core:' + versions.materialDialogs
   implementation 'com.afollestad:assent:' + versions.assent
+
+  // Debug
+  implementation 'com.bugsnag:bugsnag-android:' + versions.bugsnag
 }
 
 apply from: '../spotless.gradle'

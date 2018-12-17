@@ -156,6 +156,10 @@ class BackgroundService : Service(), LifecycleOwner {
           }
         }
         .attachLifecycle(this)
+
+    captureEngine.onError()
+        .subscribe { ex -> ErrorDialogActivity.show(this@BackgroundService, ex) }
+        .attachLifecycle(this)
   }
 
   private fun startRecording() {
