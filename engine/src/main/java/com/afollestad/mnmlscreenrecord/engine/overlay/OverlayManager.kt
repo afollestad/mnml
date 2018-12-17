@@ -43,6 +43,11 @@ class OverlayManager(
   }
 
   /**
+   * Returns true if a countdown is configured when recording starts.
+   */
+  fun willCountdown() = countdownPref.get() > 0
+
+  /**
    * Counts down starting at the value of the [countdownPref], showing a red number in the middle
    * of the screen for each second. The given [finished] callback is invoked when we reach 0.
    */

@@ -169,7 +169,7 @@ class BackgroundService : Service(), LifecycleOwner {
               .addFlags(FLAG_ACTIVITY_NEW_TASK)
       )
       return
-    } else if (!permissionChecker.hasOverlayPermission()) {
+    } else if (!permissionChecker.hasOverlayPermission() && overlayManager.willCountdown()) {
       startActivity(
           Intent(this, OverlayPermissionActivity::class.java)
               .addFlags(FLAG_ACTIVITY_NEW_TASK)
