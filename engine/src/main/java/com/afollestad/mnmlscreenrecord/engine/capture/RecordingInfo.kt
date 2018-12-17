@@ -33,7 +33,6 @@ import timber.log.Timber
 internal data class RecordingInfo(
   val width: Int,
   val height: Int,
-  val frameRate: Int,
   val density: Int
 ) {
   companion object
@@ -56,16 +55,12 @@ internal fun Companion.get(
   val camcorderProfile = CamcorderProfile.get(QUALITY_HIGH)
   val cameraWidth = camcorderProfile?.videoFrameWidth ?: -1
   val cameraHeight = camcorderProfile?.videoFrameHeight ?: -1
-  val cameraFrameRate = camcorderProfile?.videoFrameRate ?: 30
-  log("Camera size: $cameraWidth x $cameraHeight frameRate: $cameraFrameRate")
+  log("Camera size: $cameraWidth x $cameraHeight")
 
   val sizePercentage = 100 // TODO
   log("Size percentage: $sizePercentage")
 
-  return calculateRecordingInfo(
-      displayInfo, isLandscape, cameraWidth, cameraHeight,
-      cameraFrameRate, sizePercentage
-  )
+  return calculateRecordingInfo(displayInfo, isLandscape, cameraWidth, cameraHeight, sizePercentage)
 }
 
 private fun Companion.log(message: String) {
@@ -78,7 +73,6 @@ private fun Companion.calculateRecordingInfo(
   isLandscapeDevice: Boolean,
   cameraWidth: Int,
   cameraHeight: Int,
-  cameraFrameRate: Int,
   sizePercentage: Int
 ): RecordingInfo {
   // Scale the display size before any maximum size calculations.
@@ -87,18 +81,14 @@ private fun Companion.calculateRecordingInfo(
 
   if (cameraWidth == -1 && cameraHeight == -1) {
     // No cameras. Fall back to the display size.
-    return RecordingInfo(
-        displayWidth, displayHeight, cameraFrameRate, displayInfo.density
-    )
+    return RecordingInfo(displayWidth, displayHeight, displayInfo.density)
   }
 
   var frameWidth = if (isLandscapeDevice) cameraWidth else cameraHeight
   var frameHeight = if (isLandscapeDevice) cameraHeight else cameraWidth
   if (frameWidth >= displayWidth && frameHeight >= displayHeight) {
     // Frame can hold the entire display. Use exact values.
-    return RecordingInfo(
-        displayWidth, displayHeight, cameraFrameRate, displayInfo.density
-    )
+    return RecordingInfo(displayWidth, displayHeight, displayInfo.density)
   }
 
   // Calculate new width or height to preserve aspect ratio.
@@ -107,7 +97,5 @@ private fun Companion.calculateRecordingInfo(
   } else {
     frameHeight = displayHeight * frameWidth / displayWidth
   }
-  return RecordingInfo(
-      frameWidth, frameHeight, cameraFrameRate, displayInfo.density
-  )
+  return RecordingInfo(frameWidth, frameHeight, displayInfo.density)
 }

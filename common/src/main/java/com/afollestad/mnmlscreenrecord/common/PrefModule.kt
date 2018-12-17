@@ -20,6 +20,7 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_N
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
@@ -60,5 +61,9 @@ val prefModule = module {
 
   factory(name = PREF_BIT_RATE) {
     get<RxkPrefs>().integer(PREF_BIT_RATE, 8_000_000)
+  }
+
+  factory(name = PREF_FRAME_RATE) {
+    get<RxkPrefs>().integer(PREF_FRAME_RATE, 30)
   }
 }

@@ -107,7 +107,8 @@ class RealCaptureEngine(
   private val windowManager: WindowManager,
   private val projectionManager: MediaProjectionManager,
   private val recordingsFolderPref: Pref<String>,
-  private val bitRatePref: Pref<Int>
+  private val bitRatePref: Pref<Int>,
+  private val frameRatePref: Pref<Int>
 ) : CaptureEngine {
 
   private var recordingInfo: RecordingInfo? = null
@@ -220,7 +221,11 @@ class RealCaptureEngine(
     recorder = MediaRecorder().apply {
       setVideoSource(SURFACE)
       setOutputFormat(MPEG_4)
-      setVideoFrameRate(recordingInfo.frameRate)
+
+      val frameRate = frameRatePref.get()
+      setVideoFrameRate(frameRate)
+      log("Frame rate set to $frameRate")
+
       setVideoEncoder(H264)
       setVideoSize(recordingInfo.width, recordingInfo.height)
 
@@ -228,9 +233,7 @@ class RealCaptureEngine(
       setVideoEncodingBitRate(bitRate)
       log("Bit rate set to $bitRate")
 
-      val outputFolder = File(recordingsFolderPref.get()).apply {
-        mkdirs()
-      }
+      val outputFolder = File(recordingsFolderPref.get()).apply { mkdirs() }
       val now = Date().timestampString()
       val outputFile = File(outputFolder, "MNML-$now.mp4")
       pendingFile = outputFile

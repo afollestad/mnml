@@ -6,7 +6,7 @@
     <item>@string/delete</item>
   </string-array>
 
-  <string-array name="bit_rate_options">
+  <string-array name="bit_rate_options" translatable="false">
     <item>24 Mbps</item>
     <item>20 Mbps</item>
     <item>18 Mbps</item>
@@ -32,6 +32,22 @@
     <item>6000000</item>
     <item>4000000</item>
     <item>2000000</item>
+  </integer-array>
+
+  <string-array name="frame_rate_options" translatable="false">
+    <item>24 FPS</item>
+    <item>25 FPS</item>
+    <item>30 FPS</item>
+    <item>48 FPS</item>
+    <item>60 FPS</item>
+  </string-array>
+
+  <integer-array name="frame_rate_values" translatable="false">
+    <item>24</item>
+    <item>25</item>
+    <item>30</item>
+    <item>48</item>
+    <item>60</item>
   </integer-array>
 
 </resources>

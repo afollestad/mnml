@@ -10,6 +10,9 @@
   <string name="setting_bitrate">Bit Rate</string>
   <string name="setting_bitrate_desc">Screen capture will record at %1$s</string>
 
+  <string name="setting_framerate">Frame Rate</string>
+  <string name="setting_framerate_desc">Screen capture will record at %1$d frames per second.</string>
+
   <string name="setting_countdown">Countdown</string>
   <plurals name="setting_countdown_desc">
     <item quantity="one">%1$d second before recording begins.</item>

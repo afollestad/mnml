@@ -24,4 +24,5 @@ object PrefNames {
   const val PREF_STOP_ON_SCREEN_OFF = "stop_on_screen_off"
   const val PREF_STOP_ON_SHAKE = "stop_on_shake"
   const val PREF_BIT_RATE = "bit_rate"
+  const val PREF_FRAME_RATE = "frame_rate"
 }

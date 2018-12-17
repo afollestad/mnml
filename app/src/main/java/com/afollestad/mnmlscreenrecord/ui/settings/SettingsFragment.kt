@@ -30,6 +30,7 @@ import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
@@ -44,7 +45,8 @@ import java.io.File
 /** @author Aidan Follestad (afollestad) */
 class SettingsFragment : PreferenceFragmentCompat() {
 
-  private val bitratePref by inject<Pref<Int>>(name = PREF_BIT_RATE)
+  private val bitRatePref by inject<Pref<Int>>(name = PREF_BIT_RATE)
+  private val frameRatePref by inject<Pref<Int>>(name = PREF_FRAME_RATE)
   private val countdownPref by inject<Pref<Int>>(name = PREF_COUNTDOWN)
   private val recordingsFolderPref by inject<Pref<String>>(name = PREF_RECORDINGS_FOLDER)
   private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
@@ -60,10 +62,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
     setPreferencesFromResource(R.xml.settings, rootKey)
 
     // BIT RATE
-    val bitrateEntry = findPreference(PREF_BIT_RATE)
-    bitrateEntry.setOnPreferenceClickListener {
+    val bitRateEntry = findPreference(PREF_BIT_RATE)
+    bitRateEntry.setOnPreferenceClickListener {
       val rawValues = resources.getIntArray(R.array.bit_rate_values)
-      val currentValue = bitratePref.get()
+      val currentValue = bitRatePref.get()
       val defaultIndex = rawValues.indexOf(currentValue)
 
       MaterialDialog(activity!!).show {
@@ -72,15 +74,40 @@ class SettingsFragment : PreferenceFragmentCompat() {
             res = R.array.bit_rate_options,
             initialSelection = defaultIndex
         ) { _, which, _ ->
-          bitratePref.set(rawValues[which])
+          bitRatePref.set(rawValues[which])
         }
         positiveButton(R.string.select)
       }
       true
     }
-    bitratePref.observe()
+    bitRatePref.observe()
         .subscribe {
-          bitrateEntry.summary = getString(R.string.setting_bitrate_desc, it.bitRateString())
+          bitRateEntry.summary = getString(R.string.setting_bitrate_desc, it.bitRateString())
+        }
+        .attachLifecycle(this)
+
+    // FRAME RATE
+    val frameRateEntry = findPreference(PREF_FRAME_RATE)
+    frameRateEntry.setOnPreferenceClickListener {
+      val rawValues = resources.getIntArray(R.array.frame_rate_values)
+      val currentValue = frameRatePref.get()
+      val defaultIndex = rawValues.indexOf(currentValue)
+
+      MaterialDialog(activity!!).show {
+        title(R.string.setting_framerate)
+        listItemsSingleChoice(
+            res = R.array.frame_rate_options,
+            initialSelection = defaultIndex
+        ) { _, which, _ ->
+          frameRatePref.set(rawValues[which])
+        }
+        positiveButton(R.string.select)
+      }
+      true
+    }
+    frameRatePref.observe()
+        .subscribe {
+          frameRateEntry.summary = getString(R.string.setting_framerate_desc, it)
         }
         .attachLifecycle(this)
 
