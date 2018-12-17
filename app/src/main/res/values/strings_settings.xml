@@ -20,6 +20,7 @@
 
   <string name="setting_countdown">Countdown</string>
   <plurals name="setting_countdown_desc">
+    <item quantity="zero">Recording will begin immediately.</item>
     <item quantity="one">%1$d second before recording begins.</item>
     <item quantity="other">%1$d seconds before recording begins.</item>
   </plurals>
