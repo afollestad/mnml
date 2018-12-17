@@ -120,11 +120,13 @@ class MainViewModel(
   // Lifecycle Events
   @OnLifecycleEvent(ON_CREATE)
   fun onCreate() {
+    log("onCreate()")
     notifications.createChannels()
   }
 
   @OnLifecycleEvent(ON_RESUME)
   fun onResume() {
+    log("onResume()")
     disposables = CompositeDisposable()
     notifications.setIsAppOpen(true)
     invalidateFab()
@@ -147,6 +149,7 @@ class MainViewModel(
 
   @OnLifecycleEvent(ON_PAUSE)
   fun onPause() {
+    log("onPause()")
     disposables?.clear()
     notifications.setIsAppOpen(false)
   }
@@ -190,15 +193,21 @@ class MainViewModel(
    * Call when the FAB is tapped - asking for any required permissions and starting screen capture.
    */
   fun fabClicked() {
+    log("fabClicked()")
     fabEnabled.value = false
+
     if (captureEngine.isStarted()) {
+      log("fabClicked() - stopping recording")
       serviceController.stopRecording(true)
     } else {
+      log("fabClicked() - starting recording")
       if (!permissionChecker.hasStoragePermission()) {
+        log("fabClicked() - storage permission needed")
         wantToStartCapture = true
         needStoragePermission.onNext(Unit)
         return
       } else if (!permissionChecker.hasOverlayPermission()) {
+        log("fabClicked() - overlay permission needed")
         wantToStartCapture = true
         needOverlayPermission.onNext(Unit)
         return
@@ -213,6 +222,7 @@ class MainViewModel(
    * a permission request.
    */
   fun permissionGranted() {
+    log("permissionGranted()")
     if (wantToStartCapture) {
       fabClicked()
     }
