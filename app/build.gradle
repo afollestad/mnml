@@ -7,8 +7,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.bugsnag.android.gradle'
 
 def getBugsnagApiKey() {
+  def propsFile = project.rootProject.file('local.properties')
+  if (!propsFile.exists()) {
+    return ""
+  }
   Properties properties = new Properties()
-  properties.load(project.rootProject.file('local.properties').newDataInputStream())
+  properties.load(propsFile.newDataInputStream())
   return properties.getProperty("bugsnag.apikey") ?: ""
 }
 
