@@ -18,7 +18,6 @@ package com.afollestad.mnmlscreenrecord.ui.main
 import androidx.annotation.CheckResult
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
-import androidx.lifecycle.Lifecycle.Event.ON_CREATE
 import androidx.lifecycle.Lifecycle.Event.ON_PAUSE
 import androidx.lifecycle.Lifecycle.Event.ON_RESUME
 import androidx.lifecycle.LifecycleObserver
@@ -118,11 +117,6 @@ class MainViewModel(
   fun onNeedOverlayPermission(): Observable<Unit> = needOverlayPermission
 
   // Lifecycle Events
-  @OnLifecycleEvent(ON_CREATE)
-  fun onCreate() {
-    log("onCreate()")
-    notifications.createChannels()
-  }
 
   @OnLifecycleEvent(ON_RESUME)
   fun onResume() {

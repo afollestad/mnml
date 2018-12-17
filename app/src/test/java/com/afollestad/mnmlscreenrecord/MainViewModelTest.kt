@@ -80,15 +80,15 @@ class MainViewModelTest {
   @ExperimentalCoroutinesApi
   fun setup() {
     viewModel = MainViewModel(
-      Dispatchers.Unconfined,
-      Dispatchers.Unconfined,
-      notifications,
-      permissionChecker,
-      captureEngine,
-      recordingManager,
-      recordingScanner,
-      serviceController,
-      alwaysShowNotificationPref
+        Dispatchers.Unconfined,
+        Dispatchers.Unconfined,
+        notifications,
+        permissionChecker,
+        captureEngine,
+        recordingManager,
+        recordingScanner,
+        serviceController,
+        alwaysShowNotificationPref
     )
   }
 
@@ -96,16 +96,10 @@ class MainViewModelTest {
   fun tearDown() = viewModel.destroy()
 
   @Test
-  fun onCreate() {
-    viewModel.onCreate()
-    verify(notifications).createChannels()
-  }
-
-  @Test
   fun onResume() {
     whenever(alwaysShowNotificationPref.get()).doReturn(true)
     val fabEnabled = viewModel.onFabEnabled()
-      .test()
+        .test()
 
     viewModel.onResume()
 
@@ -174,11 +168,11 @@ class MainViewModelTest {
   fun refreshRecordings_needStoragePermission() {
     whenever(permissionChecker.hasStoragePermission()).doReturn(false)
     val emptyViewVisibility = viewModel.onEmptyViewVisibility()
-      .test()
+        .test()
     val needStoragePermission = viewModel.onNeedStoragePermission()
-      .test()
+        .test()
     val onRecordings = viewModel.onRecordings()
-      .test()
+        .test()
     viewModel.refreshRecordings()
 
     emptyViewVisibility.assertValues(true, true)
@@ -190,22 +184,22 @@ class MainViewModelTest {
   @Test
   fun refreshRecordings() {
     val recording = Recording(
-      1,
-      "/sdcard/hello.mp4",
-      "Hello",
-      currentTimeMillis(),
-      1024
+        1,
+        "/sdcard/hello.mp4",
+        "Hello",
+        currentTimeMillis(),
+        1024
     )
     val recordings = listOf(recording)
     whenever(permissionChecker.hasStoragePermission()).doReturn(true)
     whenever(recordingManager.getRecordings()).doReturn(recordings)
 
     val emptyViewVisibility = viewModel.onEmptyViewVisibility()
-      .test()
+        .test()
     val needStoragePermission = viewModel.onNeedStoragePermission()
-      .test()
+        .test()
     val onRecordings = viewModel.onRecordings()
-      .test()
+        .test()
     viewModel.refreshRecordings()
 
     emptyViewVisibility.assertValues(true, false)
@@ -216,11 +210,11 @@ class MainViewModelTest {
   @Test
   fun deleteRecording() {
     val recording = Recording(
-      1,
-      "/sdcard/hello.mp4",
-      "Hello",
-      currentTimeMillis(),
-      1024
+        1,
+        "/sdcard/hello.mp4",
+        "Hello",
+        currentTimeMillis(),
+        1024
     )
     viewModel.deleteRecording(recording)
 
@@ -233,7 +227,7 @@ class MainViewModelTest {
   fun fabClicked_alreadyStarted() {
     whenever(captureEngine.isStarted()).doReturn(true)
     val fabEnabled = viewModel.onFabEnabled()
-      .test()
+        .test()
     viewModel.fabClicked()
 
     fabEnabled.assertValues(false)
@@ -246,11 +240,11 @@ class MainViewModelTest {
     whenever(permissionChecker.hasStoragePermission()).doReturn(false)
     whenever(captureEngine.isStarted()).doReturn(false)
     val fabEnabled = viewModel.onFabEnabled()
-      .test()
+        .test()
     val onNeedStoragePermission = viewModel.onNeedStoragePermission()
-      .test()
+        .test()
     val onNeedOverlayPermission = viewModel.onNeedOverlayPermission()
-      .test()
+        .test()
     viewModel.fabClicked()
 
     fabEnabled.assertValues(false)
@@ -266,11 +260,11 @@ class MainViewModelTest {
     whenever(permissionChecker.hasOverlayPermission()).doReturn(false)
     whenever(captureEngine.isStarted()).doReturn(false)
     val fabEnabled = viewModel.onFabEnabled()
-      .test()
+        .test()
     val onNeedStoragePermission = viewModel.onNeedStoragePermission()
-      .test()
+        .test()
     val onNeedOverlayPermission = viewModel.onNeedOverlayPermission()
-      .test()
+        .test()
     viewModel.fabClicked()
 
     fabEnabled.assertValues(false)
@@ -286,11 +280,11 @@ class MainViewModelTest {
     whenever(permissionChecker.hasOverlayPermission()).doReturn(true)
     whenever(captureEngine.isStarted()).doReturn(false)
     val fabEnabled = viewModel.onFabEnabled()
-      .test()
+        .test()
     val onNeedStoragePermission = viewModel.onNeedStoragePermission()
-      .test()
+        .test()
     val onNeedOverlayPermission = viewModel.onNeedOverlayPermission()
-      .test()
+        .test()
     viewModel.fabClicked()
 
     fabEnabled.assertValues(false)
@@ -328,13 +322,13 @@ class MainViewModelTest {
   fun invalidateFab_isStarted() {
     whenever(captureEngine.isStarted()).doReturn(true)
     val fabEnabled = viewModel.onFabEnabled()
-      .test()
+        .test()
     val fabColor = viewModel.onFabColorRes()
-      .test()
+        .test()
     val fabIcon = viewModel.onFabIconRes()
-      .test()
+        .test()
     val fabText = viewModel.onFabTextRes()
-      .test()
+        .test()
 
     viewModel.invalidateFab()
     fabEnabled.assertValues(true)
@@ -347,13 +341,13 @@ class MainViewModelTest {
   fun invalidateFab_notStarted() {
     whenever(captureEngine.isStarted()).doReturn(false)
     val fabEnabled = viewModel.onFabEnabled()
-      .test()
+        .test()
     val fabColor = viewModel.onFabColorRes()
-      .test()
+        .test()
     val fabIcon = viewModel.onFabIconRes()
-      .test()
+        .test()
     val fabText = viewModel.onFabTextRes()
-      .test()
+        .test()
 
     viewModel.invalidateFab()
     fabEnabled.assertValues(true)

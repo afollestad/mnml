@@ -26,8 +26,10 @@ import com.afollestad.mnmlscreenrecord.di.mainModule
 import com.afollestad.mnmlscreenrecord.di.viewModelModule
 import com.afollestad.mnmlscreenrecord.engine.engineModule
 import com.afollestad.mnmlscreenrecord.logging.BugsnagTree
+import com.afollestad.mnmlscreenrecord.notifications.Notifications
 import com.afollestad.mnmlscreenrecord.notifications.notificationsModule
 import com.bugsnag.android.Bugsnag
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -58,5 +60,8 @@ class MnmlApp : Application() {
         androidContext = this,
         modules = modules
     )
+
+    val notifications by inject<Notifications>()
+    notifications.createChannels()
   }
 }
