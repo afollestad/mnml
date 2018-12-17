@@ -24,6 +24,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.mnmlscreenrecord.engine.R
+import com.bugsnag.android.Bugsnag
 
 interface OverlayExplanationCallback {
 
@@ -38,7 +39,13 @@ class OverlayExplanationDialog : DialogFragment() {
 
     fun <T> show(context: T) where T : FragmentActivity, T : OverlayExplanationCallback {
       val dialog = OverlayExplanationDialog()
-      dialog.show(context.supportFragmentManager, TAG)
+      try {
+        dialog.show(context.supportFragmentManager, TAG)
+      } catch (_: java.lang.IllegalStateException) {
+        Bugsnag.leaveBreadcrumb(
+            "Not showing OverlayExplanationDialog due to IllegalStateException."
+        )
+      }
     }
   }
 

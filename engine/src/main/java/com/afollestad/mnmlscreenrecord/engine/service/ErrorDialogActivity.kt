@@ -42,7 +42,13 @@ class ErrorDialog : DialogFragment() {
     ) {
       val dialog = ErrorDialog()
       dialog.arguments = Bundle().apply { putSerializable(KEY_ERROR, error) }
-      dialog.show(context.supportFragmentManager, TAG)
+      try {
+        dialog.show(context.supportFragmentManager, TAG)
+      } catch (e: IllegalStateException) {
+        Bugsnag.leaveBreadcrumb(
+            "Not showing ErrorDialog due to IllegalStateException."
+        )
+      }
     }
   }
 

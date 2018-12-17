@@ -22,6 +22,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.mnmlscreenrecord.engine.R
+import com.bugsnag.android.Bugsnag
 
 interface StorageExplanationCallback {
 
@@ -36,7 +37,13 @@ class StorageExplanationDialog : DialogFragment() {
 
     fun <T> show(context: T) where T : FragmentActivity, T : StorageExplanationCallback {
       val dialog = StorageExplanationDialog()
-      dialog.show(context.supportFragmentManager, TAG)
+      try {
+        dialog.show(context.supportFragmentManager, TAG)
+      } catch (_: java.lang.IllegalStateException) {
+        Bugsnag.leaveBreadcrumb(
+            "Not showing StorageExplanationDialog due to IllegalStateException."
+        )
+      }
     }
   }
 
