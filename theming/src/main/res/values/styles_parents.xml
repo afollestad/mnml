@@ -13,6 +13,11 @@
 
     <item name="android:windowLightStatusBar">true</item>
     <item name="android:statusBarColor">@color/colorPrimary_lightTheme</item>
+
+    <item name="md_corner_radius">16dp</item>
+    <item name="md_font_title">@font/lato_bold</item>
+    <item name="md_font_body">@font/lato</item>
+    <item name="md_font_button">@font/lato_bold</item>
   </style>
 
   <style name="AppThemeParent.Dark" parent="Theme.MaterialComponents.NoActionBar">
@@ -28,6 +33,11 @@
 
     <item name="android:windowLightStatusBar">false</item>
     <item name="android:statusBarColor">@color/colorPrimary_darkTheme</item>
+
+    <item name="md_corner_radius">16dp</item>
+    <item name="md_font_title">@font/lato_bold</item>
+    <item name="md_font_body">@font/lato</item>
+    <item name="md_font_button">@font/lato_bold</item>
   </style>
 
 </resources>

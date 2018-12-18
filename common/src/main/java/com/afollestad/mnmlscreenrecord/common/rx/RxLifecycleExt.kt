@@ -18,6 +18,7 @@
 package com.afollestad.mnmlscreenrecord.common.rx
 
 import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
+import androidx.lifecycle.Lifecycle.State.DESTROYED
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
@@ -39,6 +40,10 @@ class LifecycleAwareDisposable(
  * @author Aidan Follestad (afollestad)
  */
 fun LifecycleOwner.ownRx(disposable: Disposable) {
+  if (this.lifecycle.currentState == DESTROYED) {
+    disposable.dispose()
+    return
+  }
   this.lifecycle.addObserver(LifecycleAwareDisposable(disposable))
 }
 

@@ -1,8 +1,5 @@
 <resources>
 
-  <string name="dark_mode">Dark Mode</string>
-  <string name="settings">Settings</string>
-
   <!-- Quality -->
   <string name="setting_category_quality">Quality</string>
 

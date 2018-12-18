@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string-array name="donation_skus" translatable="false">
+    <item>one</item>
+    <item>two</item>
+    <item>three</item>
+    <item>five</item>
+    <item>ten</item>
+    <item>twenty</item>
+  </string-array>
+
+</resources>

@@ -43,6 +43,7 @@ dependencies {
   implementation project(':common')
   implementation project(':notifications')
   implementation project(':theming')
+  implementation project(':donate')
 
   // Kotlin
   implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin

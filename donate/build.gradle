@@ -1,0 +1,35 @@
+apply from: '../dependencies.gradle'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+  compileSdkVersion versions.compileSdk
+
+  defaultConfig {
+    minSdkVersion versions.minSdk
+    targetSdkVersion versions.compileSdk
+    versionCode versions.publishVersionCode
+    versionName versions.publishVersion
+  }
+}
+
+dependencies {
+  // Kotlin
+  implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
+
+  // Google
+  api 'com.android.billingclient:billing:' + versions.billing
+  implementation 'androidx.lifecycle:lifecycle-extensions:' + versions.lifecycle
+
+  // Koin
+  api 'org.koin:koin-android:' + versions.koin
+
+  // RxJava
+  api 'io.reactivex.rxjava2:rxjava:' + versions.rxJava
+
+  // Debug
+  implementation 'com.bugsnag:bugsnag-android:' + versions.bugsnag
+  implementation 'com.jakewharton.timber:timber:' + versions.timber
+}
+
+apply from: '../spotless.gradle'

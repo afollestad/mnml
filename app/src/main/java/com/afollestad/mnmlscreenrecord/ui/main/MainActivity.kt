@@ -25,12 +25,14 @@ import com.afollestad.assent.Permission.WRITE_EXTERNAL_STORAGE
 import com.afollestad.assent.askForPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
 import com.afollestad.mnmlscreenrecord.common.misc.toast
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onDebouncedClick
 import com.afollestad.mnmlscreenrecord.common.view.onScroll
+import com.afollestad.mnmlscreenrecord.donate.DonateClient
 import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationCallback
 import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationDialog
 import com.afollestad.mnmlscreenrecord.engine.permission.StorageExplanationCallback
@@ -48,6 +50,7 @@ import com.afollestad.mnmlscreenrecord.views.asVisibility
 import kotlinx.android.synthetic.main.activity_main.fab
 import kotlinx.android.synthetic.main.activity_main.list
 import kotlinx.android.synthetic.main.include_appbar.toolbar
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlinx.android.synthetic.main.activity_main.empty_view as emptyView
 import kotlinx.android.synthetic.main.include_appbar.app_toolbar as appToolbar
@@ -62,6 +65,7 @@ class MainActivity : DarkModeSwitchActivity(),
   }
 
   private val viewModel by viewModel<MainViewModel>()
+  private val donateClient by inject<DonateClient>()
 
   private lateinit var adapter: RecordingAdapter
 
@@ -73,7 +77,10 @@ class MainActivity : DarkModeSwitchActivity(),
 
     fab.onDebouncedClick { viewModel.fabClicked() }
 
-    lifecycle.addObserver(viewModel)
+    lifecycle.run {
+      addObserver(viewModel)
+      addObserver(donateClient)
+    }
 
     viewModel.onRecordings()
         .observe(this, Observer { adapter.set(it) })
@@ -129,6 +136,9 @@ class MainActivity : DarkModeSwitchActivity(),
       when (item.itemId) {
         R.id.dark_mode_toggle -> {
           toggleDarkMode()
+        }
+        R.id.support_me -> {
+          supportMe()
         }
         R.id.about -> {
           AboutDialog.show(this@MainActivity)
@@ -229,5 +239,22 @@ class MainActivity : DarkModeSwitchActivity(),
         cancelable(false)
       }
     }
+  }
+
+  private fun supportMe() {
+    donateClient.onReady()
+        .subscribe { options ->
+          val optionNames = options.map { it.title }
+          MaterialDialog(this).show {
+            title(R.string.support_me)
+            message(R.string.support_me, html = true, lineHeightMultiplier = 1.4f)
+            listItemsSingleChoice(items = optionNames) { _, index, _ ->
+              val selection = options[index]
+              donateClient.makePurchase(this@MainActivity, selection)
+            }
+            positiveButton(R.string.next)
+          }
+        }
+        .attachLifecycle(this)
   }
 }

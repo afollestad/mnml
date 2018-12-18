@@ -24,6 +24,7 @@ import com.afollestad.mnmlscreenrecord.common.commonModule
 import com.afollestad.mnmlscreenrecord.common.prefModule
 import com.afollestad.mnmlscreenrecord.di.mainModule
 import com.afollestad.mnmlscreenrecord.di.viewModelModule
+import com.afollestad.mnmlscreenrecord.donate.donateModule
 import com.afollestad.mnmlscreenrecord.engine.engineModule
 import com.afollestad.mnmlscreenrecord.logging.BugsnagTree
 import com.afollestad.mnmlscreenrecord.notifications.Notifications
@@ -54,7 +55,8 @@ class MnmlApp : Application() {
         prefModule,
         engineModule,
         mainModule,
-        viewModelModule
+        viewModelModule,
+        donateModule
     )
     startKoin(
         androidContext = this,

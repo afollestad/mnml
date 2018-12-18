@@ -4,6 +4,10 @@
       android:id="@+id/about"
       android:title="@string/about"/>
   <item
+      android:id="@+id/support_me"
+      android:title="@string/support_me"
+      android:visible="false"/>
+  <item
       android:id="@+id/dark_mode_toggle"
       android:checkable="true"
       android:checked="false"

@@ -1,43 +1,47 @@
 ext.versions = [
-  // Properties
-  minSdk            : 23,
-  compileSdk        : 28,
-  buildTools        : '28.0.3',
-  publishVersion    : '1.0.5',
-  publishVersionCode: 10,
+    // Properties
+    minSdk            : 23,
+    compileSdk        : 28,
+    buildTools        : '28.0.3',
+    publishVersion    : '1.0.5',
+    publishVersionCode: 10,
 
-  // Plugins
-  gradlePlugin      : '3.2.1',
-  spotlessPlugin    : '3.16.0',
-  versionPlugin     : '0.20.0',
-  bugsnagPlugin     : '3.+',
+    // Plugins
+    gradlePlugin      : '3.2.1',
+    spotlessPlugin    : '3.16.0',
+    versionPlugin     : '0.20.0',
+    bugsnagPlugin     : '3.+',
 
-  // Kotlin
-  kotlin            : '1.3.11',
-  coroutines        : '1.0.1',
-  koin              : '1.0.2',
+    // Kotlin
+    kotlin            : '1.3.11',
+    coroutines        : '1.0.1',
+    koin              : '1.0.2',
 
-  // Google/AndroidX
-  androidx          : '1.0.0',
-  lifecycle         : '2.0.0',
+    // Google/AndroidX
+    billing           : '1.2',
+    androidx          : '1.0.0',
+    lifecycle         : '2.0.0',
 
-  // Glide
-  glide             : '4.8.0',
+    // Glide
+    glide             : '4.8.0',
 
-  // afollestad
-  materialDialogs   : '2.0.0-rc3',
-  rxkPrefs          : '1.2.0',
-  assent            : '2.2.0',
+    // afollestad
+    materialDialogs   : '2.0.0-rc3',
+    rxkPrefs          : '1.2.0',
+    assent            : '2.2.0',
 
-  // Debug
-  timber            : '4.7.1',
-  bugsnag           : '4.+',
+    // RxJava
+    rxJava            : '2.2.3',
 
-  // Test
-  junit             : '4.12',
-  mockito           : '2.23.0',
-  mockitoKotlin     : '2.0.0-RC1',
-  truth             : '0.42',
-  androidxTest      : '1.1.0',
-  archTesting       : '2.0.0'
+    // Debug
+    timber            : '4.7.1',
+    bugsnag           : '4.+',
+
+    // Test
+    junit             : '4.12',
+    mockito           : '2.23.0',
+    mockitoKotlin     : '2.0.0-RC1',
+    truth             : '0.42',
+    androidxTest      : '1.1.0',
+    archTesting       : '2.0.0'
 ]
