@@ -43,6 +43,18 @@
       android:title="@string/setting_category_quality">
 
     <Preference
+        android:key="frame_rate"
+        android:layout="@layout/custom_preference"
+        android:summary="@string/setting_framerate_desc"
+        android:title="@string/setting_framerate"/>
+
+    <Preference
+        android:key="resolution"
+        android:layout="@layout/custom_preference"
+        android:summary="@string/setting_resolution_desc"
+        android:title="@string/setting_resolution"/>
+
+    <Preference
         android:key="bit_rate"
         android:layout="@layout/custom_preference"
         android:summary="@string/setting_bitrate_desc"
@@ -53,12 +65,6 @@
         android:layout="@layout/custom_preference"
         android:summary="@string/setting_audio_bitrate_desc"
         android:title="@string/setting_audio_bitrate"/>
-
-    <Preference
-        android:key="frame_rate"
-        android:layout="@layout/custom_preference"
-        android:summary="@string/setting_framerate_desc"
-        android:title="@string/setting_framerate"/>
 
   </PreferenceCategory>
 

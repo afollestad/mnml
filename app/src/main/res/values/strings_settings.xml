@@ -19,6 +19,11 @@
   <string name="setting_framerate">Frame Rate</string>
   <string name="setting_framerate_desc">Screen capture will record at %1$d frames per second.</string>
 
+  <string name="setting_resolution">Resolution</string>
+  <string name="setting_resolution_desc">Recording resolution set to %1$dx%2$d.</string>
+  <string name="setting_resolution_current_screen">Recording resolution will match your screen resolution</string>
+  <string name="use_screen_resolution">Use screen resolution</string>
+
   <!-- Recording -->
   <string name="setting_category_recording">Recording</string>
 

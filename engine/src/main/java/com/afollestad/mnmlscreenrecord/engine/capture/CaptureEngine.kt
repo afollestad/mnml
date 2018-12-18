@@ -121,7 +121,9 @@ class RealCaptureEngine(
   private val videoBitRatePref: Pref<Int>,
   private val frameRatePref: Pref<Int>,
   private val recordAudioPref: Pref<Boolean>,
-  private val audioBitRatePref: Pref<Int>
+  private val audioBitRatePref: Pref<Int>,
+  private val resolutionWidthPref: Pref<Int>,
+  private val resolutionHeightPref: Pref<Int>
 ) : CaptureEngine {
 
   private var recordingInfo: RecordingInfo? = null
@@ -250,7 +252,19 @@ class RealCaptureEngine(
       if (recordAudioPref.get()) {
         setAudioEncoder(AAC)
       }
-      setVideoSize(recordingInfo.width, recordingInfo.height)
+
+      val videoWidth = if (resolutionWidthPref.get() == 0) {
+        recordingInfo.width
+      } else {
+        resolutionWidthPref.get()
+      }
+      val videoHeight = if (resolutionHeightPref.get() == 0) {
+        recordingInfo.height
+      } else {
+        resolutionHeightPref.get()
+      }
+      setVideoSize(videoWidth, videoHeight)
+      log ("Video resolution set to $videoWidth x $videoHeight")
 
       val videoBitRate = videoBitRatePref.get()
       setVideoEncodingBitRate(videoBitRate)

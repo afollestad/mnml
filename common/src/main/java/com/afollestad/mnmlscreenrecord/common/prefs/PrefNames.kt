@@ -22,8 +22,10 @@ object PrefNames {
   const val PREF_DARK_MODE = "dark_mode"
 
   // Quality
-  const val PREF_VIDEO_BIT_RATE = "bit_rate"
   const val PREF_FRAME_RATE = "frame_rate"
+  const val PREF_RESOLUTION_WIDTH = "resolution_width"
+  const val PREF_RESOLUTION_HEIGHT = "resolution_height"
+  const val PREF_VIDEO_BIT_RATE = "bit_rate"
   const val PREF_AUDIO_BIT_RATE = "audio_bit_rate"
 
   // Recording

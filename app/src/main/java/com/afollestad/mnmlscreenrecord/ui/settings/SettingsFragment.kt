@@ -36,6 +36,8 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RESOLUTION_HEIGHT
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RESOLUTION_WIDTH
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
@@ -43,6 +45,8 @@ import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onProgressChanged
 import com.afollestad.mnmlscreenrecord.common.view.onScroll
 import com.afollestad.rxkprefs.Pref
+import io.reactivex.Observable.zip
+import io.reactivex.functions.BiFunction
 import kotlinx.android.synthetic.main.dialog_number_selector.view.label
 import kotlinx.android.synthetic.main.dialog_number_selector.view.seeker
 import org.koin.android.ext.android.inject
@@ -54,9 +58,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
   // UI
   private val darkModePref by inject<Pref<Boolean>>(name = PREF_DARK_MODE)
   // Quality
+  private val frameRatePref by inject<Pref<Int>>(name = PREF_FRAME_RATE)
+  private val resolutionWidthPref by inject<Pref<Int>>(name = PREF_RESOLUTION_WIDTH)
+  private val resolutionHeightPref by inject<Pref<Int>>(name = PREF_RESOLUTION_HEIGHT)
   private val videoBitRatePref by inject<Pref<Int>>(name = PREF_VIDEO_BIT_RATE)
   private val audioBitRatePref by inject<Pref<Int>>(name = PREF_AUDIO_BIT_RATE)
-  private val frameRatePref by inject<Pref<Int>>(name = PREF_FRAME_RATE)
   // Recording
   private val countdownPref by inject<Pref<Int>>(name = PREF_COUNTDOWN)
   private val recordAudioPref by inject<Pref<Boolean>>(name = PREF_RECORD_AUDIO)
@@ -93,6 +99,74 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
     darkModePref.observe()
         .subscribe { darkModeEntry.isChecked = it }
+        .attachLifecycle(this)
+
+    // FRAME RATE
+    val frameRateEntry = findPreference(PREF_FRAME_RATE)
+    frameRateEntry.setOnPreferenceClickListener {
+      val rawValues = resources.getIntArray(R.array.frame_rate_values)
+      val currentValue = frameRatePref.get()
+      val defaultIndex = rawValues.indexOf(currentValue)
+
+      MaterialDialog(activity!!).show {
+        title(R.string.setting_framerate)
+        listItemsSingleChoice(
+            res = R.array.frame_rate_options,
+            initialSelection = defaultIndex
+        ) { _, which, _ ->
+          frameRatePref.set(rawValues[which])
+        }
+        positiveButton(R.string.select)
+      }
+      true
+    }
+    frameRatePref.observe()
+        .subscribe {
+          frameRateEntry.summary = getString(R.string.setting_framerate_desc, it)
+        }
+        .attachLifecycle(this)
+
+    // RESOLUTION
+    val resolutionEntry = findPreference("resolution")
+    resolutionEntry.setOnPreferenceClickListener {
+      val options = resources.getStringArray(R.array.screen_resolution_options)
+      val currentXByY = "${resolutionWidthPref.get()}x${resolutionHeightPref.get()}"
+      var defaultIndex = options.indexOf(currentXByY)
+      if (defaultIndex == -1) {
+        defaultIndex = 0
+      }
+
+      MaterialDialog(activity!!).show {
+        title(R.string.setting_resolution)
+        listItemsSingleChoice(
+            res = R.array.screen_resolution_options,
+            initialSelection = defaultIndex
+        ) { _, which, text ->
+          if (which == 0) {
+            resolutionWidthPref.delete()
+            resolutionHeightPref.delete()
+          } else {
+            val splitRes = text.split('x')
+            resolutionWidthPref.set(splitRes[0].toInt())
+            resolutionHeightPref.set(splitRes[1].toInt())
+          }
+        }
+        positiveButton(R.string.select)
+      }
+      true
+    }
+    zip(resolutionWidthPref.observe(), resolutionHeightPref.observe(),
+        BiFunction<Int, Int, Pair<Int, Int>> { w, h -> Pair(w, h) })
+        .subscribe {
+          if (it.first == 0 || it.second == 0) {
+            resolutionEntry.summary =
+                resources.getString(R.string.setting_resolution_current_screen)
+          } else {
+            resolutionEntry.summary = resources.getString(
+                R.string.setting_resolution_desc, it.first, it.second
+            )
+          }
+        }
         .attachLifecycle(this)
 
     // VIDEO BIT RATE
@@ -144,31 +218,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         .subscribe {
           audioBitRateEntry.summary =
               getString(R.string.setting_audio_bitrate_desc, it.bitRateString())
-        }
-        .attachLifecycle(this)
-
-    // FRAME RATE
-    val frameRateEntry = findPreference(PREF_FRAME_RATE)
-    frameRateEntry.setOnPreferenceClickListener {
-      val rawValues = resources.getIntArray(R.array.frame_rate_values)
-      val currentValue = frameRatePref.get()
-      val defaultIndex = rawValues.indexOf(currentValue)
-
-      MaterialDialog(activity!!).show {
-        title(R.string.setting_framerate)
-        listItemsSingleChoice(
-            res = R.array.frame_rate_options,
-            initialSelection = defaultIndex
-        ) { _, which, _ ->
-          frameRatePref.set(rawValues[which])
-        }
-        positiveButton(R.string.select)
-      }
-      true
-    }
-    frameRatePref.observe()
-        .subscribe {
-          frameRateEntry.summary = getString(R.string.setting_framerate_desc, it)
         }
         .attachLifecycle(this)
 

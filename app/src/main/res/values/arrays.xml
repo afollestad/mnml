@@ -53,6 +53,7 @@
     <item>25 FPS</item>
     <item>30 FPS</item>
     <item>48 FPS</item>
+    <item>50 FPS</item>
     <item>60 FPS</item>
   </string-array>
 
@@ -61,7 +62,23 @@
     <item>25</item>
     <item>30</item>
     <item>48</item>
+    <item>50</item>
     <item>60</item>
   </integer-array>
+
+  <string-array name="screen_resolution_options" translatable="false">
+    <item>@string/use_screen_resolution</item>
+    <item>2560x1440</item>
+    <item>2220x1080</item>
+    <item>1920x1080</item>
+    <item>1480x720</item>
+    <item>1280x720</item>
+    <item>986x480</item>
+    <item>854x480</item>
+    <item>740x360</item>
+    <item>640x360</item>
+    <item>494x240</item>
+    <item>426x240</item>
+  </string-array>
 
 </resources>

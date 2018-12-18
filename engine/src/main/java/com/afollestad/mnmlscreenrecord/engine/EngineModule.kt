@@ -30,6 +30,8 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RESOLUTION_HEIGHT
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RESOLUTION_WIDTH
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.capture.RealCaptureEngine
@@ -74,7 +76,9 @@ val engineModule = module {
         get(name = PREF_VIDEO_BIT_RATE),
         get(name = PREF_FRAME_RATE),
         get(name = PREF_RECORD_AUDIO),
-        get(name = PREF_AUDIO_BIT_RATE)
+        get(name = PREF_AUDIO_BIT_RATE),
+        get(name = PREF_RESOLUTION_WIDTH),
+        get(name = PREF_RESOLUTION_HEIGHT)
     )
   } bind CaptureEngine::class
 

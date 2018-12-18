@@ -23,6 +23,8 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RESOLUTION_HEIGHT
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RESOLUTION_WIDTH
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
@@ -42,16 +44,24 @@ val prefModule = module {
   }
 
   // Quality
+  factory(name = PREF_FRAME_RATE) {
+    get<RxkPrefs>().integer(PREF_FRAME_RATE, 30)
+  }
+
+  factory(name = PREF_RESOLUTION_WIDTH) {
+    get<RxkPrefs>().integer(PREF_RESOLUTION_WIDTH, 0)
+  }
+
+  factory(name = PREF_RESOLUTION_HEIGHT) {
+    get<RxkPrefs>().integer(PREF_RESOLUTION_HEIGHT, 0)
+  }
+
   factory(name = PREF_VIDEO_BIT_RATE) {
     get<RxkPrefs>().integer(PREF_VIDEO_BIT_RATE, 8_000_000)
   }
 
   factory(name = PREF_AUDIO_BIT_RATE) {
     get<RxkPrefs>().integer(PREF_AUDIO_BIT_RATE, 128_000)
-  }
-
-  factory(name = PREF_FRAME_RATE) {
-    get<RxkPrefs>().integer(PREF_FRAME_RATE, 30)
   }
 
   // Recording
