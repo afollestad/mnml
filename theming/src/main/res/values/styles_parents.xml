@@ -6,10 +6,9 @@
     <item name="colorAccent">@color/colorAccent</item>
 
     <item name="toolbarTitleColor">#000000</item>
-    <item name="cardBackground">@color/card_background_lightTheme</item>
     <item name="dividerColor">#1f000000</item>
 
-    <item name="android:windowBackground">@color/window_background_lightTheme</item>
+    <item name="android:windowBackground">@color/colorPrimary_lightTheme</item>
 
     <item name="android:windowLightStatusBar">true</item>
     <item name="android:statusBarColor">@color/colorPrimary_lightTheme</item>
@@ -26,10 +25,9 @@
     <item name="colorAccent">@color/colorAccent</item>
 
     <item name="toolbarTitleColor">#ffffff</item>
-    <item name="cardBackground">@color/card_background_darkTheme</item>
     <item name="dividerColor">#1fffffff</item>
 
-    <item name="android:windowBackground">@color/window_background_darkTheme</item>
+    <item name="android:windowBackground">@color/colorPrimary_darkTheme</item>
 
     <item name="android:windowLightStatusBar">false</item>
     <item name="android:statusBarColor">@color/colorPrimary_darkTheme</item>

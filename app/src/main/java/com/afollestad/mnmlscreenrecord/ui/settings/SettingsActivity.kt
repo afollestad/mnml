@@ -53,4 +53,12 @@ class SettingsActivity : DarkModeSwitchActivity() {
           .commit()
     }
   }
+
+  fun invalidateToolbarElevation(scrollY: Int) {
+    if (scrollY > (toolbar.measuredHeight / 2)) {
+      appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
+    } else {
+      appToolbar.elevation = 0f
+    }
+  }
 }

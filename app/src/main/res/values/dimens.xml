@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
   <dimen name="raised_toolbar_elevation">4dp</dimen>
+  <dimen name="list_thumbnail_size">56dp</dimen>
+
 </resources>

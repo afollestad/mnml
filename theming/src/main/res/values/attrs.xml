@@ -2,7 +2,6 @@
 <resources>
 
   <attr format="color" name="toolbarTitleColor"/>
-  <attr format="color" name="cardBackground"/>
   <attr format="color" name="dividerColor"/>
 
 </resources>

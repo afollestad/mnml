@@ -1,48 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="@drawable/accent_ripple"
-    app:cardBackgroundColor="?cardBackground"
-    app:cardUseCompatPadding="true"
-    app:contentPadding="@dimen/content_inset"
+    android:background="@drawable/accent_ripple"
+    android:paddingLeft="@dimen/content_inset"
+    android:paddingRight="@dimen/content_inset"
     >
+
+  <androidx.appcompat.widget.AppCompatImageView
+      android:id="@+id/thumbnail"
+      android:layout_width="@dimen/list_thumbnail_size"
+      android:layout_height="@dimen/list_thumbnail_size"
+      android:layout_alignParentStart="true"
+      android:layout_marginBottom="@dimen/content_inset"
+      android:layout_marginEnd="@dimen/content_inset"
+      android:layout_marginTop="@dimen/content_inset"
+      android:background="@drawable/divider_border"
+      android:scaleType="centerCrop"
+      tools:background="#400099CC"
+      />
 
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_centerVertical="true"
+      android:layout_toEndOf="@+id/thumbnail"
       android:orientation="vertical"
       >
 
-    <com.afollestad.mnmlscreenrecord.views.SquareImageView
-        android:id="@+id/thumbnail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/content_inset"
-        android:scaleType="centerCrop"
-        tools:background="#400099CC"
-        />
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textAppearance="@style/AppTheme.TextAppearance.Subheader"
         tools:text="Name of Recording"
         />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/details"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textAppearance="@style/AppTheme.TextAppearance.Caption"
         tools:text="12MB – Dec 13, 2019"
         />
 
   </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+  <View
+      android:id="@+id/divider"
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:layout_alignParentBottom="true"
+      android:layout_marginTop="@dimen/content_inset"
+      android:background="?dividerColor"
+      />
+
+</RelativeLayout>

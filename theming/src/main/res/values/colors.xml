@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <color name="window_background_lightTheme">#E5E5E5</color>
-  <color name="window_background_darkTheme">#202123</color>
-
-  <color name="card_background_lightTheme">#FFFFFF</color>
-  <color name="card_background_darkTheme">#333333</color>
-
   <color name="colorPrimary_lightTheme">#FFFFFF</color>
   <color name="colorPrimaryDark_lightTheme">#F5F5F5</color>
 

@@ -20,7 +20,7 @@ import android.content.Intent.ACTION_VIEW
 import android.os.Bundle
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.assent.Permission.WRITE_EXTERNAL_STORAGE
 import com.afollestad.assent.askForPermissions
 import com.afollestad.materialdialogs.MaterialDialog
@@ -155,26 +155,13 @@ class MainActivity : DarkModeSwitchActivity(),
       }
     }
 
-    list.layoutManager = GridLayoutManager(this, resources.getInteger(R.integer.grid_span))
+    list.layoutManager = LinearLayoutManager(this)
     list.adapter = adapter
-
-    if (!isDarkMode()) {
-      // In light mode, the toolbar should always have elevation.
-      appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
-    } else {
-      // In dark mode, the toolbar has elevation when we scroll down.
-      list.onScroll { invalidateToolbarElevation() }
-    }
+    list.onScroll { invalidateToolbarElevation(it) }
   }
 
-  private fun invalidateToolbarElevation() {
-    if (!isDarkMode()) {
-      appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
-      return
-    }
-
-    val scrollPosition = list.computeVerticalScrollRange()
-    if (scrollPosition > (toolbar.measuredHeight / 2)) {
+  private fun invalidateToolbarElevation(scrollY: Int) {
+    if (scrollY > (toolbar.measuredHeight / 2)) {
       appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
     } else {
       appToolbar.elevation = 0f
@@ -183,7 +170,7 @@ class MainActivity : DarkModeSwitchActivity(),
 
   override fun onResume() {
     super.onResume()
-    invalidateToolbarElevation()
+    invalidateToolbarElevation(list.computeVerticalScrollOffset())
   }
 
   override fun onActivityResult(

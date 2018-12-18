@@ -16,6 +16,7 @@
 package com.afollestad.mnmlscreenrecord.ui.settings
 
 import android.os.Bundle
+import android.view.View
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.afollestad.assent.Permission.RECORD_AUDIO
@@ -40,6 +41,7 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onProgressChanged
+import com.afollestad.mnmlscreenrecord.common.view.onScroll
 import com.afollestad.rxkprefs.Pref
 import kotlinx.android.synthetic.main.dialog_number_selector.view.label
 import kotlinx.android.synthetic.main.dialog_number_selector.view.seeker
@@ -65,6 +67,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
       name = PREF_ALWAYS_SHOW_NOTIFICATION
   )
   private val stopOnShakePref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SHAKE)
+
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?
+  ) {
+    super.onViewCreated(view, savedInstanceState)
+    listView.onScroll {
+      (activity as? SettingsActivity)?.invalidateToolbarElevation(it)
+    }
+  }
 
   override fun onCreatePreferences(
     savedInstanceState: Bundle?,

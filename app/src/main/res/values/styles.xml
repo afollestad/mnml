@@ -25,7 +25,7 @@
     <item name="android:textColor">?android:textColorPrimary</item>
   </style>
 
-  <style name="AppTheme.TextAppearance.Caption" parent="TextAppearance.MaterialComponents.Caption">
+  <style name="AppTheme.TextAppearance.Caption" parent="TextAppearance.MaterialComponents.Body2">
     <item name="fontFamily">@font/lato_light</item>
     <item name="android:fontFamily">@font/lato_light</item>
     <item name="android:textColor">?android:textColorSecondary</item>
