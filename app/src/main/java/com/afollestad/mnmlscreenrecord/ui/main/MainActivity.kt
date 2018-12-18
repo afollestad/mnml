@@ -129,14 +129,9 @@ class MainActivity : DarkModeSwitchActivity(),
 
   private fun setupToolbar() = toolbar.run {
     inflateMenu(R.menu.main)
-    menu.findItem(R.id.dark_mode_toggle)
-        .isChecked = isDarkMode()
 
     setOnMenuItemClickListener { item ->
       when (item.itemId) {
-        R.id.dark_mode_toggle -> {
-          toggleDarkMode()
-        }
         R.id.support_me -> {
           supportMe()
         }

@@ -3,6 +3,19 @@
 
   <PreferenceCategory
       android:layout="@layout/custom_preference_category"
+      android:title="@string/setting_category_ui">
+
+    <SwitchPreference
+        android:key="dark_mode"
+        android:layout="@layout/custom_preference"
+        android:summaryOff="@string/setting_dark_mode_off"
+        android:summaryOn="@string/setting_dark_mode_on"
+        android:title="@string/setting_dark_mode"/>
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:layout="@layout/custom_preference_category"
       android:title="@string/setting_category_recording">
 
     <Preference

@@ -1,5 +1,12 @@
 <resources>
 
+  <!-- UI -->
+  <string name="setting_category_ui">UI</string>
+
+  <string name="setting_dark_mode">Dark Mode</string>
+  <string name="setting_dark_mode_on">Dark mode is enabled.</string>
+  <string name="setting_dark_mode_off">Dark mode is disabled.</string>
+
   <!-- Quality -->
   <string name="setting_category_quality">Quality</string>
 

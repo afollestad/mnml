@@ -31,6 +31,7 @@ import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_AUDIO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
@@ -48,6 +49,8 @@ import java.io.File
 /** @author Aidan Follestad (afollestad) */
 class SettingsFragment : PreferenceFragmentCompat() {
 
+  // UI
+  private val darkModePref by inject<Pref<Boolean>>(name = PREF_DARK_MODE)
   // Quality
   private val videoBitRatePref by inject<Pref<Int>>(name = PREF_VIDEO_BIT_RATE)
   private val audioBitRatePref by inject<Pref<Int>>(name = PREF_AUDIO_BIT_RATE)
@@ -68,6 +71,17 @@ class SettingsFragment : PreferenceFragmentCompat() {
     rootKey: String?
   ) {
     setPreferencesFromResource(R.xml.settings, rootKey)
+
+    // DARK MODE
+    val darkModeEntry = findPreference(PREF_DARK_MODE) as SwitchPreference
+    darkModeEntry.setOnPreferenceChangeListener { _, newValue ->
+      darkModePref.set(newValue as Boolean)
+      activity?.recreate()
+      true
+    }
+    darkModePref.observe()
+        .subscribe { darkModeEntry.isChecked = it }
+        .attachLifecycle(this)
 
     // VIDEO BIT RATE
     val videoBitRateEntry = findPreference(PREF_VIDEO_BIT_RATE)

@@ -7,11 +7,6 @@
       android:id="@+id/support_me"
       android:title="@string/support_me"/>
   <item
-      android:id="@+id/dark_mode_toggle"
-      android:checkable="true"
-      android:checked="false"
-      android:title="@string/dark_mode"/>
-  <item
       android:id="@+id/settings"
       android:title="@string/settings"/>
 </menu>
