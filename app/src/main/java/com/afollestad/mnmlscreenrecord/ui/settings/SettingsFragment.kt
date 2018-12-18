@@ -110,6 +110,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     // AUDIO BIT RATE
     val audioBitRateEntry = findPreference(PREF_AUDIO_BIT_RATE)
+    audioBitRateEntry.isVisible = recordAudioPref.get()
     audioBitRateEntry.setOnPreferenceClickListener {
       val rawValues = resources.getIntArray(R.array.audio_bit_rate_values)
       val currentValue = audioBitRatePref.get()
@@ -171,9 +172,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
     countdownPref.observe()
         .subscribe {
-          countdownEntry.summary = resources.getQuantityString(
-              R.plurals.setting_countdown_desc, it, it
-          )
+          if (it == 0) {
+            countdownEntry.summary = resources.getString(R.string.setting_countdown_disabled)
+          } else {
+            countdownEntry.summary = resources.getQuantityString(
+                R.plurals.setting_countdown_desc, it, it
+            )
+          }
         }
         .attachLifecycle(this)
 
@@ -187,12 +192,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
         false
       } else {
+        recordAudioPref.set(false)
         true
       }
     }
     recordAudioPref.observe()
         .subscribe {
           recordAudioEntry.isChecked = it
+          audioBitRateEntry.isVisible = it
         }
         .attachLifecycle(this)
 

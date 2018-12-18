@@ -23,8 +23,10 @@
   <string name="setting_category_recording">Recording</string>
 
   <string name="setting_countdown">Countdown</string>
+  <string name="setting_countdown_disabled">Recording will begin immediately.</string>
   <plurals name="setting_countdown_desc">
-    <item quantity="zero">Recording will begin immediately.</item>
+    <!-- zero gets overridden by other so we do that programatically -->
+    <item quantity="zero">@string/setting_countdown_disabled</item>
     <item quantity="one">%1$d second before recording begins.</item>
     <item quantity="other">%1$d seconds before recording begins.</item>
   </plurals>
