@@ -244,13 +244,17 @@ class MainActivity : DarkModeSwitchActivity(),
   private fun supportMe() {
     donateClient.onReady()
         .subscribe { options ->
-          val optionNames = options.map { it.title }
+          val optionNames = options.map {
+            it.title.replace(" (MNML Screen Recorder)", "")
+          }
           MaterialDialog(this).show {
             title(R.string.support_me)
-            message(R.string.support_me, html = true, lineHeightMultiplier = 1.4f)
+            message(R.string.support_me_message, html = true, lineHeightMultiplier = 1.4f)
             listItemsSingleChoice(items = optionNames) { _, index, _ ->
               val selection = options[index]
-              donateClient.makePurchase(this@MainActivity, selection)
+              if (donateClient.makePurchase(this@MainActivity, selection)) {
+                toast(R.string.thank_you)
+              }
             }
             positiveButton(R.string.next)
           }

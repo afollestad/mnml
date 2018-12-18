@@ -164,7 +164,7 @@ class RealDonateClient(
 
     client.querySkuDetailsAsync(params) { code, detailsList ->
       log("Got SKU details result. Code = $code, list = $detailsList")
-      onIsReady.onNext(detailsList)
+      onIsReady.onNext(detailsList.sortedBy { it.priceAmountMicros })
     }
   }
 }
