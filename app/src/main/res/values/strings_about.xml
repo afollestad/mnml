@@ -1,6 +1,7 @@
 <resources>
 
   <string name="about">About</string>
+  <string name="about_title">MNML v%1$s</string>
   <string name="dismiss">Dismiss</string>
   <string name="about_body"><![CDATA[
         MNML, designed by <b>Aidan Follestad</b>.<br/>

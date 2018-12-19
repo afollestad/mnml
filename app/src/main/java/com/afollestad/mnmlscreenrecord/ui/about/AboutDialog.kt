@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.mnmlscreenrecord.BuildConfig.VERSION_NAME
 import com.afollestad.mnmlscreenrecord.R
 
 /** @author Aidan Follestad (afollestad) */
@@ -39,8 +40,9 @@ class AboutDialog : DialogFragment() {
   }
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    return MaterialDialog(activity!!)
-        .title(R.string.about)
+    val context = activity ?: throw IllegalStateException("Oh no!")
+    return MaterialDialog(context)
+        .title(text = getString(R.string.about_title, VERSION_NAME))
         .message(
             res = R.string.about_body,
             html = true,
