@@ -24,7 +24,7 @@ fun Date.timestampString(): String {
   if (time <= 0) {
     return "Invalid"
   }
-  val df = SimpleDateFormat("MMMMd-hhmmssa", Locale.getDefault())
+  val df = SimpleDateFormat("MMMMd-hhmmssa", Locale.US)
   return df.format(this)
 }
 
