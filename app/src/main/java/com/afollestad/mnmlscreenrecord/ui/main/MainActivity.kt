@@ -224,6 +224,17 @@ class MainActivity : DarkModeSwitchActivity(),
   }
 
   private fun supportMe() {
+    donateClient.onError()
+        .subscribe {
+          MaterialDialog(this).show {
+            title(R.string.support_me_failed)
+            message(text = it.message)
+            positiveButton(android.R.string.ok)
+            cancelOnTouchOutside(false)
+            cancelable(false)
+          }
+        }
+        .attachLifecycle(this)
     donateClient.onReady()
         .subscribe { options ->
           val optionNames = options.map {

@@ -20,8 +20,6 @@ package com.afollestad.mnmlscreenrecord.donate
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
-import androidx.lifecycle.Lifecycle.Event.ON_CREATE
-import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
 import androidx.lifecycle.Lifecycle.Event.ON_START
 import androidx.lifecycle.Lifecycle.Event.ON_STOP
 import androidx.lifecycle.LifecycleObserver
@@ -66,6 +64,9 @@ interface DonateClient : LifecycleObserver {
   /** Emits a set of SKY details when and if the client is ready to purchase. */
   fun onReady(): Single<List<SkuDetails>>
 
+  /** Emits when an error that should be shown to the user occurs. */
+  fun onError(): Observable<Exception>
+
   /** Performs a purchase with a SKU. Returns true if the response code is OK. */
   fun makePurchase(
     activity: Activity,
@@ -76,24 +77,22 @@ interface DonateClient : LifecycleObserver {
 /** @author Aidan Follestad (@afollestad) */
 class RealDonateClient(
   private val app: Application
-) : DonateClient, PurchasesUpdatedListener {
+) : DonateClient, PurchasesUpdatedListener, LifecycleObserver {
 
   private val onPurchase = PublishSubject.create<String>()
   private val onIsReady = BehaviorSubject.create<List<SkuDetails>>()
+  private val onError = BehaviorSubject.create<Exception>()
   private var baseClient: BillingClient? = null
-
-  @OnLifecycleEvent(ON_CREATE)
-  fun onCreate() {
-    log("onCreate()")
-    baseClient = BillingClient.newBuilder(app)
-        .setListener(this)
-        .build()
-  }
 
   @OnLifecycleEvent(ON_START)
   fun onStart() {
     log("onStart()")
-    baseClient?.startConnection(object : BillingClientStateListener {
+    if (baseClient == null) {
+      baseClient = BillingClient.newBuilder(app)
+          .setListener(this)
+          .build()
+    }
+    baseClient!!.startConnection(object : BillingClientStateListener {
       override fun onBillingSetupFinished(responseCode: Int) {
         if (responseCode == BillingResponse.OK) {
           log("Billing client setup finished successfully!")
@@ -116,12 +115,6 @@ class RealDonateClient(
     baseClient?.endConnection()
   }
 
-  @OnLifecycleEvent(ON_DESTROY)
-  fun onDestroy() {
-    log("onDestroy()")
-    baseClient = null
-  }
-
   override fun onPurchase(): Observable<String> = onPurchase
 
   override fun onReady(): Single<List<SkuDetails>> {
@@ -129,6 +122,8 @@ class RealDonateClient(
         .take(1)
         .singleOrError()
   }
+
+  override fun onError(): Observable<Exception> = onError
 
   override fun makePurchase(
     activity: Activity,
@@ -143,6 +138,12 @@ class RealDonateClient(
     val responseCode = client.launchBillingFlow(activity, flowParams)
 
     if (responseCode != OK) {
+      onError.onNext(
+          Exception(
+              "Unable to donate, error code ${responseCode.billingCodeName()}. " +
+                  "Please try again later :)"
+          )
+      )
       Bugsnag.notify(
           DonationException("makePurchase(${skuDetails.sku})", responseCode)
       )
@@ -161,7 +162,15 @@ class RealDonateClient(
         log("onPurchasesUpdated() - Success for SKU ${it.sku}")
         onPurchase.onNext(it.sku)
       }
-      else -> Bugsnag.notify(DonationException("onPurchasesUpdated()", responseCode))
+      else -> {
+        onError.onNext(
+            Exception(
+                "Unable to donate, error code ${responseCode.billingCodeName()}. " +
+                    "Please try again later :)"
+            )
+        )
+        Bugsnag.notify(DonationException("onPurchasesUpdated()", responseCode))
+      }
     }
   }
 

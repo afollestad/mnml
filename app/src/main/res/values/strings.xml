@@ -15,6 +15,7 @@
         my <a href="https://github.com/afollestad">open source</a> projects as well!
   ]]></string>
   <string name="thank_you">Thank you very much!</string>
+  <string name="support_me_failed">Donation Failed</string>
   <string name="next">Next</string>
 
 </resources>
