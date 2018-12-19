@@ -35,6 +35,7 @@ val viewModelModule = module {
         get(),
         get(),
         get(),
+        get(),
         get(name = PREF_ALWAYS_SHOW_NOTIFICATION)
     )
   }

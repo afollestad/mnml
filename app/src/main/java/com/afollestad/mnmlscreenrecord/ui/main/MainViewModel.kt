@@ -28,6 +28,7 @@ import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
 import com.afollestad.mnmlscreenrecord.common.rx.plusAssign
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
+import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
 import com.afollestad.mnmlscreenrecord.engine.recordings.Recording
 import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingManager
 import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingScanner
@@ -58,6 +59,7 @@ class MainViewModel(
   private val recordingManager: RecordingManager,
   private val recordingScanner: RecordingScanner,
   private val serviceController: ServiceController,
+  private val overlayManager: OverlayManager,
   private val alwaysShowNotificationPref: Pref<Boolean>
 ) : ScopedViewModel(mainDispatcher), LifecycleObserver {
 
@@ -156,7 +158,9 @@ class MainViewModel(
   @VisibleForTesting(otherwise = PRIVATE)
   fun refreshRecordings() = launch {
     log("refreshRecordings()")
-    if (!permissionChecker.hasStoragePermission()) {
+    if (!permissionChecker.hasStoragePermission() &&
+        overlayManager.willCountdown()
+    ) {
       // Can't access recordings yet
       log("refreshRecordings() - don't have storage permission yet.")
       emptyViewVisibility.value = true
