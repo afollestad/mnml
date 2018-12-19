@@ -74,7 +74,9 @@ class ErrorDialogActivity : AppCompatActivity() {
       error: java.lang.Exception
     ) {
       Bugsnag.leaveBreadcrumb("Showing ErrorDialogActivity for $error")
-      Bugsnag.notify(error)
+      if (error !is FileSystemException) {
+        Bugsnag.notify(error)
+      }
 
       context.startActivity(Intent(context, ErrorDialogActivity::class.java).apply {
         putExtra(KEY_ERROR, error)

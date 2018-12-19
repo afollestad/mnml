@@ -45,7 +45,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.io.File
 import java.io.FileNotFoundException
-import java.io.IOException
 import java.util.Date
 import timber.log.Timber.d as log
 
@@ -246,7 +245,8 @@ class RealCaptureEngine(
     }
   }
 
-  @CheckResult private fun createAndPrepareRecorder(context: Context): Boolean {
+  @CheckResult
+  private fun createAndPrepareRecorder(context: Context): Boolean {
     val recordingInfo = ensureRecordingInfo(context)
     recorder = MediaRecorder().apply {
       setVideoSource(SURFACE)
@@ -304,20 +304,10 @@ class RealCaptureEngine(
         prepare()
         log("Media recorder prepared")
       } catch (fe: FileNotFoundException) {
-        onError.onNext(
-            Exception("MNML was unable to access your file system. ${fe.displayMessage()}", fe)
-        )
-        return false
-      } catch (ie: IOException) {
-        onError.onNext(
-            Exception(
-                "MNML was unable to setup the recorder, please check your " +
-                    "quality settings... ${ie.displayMessage()}", ie
-            )
-        )
+        onError.onNext(FileSystemException(fe))
         return false
       } catch (t: Throwable) {
-        onError.onNext(Exception("MNML was unable to prepare for recording. $t", t))
+        onError.onNext(PrepareFailedException(t))
         return false
       }
     }
@@ -338,12 +328,7 @@ class RealCaptureEngine(
       } catch (e: Exception) {
         isStarted = false
         onCancel.onNext(Unit)
-        onError.onNext(
-            Exception(
-                "MNML was unable to begin recording, please check your " +
-                    "quality settings... ${e.displayMessage()}", e
-            )
-        )
+        onError.onNext(StartRecordingException(e))
       }
     }, 150)
 
@@ -376,18 +361,35 @@ class RealCaptureEngine(
     return recordingInfo!!
   }
 
-  private fun Exception.displayMessage(): String {
-    return if (!this.message.isNullOrBlank()) {
-      this.message!!
-    } else {
-      "$this"
-    }
-  }
-
   private val projectionCallback = object : MediaProjection.Callback() {
     override fun onStop() {
       log("Got onStop() in projection callback")
       stop()
     }
+  }
+}
+
+class FileSystemException(base: Exception) : Exception(
+    "MNML was unable to access your file system. You may need to change your " +
+        "recording folder in MNML's settings. ${base.displayMessage()}",
+    base
+)
+
+class PrepareFailedException(base: Throwable) :
+    Exception(
+        "MNML was unable to prepare for recording. ${base.displayMessage()}",
+        base
+    )
+
+class StartRecordingException(base: Exception) : Exception(
+    "MNML was unable to begin recording. ${base.displayMessage()}",
+    base
+)
+
+private fun Throwable.displayMessage(): String {
+  return if (!this.message.isNullOrBlank()) {
+    this.message!!
+  } else {
+    "$this"
   }
 }
