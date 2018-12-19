@@ -18,11 +18,9 @@ package com.afollestad.mnmlscreenrecord.engine.recordings
 import android.annotation.SuppressLint
 import android.app.Application
 import android.net.Uri
-import com.afollestad.mnmlscreenrecord.common.misc.toUri
+import android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 import com.afollestad.rxkprefs.Pref
 import java.io.File
-
-const val VIDEOS_URI = "content://media/external/video/media"
 
 /**
  * Handles loading and deleting recordings.
@@ -77,12 +75,12 @@ class RealRecordingManager(
 
   override fun getRecordings(): List<Recording> {
     val cursor = contentResolver.query(
-        VIDEOS_URI.toUri(), // uri
+        EXTERNAL_CONTENT_URI, // uri
         null, // projection
         "bucket_display_name = ?", // selection
         arrayOf(recordingsBucket), // selectionArgs
         "date_added DESC" // sortOrder
-    ) ?: throw IllegalStateException()
+    ) ?: throw RecordingManagerException("Unable to access $EXTERNAL_CONTENT_URI :(")
 
     return mutableListOf<Recording>().also { list ->
       if (cursor.moveToFirst()) {
@@ -99,3 +97,5 @@ class RealRecordingManager(
     contentResolver.delete(recording.toUri(), null, null)
   }
 }
+
+private class RecordingManagerException(msg: String) : Exception(msg)

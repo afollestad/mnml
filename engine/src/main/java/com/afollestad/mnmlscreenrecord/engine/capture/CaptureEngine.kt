@@ -294,11 +294,13 @@ class RealCaptureEngine(
       log("Recording to $outputFile")
 
       val rotation = windowManager.defaultDisplay.rotation
-      val orientation = orientations[rotation + 90] ?: throw IllegalStateException(
-          "Couldn't find value ${rotation + 90} in the orientations map."
-      )
-      log("Orientation hint set to $orientation")
-      setOrientationHint(orientation)
+      val orientation = orientations[rotation + 90]
+      if (orientation != null) {
+        log("Orientation hint set to $orientation")
+        setOrientationHint(orientation)
+      } else {
+        log("Couldn't find orientation ${rotation + 90} in the map.")
+      }
 
       try {
         prepare()

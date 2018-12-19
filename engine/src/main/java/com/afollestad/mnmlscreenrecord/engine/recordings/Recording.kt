@@ -18,9 +18,9 @@ package com.afollestad.mnmlscreenrecord.engine.recordings
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable.Creator
+import android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 import com.afollestad.mnmlscreenrecord.common.misc.friendlyDate
 import com.afollestad.mnmlscreenrecord.common.misc.friendlySize
-import com.afollestad.mnmlscreenrecord.common.misc.toUri
 import com.afollestad.mnmlscreenrecord.notifications.RecordingStub
 
 /** @author Aidan Follestad (@afollestad) */
@@ -92,5 +92,5 @@ data class Recording(
   /**
    * Gets the content provider URI for this recording.
    */
-  override fun toUri() = "$VIDEOS_URI/$id".toUri()
+  override fun toUri() = EXTERNAL_CONTENT_URI.buildUpon().appendPath(id.toString()).build()!!
 }
