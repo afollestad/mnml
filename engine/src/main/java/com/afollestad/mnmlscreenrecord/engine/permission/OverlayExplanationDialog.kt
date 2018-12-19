@@ -18,6 +18,7 @@ package com.afollestad.mnmlscreenrecord.engine.permission
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
@@ -25,6 +26,7 @@ import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.mnmlscreenrecord.engine.R
 import com.bugsnag.android.Bugsnag
+import java.lang.reflect.InvocationTargetException
 
 interface OverlayExplanationCallback {
 
@@ -52,13 +54,27 @@ class OverlayExplanationDialog : DialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val context = activity ?: throw IllegalStateException("Oh no!")
     val callback = context as OverlayExplanationCallback
-    return MaterialDialog(context)
-        .title(R.string.overlay_permission_prompt)
-        .message(R.string.overlay_permission_prompt_desc)
-        .cancelOnTouchOutside(false)
-        .positiveButton(R.string.okay) { callback.onShouldAskForOverlayPermission() }
-        .onDismiss { dismiss() }
-        .onCancel { dismiss() }
+
+    try {
+      return MaterialDialog(context)
+          .title(R.string.overlay_permission_prompt)
+          .message(R.string.overlay_permission_prompt_desc)
+          .cancelOnTouchOutside(false)
+          .positiveButton(R.string.okay) { callback.onShouldAskForOverlayPermission() }
+          .onDismiss { dismiss() }
+          .onCancel { dismiss() }
+    } catch (e: InvocationTargetException) {
+      // Workaround for Samsung/Huawei bug with AndroidX font retrieval.
+      return AlertDialog.Builder(context)
+          .setTitle(R.string.overlay_permission_prompt)
+          .setMessage(R.string.overlay_permission_prompt_desc)
+          .setPositiveButton(R.string.okay) { _, _ ->
+            callback.onShouldAskForOverlayPermission()
+          }
+          .setOnCancelListener { dismiss() }
+          .setOnDismissListener { dismiss() }
+          .create()
+    }
   }
 
   override fun onCancel(dialog: DialogInterface?) {
