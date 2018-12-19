@@ -41,6 +41,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.IOException
 import java.util.Date
 import timber.log.Timber.d as log
 
@@ -264,7 +265,7 @@ class RealCaptureEngine(
         resolutionHeightPref.get()
       }
       setVideoSize(videoWidth, videoHeight)
-      log ("Video resolution set to $videoWidth x $videoHeight")
+      log("Video resolution set to $videoWidth x $videoHeight")
 
       val videoBitRate = videoBitRatePref.get()
       setVideoEncodingBitRate(videoBitRate)
@@ -285,7 +286,17 @@ class RealCaptureEngine(
         prepare()
         log("Media recorder prepared")
       } catch (fe: FileNotFoundException) {
-        onError.onNext(Exception("MNML was unable to access your file system. ${fe.message}", fe))
+        onError.onNext(
+            Exception("MNML was unable to access your file system. ${fe.displayMessage()}", fe)
+        )
+        return false
+      } catch (ie: IOException) {
+        onError.onNext(
+            Exception(
+                "MNML was unable to setup the recorder, please check your " +
+                    "quality settings... ${ie.displayMessage()}", ie
+            )
+        )
         return false
       } catch (t: Throwable) {
         onError.onNext(Exception("MNML was unable to prepare for recording. $t", t))
@@ -302,9 +313,20 @@ class RealCaptureEngine(
 
     // Tiny delay so we don't record the cast "start now" dialog.
     handler.postDelayed({
-      recorder?.start() ?: throw IllegalStateException(
-          "createVirtualDisplayAndStart - Recorder is unexpectedly null!"
-      )
+      try {
+        recorder?.start() ?: throw IllegalStateException(
+            "createVirtualDisplayAndStart - Recorder is unexpectedly null!"
+        )
+      } catch (e: Exception) {
+        isStarted = false
+        onCancel.onNext(Unit)
+        onError.onNext(
+            Exception(
+                "MNML was unable to begin recording, please check your " +
+                    "quality settings... ${e.displayMessage()}", e
+            )
+        )
+      }
     }, 150)
 
     isStarted = true
@@ -334,6 +356,14 @@ class RealCaptureEngine(
       recordingInfo = RecordingInfo.get(context, windowManager)
     }
     return recordingInfo!!
+  }
+
+  private fun Exception.displayMessage(): String {
+    return if (!this.message.isNullOrBlank()) {
+      this.message!!
+    } else {
+      "$this"
+    }
   }
 
   private val projectionCallback = object : MediaProjection.Callback() {

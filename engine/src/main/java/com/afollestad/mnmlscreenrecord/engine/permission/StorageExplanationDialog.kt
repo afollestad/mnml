@@ -59,8 +59,7 @@ class StorageExplanationDialog : DialogFragment() {
 
   override fun onCancel(dialog: DialogInterface?) {
     super.onCancel(dialog)
-    val context = activity ?: return
-    val callback = context as StorageExplanationCallback
+    val callback = activity as? StorageExplanationCallback ?: return
     callback.onShouldAskForStoragePermission()
   }
 }

@@ -28,6 +28,17 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.BillingResponse
+import com.android.billingclient.api.BillingClient.BillingResponse.BILLING_UNAVAILABLE
+import com.android.billingclient.api.BillingClient.BillingResponse.DEVELOPER_ERROR
+import com.android.billingclient.api.BillingClient.BillingResponse.ERROR
+import com.android.billingclient.api.BillingClient.BillingResponse.FEATURE_NOT_SUPPORTED
+import com.android.billingclient.api.BillingClient.BillingResponse.ITEM_ALREADY_OWNED
+import com.android.billingclient.api.BillingClient.BillingResponse.ITEM_NOT_OWNED
+import com.android.billingclient.api.BillingClient.BillingResponse.ITEM_UNAVAILABLE
+import com.android.billingclient.api.BillingClient.BillingResponse.OK
+import com.android.billingclient.api.BillingClient.BillingResponse.SERVICE_DISCONNECTED
+import com.android.billingclient.api.BillingClient.BillingResponse.SERVICE_UNAVAILABLE
+import com.android.billingclient.api.BillingClient.BillingResponse.USER_CANCELED
 import com.android.billingclient.api.BillingClient.SkuType
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
@@ -35,6 +46,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
+import com.bugsnag.android.Bugsnag
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
@@ -130,7 +142,11 @@ class RealDonateClient(
         .build()
     val responseCode = client.launchBillingFlow(activity, flowParams)
 
-    log("makePurchase response code = $responseCode")
+    if (responseCode != OK) {
+      Bugsnag.notify(
+          DonationException("makePurchase(${skuDetails.sku})", responseCode)
+      )
+    }
     return responseCode == BillingResponse.OK
   }
 
@@ -145,7 +161,7 @@ class RealDonateClient(
         log("onPurchasesUpdated() - Success for SKU ${it.sku}")
         onPurchase.onNext(it.sku)
       }
-      else -> log("onPurchasesUpdated() - Unsuccessful response code $responseCode")
+      else -> Bugsnag.notify(DonationException("onPurchasesUpdated()", responseCode))
     }
   }
 
@@ -167,4 +183,24 @@ class RealDonateClient(
       onIsReady.onNext(detailsList.sortedBy { it.priceAmountMicros })
     }
   }
+}
+
+internal class DonationException(
+  action: String,
+  responseCode: Int
+) : Exception("$action unsuccessful - code = ${responseCode.billingCodeName()}")
+
+private fun Int.billingCodeName(): String = when (this) {
+  FEATURE_NOT_SUPPORTED -> "FEATURE_NOT_SUPPORTED"
+  SERVICE_DISCONNECTED -> "SERVICE_DISCONNECTED"
+  OK -> "OK"
+  USER_CANCELED -> "USER_CANCELED"
+  SERVICE_UNAVAILABLE -> "SERVICE_UNAVAILABLE"
+  BILLING_UNAVAILABLE -> "BILLING_UNAVAILABLE"
+  ITEM_UNAVAILABLE -> "ITEM_UNAVAILABLE"
+  DEVELOPER_ERROR -> "DEVELOPER_ERROR"
+  ERROR -> "ERROR"
+  ITEM_ALREADY_OWNED -> "ITEM_ALREADY_OWNED"
+  ITEM_NOT_OWNED -> "ITEM_NOT_OWNED"
+  else -> "??"
 }

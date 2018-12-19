@@ -63,8 +63,7 @@ class OverlayExplanationDialog : DialogFragment() {
 
   override fun onCancel(dialog: DialogInterface?) {
     super.onCancel(dialog)
-    val context = activity ?: return
-    val callback = context as OverlayExplanationCallback
+    val callback = activity as? OverlayExplanationCallback ?: return
     callback.onShouldAskForOverlayPermission()
   }
 }
