@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <!-- UI -->
   <string name="setting_category_ui">UI</string>
@@ -17,7 +17,9 @@
   <string name="setting_audio_bitrate_desc">Audio capture will record at %1$s</string>
 
   <string name="setting_framerate">Frame Rate</string>
-  <string name="setting_framerate_desc">Screen capture will record at %1$d frames per second.</string>
+  <string name="setting_framerate_desc" tools:ignore="PluralsCandidate">
+    Screen capture will record at %1$d frames per second.
+  </string>
 
   <string name="setting_resolution">Resolution</string>
   <string name="setting_resolution_desc">Recording resolution set to %1$dx%2$d.</string>
@@ -49,10 +51,10 @@
 
   <string name="setting_stop_on_screen_off">Stop on Screen Off</string>
   <string name="setting_stop_on_screen_off_desc_on">
-      When your screen is turned off, any active screen recording will stop.
+    When your screen is turned off, any active screen recording will stop.
   </string>
   <string name="setting_stop_on_screen_off_desc_off">
-      When your screen is turned off, nothing special will happen.
+    When your screen is turned off, nothing special will happen.
   </string>
 
   <string name="setting_always_show_notification">Always Show Notification</string>

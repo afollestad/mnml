@@ -196,6 +196,7 @@ class BackgroundService : Service(), LifecycleOwner {
     log("onDestroy()")
     shakeListener.stop()
     captureEngine.stop()
+    lifecycle.onDestroy()
     super.onDestroy()
   }
 

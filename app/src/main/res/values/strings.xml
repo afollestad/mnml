@@ -4,15 +4,12 @@
 
   <string name="recordings_empty_text">You have no recordings, yet…</string>
 
-  <string name="dark_mode">Dark Mode</string>
   <string name="settings">Settings</string>
   <string name="support_me">Support Me</string>
 
   <string name="support_me_message"><![CDATA[
-        <b>MNML</b> was created and is maintained by one person. Donations are <b>much</b>
-        appreciated and encourage continued support. Please checkout my
-        <a href="https://play.google.com/store/apps/dev?id=8293213872477886335">other apps</a> and
-        my <a href="https://github.com/afollestad">open source</a> projects as well!
+      <b>MNML</b> was created and is maintained by one person. Donations are <b>much</b>
+      appreciated and encourage continued support.
   ]]></string>
   <string name="thank_you">Thank you very much!</string>
   <string name="support_me_failed">Donation Failed</string>
