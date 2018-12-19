@@ -20,8 +20,7 @@ package com.afollestad.mnmlscreenrecord.donate
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
-import androidx.lifecycle.Lifecycle.Event.ON_START
-import androidx.lifecycle.Lifecycle.Event.ON_STOP
+import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.android.billingclient.api.BillingClient
@@ -82,42 +81,18 @@ class RealDonateClient(
   private val onPurchase = PublishSubject.create<String>()
   private val onIsReady = BehaviorSubject.create<List<SkuDetails>>()
   private val onError = BehaviorSubject.create<Exception>()
-  private var baseClient: BillingClient? = null
+  private var client: BillingClient? = null
 
-  @OnLifecycleEvent(ON_START)
-  fun onStart() {
-    log("onStart()")
-    if (baseClient == null) {
-      baseClient = BillingClient.newBuilder(app)
-          .setListener(this)
-          .build()
-    }
-    baseClient!!.startConnection(object : BillingClientStateListener {
-      override fun onBillingSetupFinished(responseCode: Int) {
-        if (responseCode == BillingResponse.OK) {
-          log("Billing client setup finished successfully!")
-          retrieveSkuDetails()
-        } else {
-          log("Billing client setup failed, responseCode $responseCode")
-        }
-      }
-
-      override fun onBillingServiceDisconnected() {
-        log("Billing client disconnected from service")
-        onIsReady.onNext(emptyList())
-      }
-    })
-  }
-
-  @OnLifecycleEvent(ON_STOP)
-  fun onStop() {
-    log("onStop()")
-    baseClient?.endConnection()
+  @OnLifecycleEvent(ON_DESTROY)
+  fun onDestroy() {
+    log("onDestroy()")
+    client?.endConnection()
   }
 
   override fun onPurchase(): Observable<String> = onPurchase
 
   override fun onReady(): Single<List<SkuDetails>> {
+    ensureClient()
     return onIsReady.filter { it.isNotEmpty() }
         .take(1)
         .singleOrError()
@@ -130,7 +105,7 @@ class RealDonateClient(
     skuDetails: SkuDetails
   ): Boolean {
     log("makePurchase(${skuDetails.sku})")
-    val client = baseClient ?: throw IllegalStateException("baseClient not initialized.")
+    val client = client ?: throw IllegalStateException("Client not initialized.")
 
     val flowParams = BillingFlowParams.newBuilder()
         .setSkuDetails(skuDetails)
@@ -179,7 +154,7 @@ class RealDonateClient(
         .toList()
     log("Retrieving SKU details for $skuList")
 
-    val client = baseClient ?: throw IllegalStateException("baseClient not initialized.")
+    val client = client ?: throw IllegalStateException("Client not initialized.")
     val params = SkuDetailsParams.newBuilder()
         .apply {
           setSkusList(skuList)
@@ -190,6 +165,36 @@ class RealDonateClient(
     client.querySkuDetailsAsync(params) { code, detailsList ->
       log("Got SKU details result. Code = $code, list = $detailsList")
       onIsReady.onNext(detailsList.sortedBy { it.priceAmountMicros })
+    }
+  }
+
+  private fun ensureClient() {
+    log("ensureClient()")
+    if (client == null) {
+      log("ensureClient() - Client constructed")
+      client = BillingClient.newBuilder(app)
+          .setListener(this)
+          .build()
+    }
+
+    val tempClient = client!!
+    if (!tempClient.isReady) {
+      log("ensureClient() - Client connecting...")
+      tempClient.startConnection(object : BillingClientStateListener {
+        override fun onBillingSetupFinished(responseCode: Int) {
+          if (responseCode == BillingResponse.OK) {
+            log("Billing client setup finished successfully!")
+            retrieveSkuDetails()
+          } else {
+            log("Billing client setup failed, responseCode $responseCode")
+          }
+        }
+
+        override fun onBillingServiceDisconnected() {
+          log("Billing client disconnected from service")
+          onIsReady.onNext(emptyList())
+        }
+      })
     }
   }
 }

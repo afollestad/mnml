@@ -17,6 +17,7 @@ package com.afollestad.mnmlscreenrecord
 
 import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
+import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
 import com.afollestad.mnmlscreenrecord.engine.recordings.Recording
 import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingManager
 import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingScanner
@@ -72,6 +73,7 @@ class MainViewModelTest {
     on { onScan() } doReturn onScan
   }
   private val serviceController = mock<ServiceController>()
+  private val overlayManager = mock<OverlayManager>()
   private val alwaysShowNotificationPref = mock<Pref<Boolean>>()
 
   private lateinit var viewModel: MainViewModel
@@ -88,6 +90,7 @@ class MainViewModelTest {
         recordingManager,
         recordingScanner,
         serviceController,
+        overlayManager,
         alwaysShowNotificationPref
     )
   }
@@ -275,9 +278,31 @@ class MainViewModelTest {
   }
 
   @Test
+  fun fabClicked_needOverlayPermission_but_countdownDisabled() {
+    whenever(permissionChecker.hasStoragePermission()).doReturn(true)
+    whenever(permissionChecker.hasOverlayPermission()).doReturn(false)
+    whenever(overlayManager.willCountdown()).doReturn(false)
+    whenever(captureEngine.isStarted()).doReturn(false)
+    val fabEnabled = viewModel.onFabEnabled()
+        .test()
+    val onNeedStoragePermission = viewModel.onNeedStoragePermission()
+        .test()
+    val onNeedOverlayPermission = viewModel.onNeedOverlayPermission()
+        .test()
+    viewModel.fabClicked()
+
+    fabEnabled.assertValues(false)
+    onNeedStoragePermission.assertNoValues()
+    onNeedOverlayPermission.assertValueCount(1)
+    verify(serviceController, never()).stopRecording(any())
+    verify(serviceController, never()).startRecording()
+  }
+
+  @Test
   fun fabClicked_start() {
     whenever(permissionChecker.hasStoragePermission()).doReturn(true)
     whenever(permissionChecker.hasOverlayPermission()).doReturn(true)
+    whenever(overlayManager.willCountdown()).doReturn(true)
     whenever(captureEngine.isStarted()).doReturn(false)
     val fabEnabled = viewModel.onFabEnabled()
         .test()

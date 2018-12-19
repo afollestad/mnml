@@ -158,9 +158,7 @@ class MainViewModel(
   @VisibleForTesting(otherwise = PRIVATE)
   fun refreshRecordings() = launch {
     log("refreshRecordings()")
-    if (!permissionChecker.hasStoragePermission() &&
-        overlayManager.willCountdown()
-    ) {
+    if (!permissionChecker.hasStoragePermission()) {
       // Can't access recordings yet
       log("refreshRecordings() - don't have storage permission yet.")
       emptyViewVisibility.value = true
@@ -204,7 +202,9 @@ class MainViewModel(
         wantToStartCapture = true
         needStoragePermission.onNext(Unit)
         return
-      } else if (!permissionChecker.hasOverlayPermission()) {
+      } else if (!permissionChecker.hasOverlayPermission() &&
+          overlayManager.willCountdown()
+      ) {
         log("fabClicked() - overlay permission needed")
         wantToStartCapture = true
         needOverlayPermission.onNext(Unit)
