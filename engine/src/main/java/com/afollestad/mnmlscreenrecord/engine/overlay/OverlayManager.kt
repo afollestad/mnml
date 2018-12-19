@@ -32,26 +32,34 @@ import com.afollestad.mnmlscreenrecord.engine.R
 import com.afollestad.rxkprefs.Pref
 
 /** @author Aidan Follestad (@afollestad) **/
-class OverlayManager(
-  private val windowManager: WindowManager,
-  private val layoutInflater: LayoutInflater,
-  private val countdownPref: Pref<Int>,
-  private val sdkProvider: SdkProvider
-) {
-  companion object {
-    private const val SECOND = 1000L
-  }
+interface OverlayManager {
 
   /**
    * Returns true if a countdown is configured when recording starts.
    */
-  fun willCountdown() = countdownPref.get() > 0
+  fun willCountdown(): Boolean
 
   /**
-   * Counts down starting at the value of the [countdownPref], showing a red number in the middle
-   * of the screen for each second. The given [finished] callback is invoked when we reach 0.
+   * Counts down starting at the value of the countdown preference, showing a red number in the
+   * middle of the screen for each second. The given [finished] callback is invoked when we reach 0.
    */
-  fun countdown(finished: () -> Unit) {
+  fun countdown(finished: () -> Unit)
+}
+
+/** @author Aidan Follestad (@afollestad) **/
+class RealOverlayManager(
+  private val windowManager: WindowManager,
+  private val layoutInflater: LayoutInflater,
+  private val countdownPref: Pref<Int>,
+  private val sdkProvider: SdkProvider
+) : OverlayManager {
+  companion object {
+    private const val SECOND = 1000L
+  }
+
+  override fun willCountdown() = countdownPref.get() > 0
+
+  override fun countdown(finished: () -> Unit) {
     val time = countdownPref.get()
     if (time <= 0) {
       finished()

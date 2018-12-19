@@ -36,6 +36,7 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RAT
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.capture.RealCaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
+import com.afollestad.mnmlscreenrecord.engine.overlay.RealOverlayManager
 import com.afollestad.mnmlscreenrecord.engine.recordings.RealRecordingManager
 import com.afollestad.mnmlscreenrecord.engine.recordings.RealRecordingScanner
 import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingManager
@@ -82,7 +83,9 @@ val engineModule = module {
     )
   } bind CaptureEngine::class
 
-  factory { OverlayManager(get(), get(), get(name = PREF_COUNTDOWN), get()) }
+  factory {
+    RealOverlayManager(get(), get(), get(name = PREF_COUNTDOWN), get())
+  } bind OverlayManager::class
 
   factory { RealServiceController(get()) } bind ServiceController::class
 }

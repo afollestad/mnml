@@ -261,6 +261,7 @@ class MainViewModelTest {
   fun fabClicked_needOverlayPermission() {
     whenever(permissionChecker.hasStoragePermission()).doReturn(true)
     whenever(permissionChecker.hasOverlayPermission()).doReturn(false)
+    whenever(overlayManager.willCountdown()).doReturn(true)
     whenever(captureEngine.isStarted()).doReturn(false)
     val fabEnabled = viewModel.onFabEnabled()
         .test()
@@ -293,9 +294,9 @@ class MainViewModelTest {
 
     fabEnabled.assertValues(false)
     onNeedStoragePermission.assertNoValues()
-    onNeedOverlayPermission.assertValueCount(1)
+    onNeedOverlayPermission.assertNoValues()
     verify(serviceController, never()).stopRecording(any())
-    verify(serviceController, never()).startRecording()
+    verify(serviceController).startRecording()
   }
 
   @Test
@@ -323,6 +324,7 @@ class MainViewModelTest {
   fun permissionGranted_fabPreviouslyClicked() {
     whenever(permissionChecker.hasStoragePermission()).doReturn(true)
     whenever(captureEngine.isStarted()).doReturn(false)
+    whenever(overlayManager.willCountdown()).doReturn(true)
 
     whenever(permissionChecker.hasOverlayPermission()).doReturn(false)
     viewModel.fabClicked()
