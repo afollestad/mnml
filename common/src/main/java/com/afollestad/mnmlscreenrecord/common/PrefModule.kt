@@ -15,7 +15,8 @@
  */
 package com.afollestad.mnmlscreenrecord.common
 
-import android.os.Environment.getExternalStorageDirectory
+import android.os.Environment.DIRECTORY_DCIM
+import android.os.Environment.getExternalStoragePublicDirectory
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_AUDIO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
@@ -70,7 +71,11 @@ val prefModule = module {
   }
 
   factory(name = PREF_RECORDINGS_FOLDER) {
-    val default = File(getExternalStorageDirectory(), "MNML Screen Recorder")
+    val dcim = getExternalStoragePublicDirectory(DIRECTORY_DCIM)
+    var default = File(dcim.parentFile, "MNML Screen Recorder")
+    if (!default.canWrite()) {
+      default = File(dcim, "MNML Screen Recorder")
+    }
     get<RxkPrefs>().string(PREF_RECORDINGS_FOLDER, default.absolutePath)
   }
 
