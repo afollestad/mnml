@@ -186,7 +186,13 @@ class RealDonateClient(
             log("Billing client setup finished successfully!")
             retrieveSkuDetails()
           } else {
-            log("Billing client setup failed, responseCode $responseCode")
+            Bugsnag.notify(DonationException("client.startConnection()", responseCode))
+            onError.onNext(
+                Exception(
+                    "Unable to donate, client setup error code ${responseCode.billingCodeName()}. " +
+                        "Please try again later :)"
+                )
+            )
           }
         }
 
