@@ -139,7 +139,7 @@ class MainActivity : DarkModeSwitchActivity(),
         R.id.support_me -> supportMe()
         R.id.provide_feedback -> {
           startActivity(Intent(ACTION_VIEW).apply {
-            data = "https://play.google.com/store/apps/details?id=$packageName".toUri()
+            data = "https://github.com/afollestad/mnml/issues/new/choose".toUri()
           })
         }
         R.id.settings -> {
