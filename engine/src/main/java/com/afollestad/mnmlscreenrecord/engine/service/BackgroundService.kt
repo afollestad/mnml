@@ -163,7 +163,9 @@ class BackgroundService : Service(), LifecycleOwner {
   }
 
   private fun startRecording() {
-    if (!permissionChecker.hasStoragePermission()) {
+    if (captureEngine.isStarted()) {
+      return
+    } else if (!permissionChecker.hasStoragePermission()) {
       startActivity(
           Intent(this, StoragePermissionActivity::class.java)
               .addFlags(FLAG_ACTIVITY_NEW_TASK)
