@@ -32,10 +32,6 @@ import android.media.MediaRecorder.VideoSource.SURFACE
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Handler
-import android.view.Surface.ROTATION_0
-import android.view.Surface.ROTATION_180
-import android.view.Surface.ROTATION_270
-import android.view.Surface.ROTATION_90
 import android.view.WindowManager
 import androidx.annotation.CheckResult
 import com.afollestad.mnmlscreenrecord.common.misc.timestampString
@@ -129,13 +125,6 @@ class RealCaptureEngine(
   private val resolutionWidthPref: Pref<Int>,
   private val resolutionHeightPref: Pref<Int>
 ) : CaptureEngine {
-
-  private val orientations = mapOf(
-      90 to ROTATION_0,
-      0 to ROTATION_90,
-      270 to ROTATION_180,
-      180 to ROTATION_270
-  )
 
   private var recordingInfo: RecordingInfo? = null
   private val handler = Handler()
@@ -300,15 +289,6 @@ class RealCaptureEngine(
       pendingFile = outputFile
       setOutputFile(outputFile.absolutePath)
       log("Recording to $outputFile")
-
-      val rotation = windowManager.defaultDisplay.rotation
-      val orientation = orientations[rotation + 90]
-      if (orientation != null) {
-        log("Orientation hint set to $orientation")
-        setOrientationHint(orientation)
-      } else {
-        log("Couldn't find orientation ${rotation + 90} in the map.")
-      }
 
       try {
         prepare()
