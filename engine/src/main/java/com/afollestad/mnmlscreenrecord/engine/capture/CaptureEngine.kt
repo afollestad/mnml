@@ -15,33 +15,22 @@
  */
 package com.afollestad.mnmlscreenrecord.engine.capture
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR
 import android.hardware.display.VirtualDisplay
 import android.media.MediaRecorder
-import android.media.MediaRecorder.AudioEncoder.AAC
-import android.media.MediaRecorder.AudioSource.MIC
-import android.media.MediaRecorder.OutputFormat.MPEG_4
-import android.media.MediaRecorder.VideoEncoder.H264
-import android.media.MediaRecorder.VideoSource.SURFACE
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Handler
 import android.view.WindowManager
-import androidx.annotation.CheckResult
-import com.afollestad.mnmlscreenrecord.common.misc.timestampString
 import com.afollestad.mnmlscreenrecord.engine.permission.CapturePermissionActivity
 import com.afollestad.rxkprefs.Pref
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.io.File
-import java.io.FileNotFoundException
-import java.util.Date
 import timber.log.Timber.d as log
 
 /**
@@ -115,29 +104,29 @@ interface CaptureEngine {
 
 /** @author Aidan Follestad (@afollestad) */
 class RealCaptureEngine(
-  private val windowManager: WindowManager,
+  internal val windowManager: WindowManager,
   private val projectionManager: MediaProjectionManager,
-  private val recordingsFolderPref: Pref<String>,
-  private val videoBitRatePref: Pref<Int>,
-  private val frameRatePref: Pref<Int>,
-  private val recordAudioPref: Pref<Boolean>,
-  private val audioBitRatePref: Pref<Int>,
-  private val resolutionWidthPref: Pref<Int>,
-  private val resolutionHeightPref: Pref<Int>
+  internal val recordingsFolderPref: Pref<String>,
+  internal val videoBitRatePref: Pref<Int>,
+  internal val frameRatePref: Pref<Int>,
+  internal val recordAudioPref: Pref<Boolean>,
+  internal val audioBitRatePref: Pref<Int>,
+  internal val resolutionWidthPref: Pref<Int>,
+  internal val resolutionHeightPref: Pref<Int>
 ) : CaptureEngine {
 
-  private var recordingInfo: RecordingInfo? = null
-  private val handler = Handler()
+  internal val handler = Handler()
 
-  private var recorder: MediaRecorder? = null
-  private var projection: MediaProjection? = null
-  private var display: VirtualDisplay? = null
-  private var pendingFile: File? = null
-  private val onStart = PublishSubject.create<Unit>()
+  internal val onStart = PublishSubject.create<Unit>()
+  internal val onCancel = PublishSubject.create<Unit>()
+  internal val onError = PublishSubject.create<Exception>()
   private val onStop = PublishSubject.create<File>()
-  private val onCancel = PublishSubject.create<Unit>()
-  private val onError = PublishSubject.create<Exception>()
-  private var isStarted: Boolean = false
+
+  internal var display: VirtualDisplay? = null
+  internal var projection: MediaProjection? = null
+  internal var isStarted: Boolean = false
+  internal var recorder: MediaRecorder? = null
+  internal var pendingFile: File? = null
 
   override fun onStart(): Observable<Unit> = onStart
 
@@ -242,148 +231,10 @@ class RealCaptureEngine(
     }
   }
 
-  @CheckResult
-  private fun createAndPrepareRecorder(context: Context): Boolean {
-    val recordingInfo = ensureRecordingInfo(context)
-    recorder = MediaRecorder().apply {
-      setVideoSource(SURFACE)
-      if (recordAudioPref.get()) {
-        log("Recording audio from the mic")
-        setAudioSource(MIC)
-      }
-      setOutputFormat(MPEG_4)
-
-      val frameRate = frameRatePref.get()
-      setVideoFrameRate(frameRate)
-      log("Frame rate set to $frameRate")
-
-      setVideoEncoder(H264)
-      if (recordAudioPref.get()) {
-        setAudioEncoder(AAC)
-      }
-
-      val videoWidth = if (resolutionWidthPref.get() == 0) {
-        recordingInfo.width
-      } else {
-        resolutionWidthPref.get()
-      }
-      val videoHeight = if (resolutionHeightPref.get() == 0) {
-        recordingInfo.height
-      } else {
-        resolutionHeightPref.get()
-      }
-      setVideoSize(videoWidth, videoHeight)
-      log("Video resolution set to $videoWidth x $videoHeight")
-
-      val videoBitRate = videoBitRatePref.get()
-      setVideoEncodingBitRate(videoBitRate)
-      log("Video bit rate set to $videoBitRate")
-
-      val audioBitRate = audioBitRatePref.get()
-      setAudioEncodingBitRate(audioBitRate)
-      log("Audio bit rate set to $audioBitRate")
-
-      val outputFolder = File(recordingsFolderPref.get()).apply { mkdirs() }
-      val now = Date().timestampString()
-      val outputFile = File(outputFolder, "MNML-$now.mp4")
-      pendingFile = outputFile
-      setOutputFile(outputFile.absolutePath)
-      log("Recording to $outputFile")
-
-      try {
-        prepare()
-        log("Media recorder prepared")
-      } catch (fe: FileNotFoundException) {
-        onError.onNext(FileSystemException(fe))
-        return false
-      } catch (t: Throwable) {
-        onError.onNext(PrepareFailedException(t))
-        return false
-      }
-    }
-
-    return true
-  }
-
-  @SuppressLint("CheckResult")
-  private fun createVirtualDisplayAndStart(context: Context) {
-    display = createVirtualDisplay(context)
-
-    // Tiny delay so we don't record the cast "start now" dialog.
-    handler.postDelayed({
-      try {
-        recorder?.start() ?: throw Exception(
-            "Recorder is unexpectedly null, this appears to be a device-specific issue."
-        )
-      } catch (e: RuntimeException) {
-        isStarted = false
-        onCancel.onNext(Unit)
-        onError.onNext(StartRecordingException(e))
-      }
-    }, 150)
-
-    isStarted = true
-    onStart.onNext(Unit)
-    log("Media recorder started")
-  }
-
-  private fun createVirtualDisplay(context: Context): VirtualDisplay {
-    val recordingInfo = ensureRecordingInfo(context)
-    val surface = recorder?.surface ?: throw Exception(
-        "Recorder is unexpectedly null, this appears to be a device-specific issue."
-    )
-    return projection?.createVirtualDisplay(
-        "MNMLCaptureEngine",
-        recordingInfo.width,
-        recordingInfo.height,
-        recordingInfo.density,
-        VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-        surface,
-        null,
-        null
-    ) ?: throw Exception(
-        "Projection unexpectedly null, this appears to be a device-specific issue."
-    )
-  }
-
-  private fun ensureRecordingInfo(context: Context): RecordingInfo {
-    if (recordingInfo == null) {
-      recordingInfo = RecordingInfo.get(context, windowManager)
-    }
-    return recordingInfo!!
-  }
-
   private val projectionCallback = object : MediaProjection.Callback() {
     override fun onStop() {
       log("Got onStop() in projection callback")
       stop()
     }
-  }
-}
-
-class FileSystemException(base: Exception) :
-    Exception(
-        "MNML was unable to access your file system. You may need to change your " +
-            "recording folder in MNML's settings. ${base.displayMessage()}",
-        base
-    )
-
-class PrepareFailedException(base: Throwable) :
-    Exception(
-        "MNML was unable to prepare for recording. ${base.displayMessage()}",
-        base
-    )
-
-class StartRecordingException(base: Exception) :
-    Exception(
-        "MNML was unable to begin recording. ${base.displayMessage()}",
-        base
-    )
-
-private fun Throwable.displayMessage(): String {
-  return if (!this.message.isNullOrBlank()) {
-    this.message!!
-  } else {
-    "$this"
   }
 }
