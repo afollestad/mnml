@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.assent.Permission.WRITE_EXTERNAL_STORAGE
 import com.afollestad.assent.askForPermissions
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onCancel
+import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.list.listItems
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.afollestad.mnmlscreenrecord.BuildConfig
@@ -131,14 +133,14 @@ class MainActivity : DarkModeSwitchActivity(),
 
   private fun setupToolbar() = toolbar.run {
     inflateMenu(R.menu.main)
-
     setOnMenuItemClickListener { item ->
       when (item.itemId) {
-        R.id.support_me -> {
-          supportMe()
-        }
-        R.id.about -> {
-          AboutDialog.show(this@MainActivity)
+        R.id.about -> AboutDialog.show(this@MainActivity)
+        R.id.support_me -> supportMe()
+        R.id.provide_feedback -> {
+          startActivity(Intent(ACTION_VIEW).apply {
+            data = "https://play.google.com/store/apps/details?id=$packageName".toUri()
+          })
         }
         R.id.settings -> {
           startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
@@ -221,6 +223,8 @@ class MainActivity : DarkModeSwitchActivity(),
         positiveButton(android.R.string.ok) { finish() }
         cancelOnTouchOutside(false)
         cancelable(false)
+        onCancel { finish() }
+        onDismiss { finish() }
       }
     }
   }

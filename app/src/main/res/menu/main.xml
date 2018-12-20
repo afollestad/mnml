@@ -7,6 +7,9 @@
       android:id="@+id/support_me"
       android:title="@string/support_me"/>
   <item
+      android:id="@+id/provide_feedback"
+      android:title="@string/provide_feedback"/>
+  <item
       android:id="@+id/settings"
       android:title="@string/settings"/>
 </menu>
