@@ -43,10 +43,8 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
-import com.bugsnag.android.Bugsnag
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber.d as log
 
@@ -64,7 +62,7 @@ interface DonateClient : LifecycleObserver {
   fun onReady(): Single<List<SkuDetails>>
 
   /** Emits when an error that should be shown to the user occurs. */
-  fun onError(): Observable<Exception>
+  fun onError(): Observable<DonationException>
 
   /** Performs a purchase with a SKU. Returns true if the response code is OK. */
   fun makePurchase(
@@ -79,8 +77,8 @@ class RealDonateClient(
 ) : DonateClient, PurchasesUpdatedListener, LifecycleObserver {
 
   private val onPurchase = PublishSubject.create<String>()
-  private val onIsReady = BehaviorSubject.create<List<SkuDetails>>()
-  private val onError = BehaviorSubject.create<Exception>()
+  private val onIsReady = PublishSubject.create<List<SkuDetails>>()
+  private val onError = PublishSubject.create<DonationException>()
   private var client: BillingClient? = null
 
   @OnLifecycleEvent(ON_DESTROY)
@@ -92,13 +90,13 @@ class RealDonateClient(
   override fun onPurchase(): Observable<String> = onPurchase
 
   override fun onReady(): Single<List<SkuDetails>> {
-    ensureClient()
     return onIsReady.filter { it.isNotEmpty() }
         .take(1)
         .singleOrError()
+        .doOnSubscribe { ensureClient() }
   }
 
-  override fun onError(): Observable<Exception> = onError
+  override fun onError(): Observable<DonationException> = onError
 
   override fun makePurchase(
     activity: Activity,
@@ -113,16 +111,12 @@ class RealDonateClient(
     val responseCode = client.launchBillingFlow(activity, flowParams)
 
     if (responseCode != OK) {
-      onError.onNext(
-          Exception(
-              "Unable to donate, error code ${responseCode.billingCodeName()}. " +
-                  "Please try again later :)"
-          )
-      )
-      Bugsnag.notify(
-          DonationException("makePurchase(${skuDetails.sku})", responseCode)
-      )
+      onError.onNext(DonationException("makePurchase(${skuDetails.sku})", responseCode))
+    } else {
+      log("Purchase successful!")
     }
+
+    client.endConnection()
     return responseCode == BillingResponse.OK
   }
 
@@ -138,13 +132,7 @@ class RealDonateClient(
         onPurchase.onNext(it.sku)
       }
       else -> {
-        onError.onNext(
-            Exception(
-                "Unable to donate, error code ${responseCode.billingCodeName()}. " +
-                    "Please try again later :)"
-            )
-        )
-        Bugsnag.notify(DonationException("onPurchasesUpdated()", responseCode))
+        onError.onNext(DonationException("onPurchasesUpdated()", responseCode))
       }
     }
   }
@@ -186,29 +174,25 @@ class RealDonateClient(
             log("Billing client setup finished successfully!")
             retrieveSkuDetails()
           } else {
-            Bugsnag.notify(DonationException("client.startConnection()", responseCode))
-            onError.onNext(
-                Exception(
-                    "Unable to donate, client setup error code ${responseCode.billingCodeName()}. " +
-                        "Please try again later :)"
-                )
-            )
+            onError.onNext(DonationException("client.startConnection()", responseCode))
           }
         }
 
         override fun onBillingServiceDisconnected() {
           log("Billing client disconnected from service")
-          onIsReady.onNext(emptyList())
         }
       })
     }
   }
 }
 
-internal class DonationException(
+class DonationException(
   action: String,
   responseCode: Int
-) : Exception("$action unsuccessful - code = ${responseCode.billingCodeName()}")
+) : Exception("$action unsuccessful - code = ${responseCode.billingCodeName()}") {
+
+  val reason = responseCode.billingCodeName()
+}
 
 private fun Int.billingCodeName(): String = when (this) {
   FEATURE_NOT_SUPPORTED -> "FEATURE_NOT_SUPPORTED"

@@ -176,8 +176,12 @@ class RealCaptureEngine(
       return
     }
 
-    if (createAndPrepareRecorder(context)) {
-      createVirtualDisplayAndStart(context)
+    try {
+      if (createAndPrepareRecorder(context)) {
+        createVirtualDisplayAndStart(context)
+      }
+    } catch (e: Exception) {
+      onError.onNext(e)
     }
   }
 
@@ -197,8 +201,12 @@ class RealCaptureEngine(
           registerCallback(projectionCallback, null)
         }
 
-    if (createAndPrepareRecorder(context)) {
-      createVirtualDisplayAndStart(context)
+    try {
+      if (createAndPrepareRecorder(context)) {
+        createVirtualDisplayAndStart(context)
+      }
+    } catch (e: Exception) {
+      onError.onNext(e)
     }
   }
 
@@ -324,10 +332,10 @@ class RealCaptureEngine(
     // Tiny delay so we don't record the cast "start now" dialog.
     handler.postDelayed({
       try {
-        recorder?.start() ?: throw IllegalStateException(
-            "createVirtualDisplayAndStart - Recorder is unexpectedly null!"
+        recorder?.start() ?: throw Exception(
+            "Recorder is unexpectedly null, this appears to be a device-specific issue."
         )
-      } catch (e: Exception) {
+      } catch (e: RuntimeException) {
         isStarted = false
         onCancel.onNext(Unit)
         onError.onNext(StartRecordingException(e))
@@ -341,8 +349,8 @@ class RealCaptureEngine(
 
   private fun createVirtualDisplay(context: Context): VirtualDisplay {
     val recordingInfo = ensureRecordingInfo(context)
-    val surface = recorder?.surface ?: throw IllegalStateException(
-        "createVirtualDisplay - Recorder unexpectedly null!"
+    val surface = recorder?.surface ?: throw Exception(
+        "Recorder is unexpectedly null, this appears to be a device-specific issue."
     )
     return projection?.createVirtualDisplay(
         "MNMLCaptureEngine",
@@ -353,7 +361,9 @@ class RealCaptureEngine(
         surface,
         null,
         null
-    ) ?: throw IllegalStateException("createVirtualDisplay - projection unexpectedly null!")
+    ) ?: throw Exception(
+        "Projection unexpectedly null, this appears to be a device-specific issue."
+    )
   }
 
   private fun ensureRecordingInfo(context: Context): RecordingInfo {
@@ -371,11 +381,12 @@ class RealCaptureEngine(
   }
 }
 
-class FileSystemException(base: Exception) : Exception(
-    "MNML was unable to access your file system. You may need to change your " +
-        "recording folder in MNML's settings. ${base.displayMessage()}",
-    base
-)
+class FileSystemException(base: Exception) :
+    Exception(
+        "MNML was unable to access your file system. You may need to change your " +
+            "recording folder in MNML's settings. ${base.displayMessage()}",
+        base
+    )
 
 class PrepareFailedException(base: Throwable) :
     Exception(
@@ -383,10 +394,11 @@ class PrepareFailedException(base: Throwable) :
         base
     )
 
-class StartRecordingException(base: Exception) : Exception(
-    "MNML was unable to begin recording. ${base.displayMessage()}",
-    base
-)
+class StartRecordingException(base: Exception) :
+    Exception(
+        "MNML was unable to begin recording. ${base.displayMessage()}",
+        base
+    )
 
 private fun Throwable.displayMessage(): String {
   return if (!this.message.isNullOrBlank()) {

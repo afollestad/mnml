@@ -26,6 +26,7 @@ import com.afollestad.assent.askForPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
+import com.afollestad.mnmlscreenrecord.BuildConfig
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
 import com.afollestad.mnmlscreenrecord.common.misc.toast
@@ -47,6 +48,7 @@ import com.afollestad.mnmlscreenrecord.views.asEnabled
 import com.afollestad.mnmlscreenrecord.views.asIcon
 import com.afollestad.mnmlscreenrecord.views.asText
 import com.afollestad.mnmlscreenrecord.views.asVisibility
+import com.bugsnag.android.Bugsnag
 import kotlinx.android.synthetic.main.activity_main.fab
 import kotlinx.android.synthetic.main.activity_main.list
 import kotlinx.android.synthetic.main.include_appbar.toolbar
@@ -224,17 +226,28 @@ class MainActivity : DarkModeSwitchActivity(),
   }
 
   private fun supportMe() {
+    if (BuildConfig.DEBUG) {
+      MaterialDialog(this).show {
+        title(R.string.cannot_donate)
+        message(R.string.cannot_donate_debug_build)
+        positiveButton(R.string.okay)
+      }
+      return
+    }
+
     donateClient.onError()
         .subscribe {
+          Bugsnag.notify(it)
           MaterialDialog(this).show {
             title(R.string.support_me_failed)
-            message(text = it.message)
+            message(text = getString(R.string.support_me_failed_try_again, it.reason))
             positiveButton(android.R.string.ok)
             cancelOnTouchOutside(false)
             cancelable(false)
           }
         }
         .attachLifecycle(this)
+
     donateClient.onReady()
         .subscribe { options ->
           val optionNames = options.map {

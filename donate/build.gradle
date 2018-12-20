@@ -28,7 +28,6 @@ dependencies {
   api 'io.reactivex.rxjava2:rxjava:' + versions.rxJava
 
   // Debug
-  implementation 'com.bugsnag:bugsnag-android:' + versions.bugsnag
   implementation 'com.jakewharton.timber:timber:' + versions.timber
 }
 
