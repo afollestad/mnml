@@ -8,13 +8,13 @@ ext.versions = [
 
     // Plugins
     gradlePlugin      : '3.2.1',
-    spotlessPlugin    : '3.16.0',
+    spotlessPlugin    : '3.17.0',
     versionPlugin     : '0.20.0',
     bugsnagPlugin     : '3.+',
 
     // Kotlin
     kotlin            : '1.3.11',
-    coroutines        : '1.0.1',
+    coroutines        : '1.1.0',
     koin              : '1.0.2',
 
     // Google/AndroidX
@@ -31,7 +31,7 @@ ext.versions = [
     assent            : '2.2.0',
 
     // RxJava
-    rxJava            : '2.2.3',
+    rxJava            : '2.2.4',
 
     // Debug
     timber            : '4.7.1',
@@ -39,7 +39,7 @@ ext.versions = [
 
     // Test
     junit             : '4.12',
-    mockito           : '2.23.0',
+    mockito           : '2.23.4',
     mockitoKotlin     : '2.0.0-RC1',
     truth             : '0.42',
     androidxTest      : '1.1.0',
