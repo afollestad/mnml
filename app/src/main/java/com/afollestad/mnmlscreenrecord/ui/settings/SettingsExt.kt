@@ -15,8 +15,6 @@
  */
 package com.afollestad.mnmlscreenrecord.ui.settings
 
-import android.content.Context
-import android.view.WindowManager
 import com.afollestad.assent.Permission.WRITE_EXTERNAL_STORAGE
 import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.runWithPermissions
@@ -25,8 +23,6 @@ import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.files.folderChooser
 import com.afollestad.mnmlscreenrecord.R
-import com.afollestad.mnmlscreenrecord.common.misc.displayInfo
-import com.afollestad.mnmlscreenrecord.common.view.Size
 import com.afollestad.mnmlscreenrecord.common.view.onProgressChanged
 import kotlinx.android.synthetic.main.dialog_number_selector.view.label
 import kotlinx.android.synthetic.main.dialog_number_selector.view.seeker
@@ -88,14 +84,4 @@ internal fun Int.bitRateString(): String {
   } else {
     "${this / 1_000}kbps"
   }
-}
-
-internal fun WindowManager.resolutionSettings(context: Context): List<Size> {
-  val displayInfo = displayInfo()
-  val displayWidth = displayInfo.width
-  val displayHeight = displayInfo.height
-  val screenRatio = displayWidth.toFloat() / displayHeight.toFloat()
-  val widths = context.resources
-      .getIntArray(R.array.screen_resolution_width_options)
-  return widths.map { w -> Size(w, (w / screenRatio).toInt()) }
 }

@@ -25,7 +25,6 @@ import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.afollestad.mnmlscreenrecord.R
-import com.afollestad.mnmlscreenrecord.common.misc.otherwise
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_AUDIO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
@@ -33,16 +32,12 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RESOLUTION_HEIGHT
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RESOLUTION_WIDTH
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onScroll
 import com.afollestad.rxkprefs.Pref
-import io.reactivex.Observable.zip
-import io.reactivex.functions.BiFunction
 import org.koin.android.ext.android.inject
 
 /** @author Aidan Follestad (afollestad) */
@@ -52,8 +47,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
   private val darkModePref by inject<Pref<Boolean>>(name = PREF_DARK_MODE)
   // Quality
   private val frameRatePref by inject<Pref<Int>>(name = PREF_FRAME_RATE)
-  private val resolutionWidthPref by inject<Pref<Int>>(name = PREF_RESOLUTION_WIDTH)
-  private val resolutionHeightPref by inject<Pref<Int>>(name = PREF_RESOLUTION_HEIGHT)
+  //private val resolutionWidthPref by inject<Pref<Int>>(name = PREF_RESOLUTION_WIDTH)
+  //private val resolutionHeightPref by inject<Pref<Int>>(name = PREF_RESOLUTION_HEIGHT)
   private val videoBitRatePref by inject<Pref<Int>>(name = PREF_VIDEO_BIT_RATE)
   private val audioBitRatePref by inject<Pref<Int>>(name = PREF_AUDIO_BIT_RATE)
   // Recording
@@ -122,50 +117,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         .attachLifecycle(this)
 
     // RESOLUTION
-    val resolutionEntry = findPreference("resolution")
-    resolutionEntry.setOnPreferenceClickListener {
-      val context = activity ?: return@setOnPreferenceClickListener true
-      val options = windowManager.resolutionSettings(context)
-          .map { size -> size.toString() }
-          .toMutableList()
-          .apply { add(0, getString(R.string.use_screen_resolution)) }
-
-      val currentXByY = "${resolutionWidthPref.get()}x${resolutionHeightPref.get()}"
-      val defaultIndex = options.indexOf(currentXByY)
-          .otherwise(-1, 0)
-
-      MaterialDialog(context).show {
-        title(R.string.setting_resolution)
-        listItemsSingleChoice(
-            items = options,
-            initialSelection = defaultIndex
-        ) { _, which, text ->
-          if (which == 0) {
-            resolutionWidthPref.delete()
-            resolutionHeightPref.delete()
-          } else {
-            val splitRes = text.split('x')
-            resolutionWidthPref.set(splitRes[0].toInt())
-            resolutionHeightPref.set(splitRes[1].toInt())
-          }
-        }
-        positiveButton(R.string.select)
-      }
-      true
-    }
-    zip(resolutionWidthPref.observe(), resolutionHeightPref.observe(),
-        BiFunction<Int, Int, Pair<Int, Int>> { w, h -> Pair(w, h) })
-        .subscribe {
-          if (it.first == 0 || it.second == 0) {
-            resolutionEntry.summary =
-                resources.getString(R.string.setting_resolution_current_screen)
-          } else {
-            resolutionEntry.summary = resources.getString(
-                R.string.setting_resolution_desc, it.first, it.second
-            )
-          }
-        }
-        .attachLifecycle(this)
+    setupResolutionPref()
 
     // VIDEO BIT RATE
     val videoBitRateEntry = findPreference(PREF_VIDEO_BIT_RATE)
@@ -306,5 +258,58 @@ class SettingsFragment : PreferenceFragmentCompat() {
     stopOnShakePref.observe()
         .subscribe { stopOnShakeEntry.isChecked = it }
         .attachLifecycle(this)
+  }
+
+  private fun setupResolutionPref() {
+    val resolutionEntry = findPreference("resolution")
+    resolutionEntry.isEnabled = false
+    resolutionEntry.summary =
+        "Android makes getting this to work hard. Disabled for now. https://github.com/afollestad/mnml"
+
+    /*
+    resolutionEntry.setOnPreferenceClickListener {
+      val context = activity ?: return@setOnPreferenceClickListener true
+      val options = windowManager.resolutionSettings(context)
+          .map { size -> size.toString() }
+          .toMutableList()
+          .apply { add(0, getString(R.string.use_screen_resolution)) }
+
+      val currentXByY = "${resolutionWidthPref.get()}x${resolutionHeightPref.get()}"
+      val defaultIndex = options.indexOf(currentXByY)
+          .otherwise(-1, 0)
+
+      MaterialDialog(context).show {
+        title(R.string.setting_resolution)
+        listItemsSingleChoice(
+            items = options,
+            initialSelection = defaultIndex
+        ) { _, which, text ->
+          if (which == 0) {
+            resolutionWidthPref.delete()
+            resolutionHeightPref.delete()
+          } else {
+            val splitRes = text.split('x')
+            resolutionWidthPref.set(splitRes[0].toInt())
+            resolutionHeightPref.set(splitRes[1].toInt())
+          }
+        }
+        positiveButton(R.string.select)
+      }
+      true
+    }
+    zip(resolutionWidthPref.observe(), resolutionHeightPref.observe(),
+        BiFunction<Int, Int, Pair<Int, Int>> { w, h -> Pair(w, h) })
+        .subscribe {
+          if (it.first == 0 || it.second == 0) {
+            resolutionEntry.summary =
+                resources.getString(R.string.setting_resolution_current_screen)
+          } else {
+            resolutionEntry.summary = resources.getString(
+                R.string.setting_resolution_desc, it.first, it.second
+            )
+          }
+        }
+        .attachLifecycle(this)
+    */
   }
 }

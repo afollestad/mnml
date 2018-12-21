@@ -36,7 +36,9 @@
           android:resource="@xml/shortcuts"/>
     </activity>
 
-    <activity android:name=".ui.settings.SettingsActivity">
+    <activity
+        android:name=".ui.settings.SettingsActivity"
+        android:label="@string/settings">
       <intent-filter>
         <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES"/>
       </intent-filter>
