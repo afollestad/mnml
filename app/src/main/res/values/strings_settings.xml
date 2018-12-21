@@ -40,7 +40,10 @@
   <string name="setting_countdown_zero_note">When set to 0, the countdown is disabled.</string>
 
   <string name="setting_record_audio">Record Audio</string>
-  <string name="setting_record_audio_on">Audio will be recorded from your microphone during capture.</string>
+  <string name="setting_record_audio_on">
+    Audio will be recorded from your microphone during capture. Google does not allow apps to
+    record internal audio.
+  </string>
   <string name="setting_record_audio_off">Audio will not be recorded during capture.</string>
   <string name="setting_record_audio_no_mic">Your device does not have a microphone and cannot record audio.</string>
 
