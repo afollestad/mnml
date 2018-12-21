@@ -46,10 +46,13 @@ internal fun RealCaptureEngine.createVirtualDisplay(context: Context): VirtualDi
   val surface = recorder?.surface ?: throw Exception(
       "Recorder is unexpectedly null, this appears to be a device-specific issue."
   )
+  val width = recordingInfo.width
+  val height = recordingInfo.height
+  log("Virtual display dimensions: $width x $height")
   return projection?.createVirtualDisplay(
       "MNMLCaptureEngine",
-      recordingInfo.width,
-      recordingInfo.height,
+      width,
+      height,
       recordingInfo.density,
       VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
       surface,
