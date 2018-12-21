@@ -25,7 +25,9 @@ import androidx.recyclerview.widget.RecyclerView
 data class Size(
   val width: Int,
   val height: Int
-)
+) {
+  override fun toString() = "${width}x$height"
+}
 
 /**
  * Returns a [Size] containing the width and height of the receiving view.

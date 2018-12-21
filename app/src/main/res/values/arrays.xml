@@ -66,19 +66,17 @@
     <item>60</item>
   </integer-array>
 
-  <string-array name="screen_resolution_options" translatable="false">
-    <item>@string/use_screen_resolution</item>
-    <item>2560x1440</item>
-    <item>2220x1080</item>
-    <item>1920x1080</item>
-    <item>1480x720</item>
-    <item>1280x720</item>
-    <item>986x480</item>
-    <item>854x480</item>
-    <item>740x360</item>
-    <item>640x360</item>
-    <item>494x240</item>
-    <item>426x240</item>
-  </string-array>
+  <integer-array name="screen_resolution_width_options" translatable="false">
+    <item>2560</item>
+    <item>2220</item>
+    <item>1920</item>
+    <item>1480</item>
+    <item>1280</item>
+    <item>986</item>
+    <item>854</item>
+    <item>740</item>
+    <item>640</item>
+    <item>494</item>
+  </integer-array>
 
 </resources>

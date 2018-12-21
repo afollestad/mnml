@@ -17,18 +17,15 @@ package com.afollestad.mnmlscreenrecord.ui.settings
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.afollestad.assent.Permission.RECORD_AUDIO
-import com.afollestad.assent.Permission.WRITE_EXTERNAL_STORAGE
-import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.customview.customView
-import com.afollestad.materialdialogs.customview.getCustomView
-import com.afollestad.materialdialogs.files.folderChooser
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.afollestad.mnmlscreenrecord.R
+import com.afollestad.mnmlscreenrecord.common.misc.otherwise
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_AUDIO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
@@ -42,15 +39,11 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
-import com.afollestad.mnmlscreenrecord.common.view.onProgressChanged
 import com.afollestad.mnmlscreenrecord.common.view.onScroll
 import com.afollestad.rxkprefs.Pref
 import io.reactivex.Observable.zip
 import io.reactivex.functions.BiFunction
-import kotlinx.android.synthetic.main.dialog_number_selector.view.label
-import kotlinx.android.synthetic.main.dialog_number_selector.view.seeker
 import org.koin.android.ext.android.inject
-import java.io.File
 
 /** @author Aidan Follestad (afollestad) */
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -66,13 +59,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
   // Recording
   private val countdownPref by inject<Pref<Int>>(name = PREF_COUNTDOWN)
   private val recordAudioPref by inject<Pref<Boolean>>(name = PREF_RECORD_AUDIO)
-  private val recordingsFolderPref by inject<Pref<String>>(name = PREF_RECORDINGS_FOLDER)
+  internal val recordingsFolderPref by inject<Pref<String>>(name = PREF_RECORDINGS_FOLDER)
   // Controls
   private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
   private val alwaysShowNotificationPref by inject<Pref<Boolean>>(
       name = PREF_ALWAYS_SHOW_NOTIFICATION
   )
   private val stopOnShakePref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SHAKE)
+
+  private val windowManager by inject<WindowManager>()
 
   override fun onViewCreated(
     view: View,
@@ -129,17 +124,20 @@ class SettingsFragment : PreferenceFragmentCompat() {
     // RESOLUTION
     val resolutionEntry = findPreference("resolution")
     resolutionEntry.setOnPreferenceClickListener {
-      val options = resources.getStringArray(R.array.screen_resolution_options)
-      val currentXByY = "${resolutionWidthPref.get()}x${resolutionHeightPref.get()}"
-      var defaultIndex = options.indexOf(currentXByY)
-      if (defaultIndex == -1) {
-        defaultIndex = 0
-      }
+      val context = activity ?: return@setOnPreferenceClickListener true
+      val options = windowManager.resolutionSettings(context)
+          .map { size -> size.toString() }
+          .toMutableList()
+          .apply { add(0, getString(R.string.use_screen_resolution)) }
 
-      MaterialDialog(activity!!).show {
+      val currentXByY = "${resolutionWidthPref.get()}x${resolutionHeightPref.get()}"
+      val defaultIndex = options.indexOf(currentXByY)
+          .otherwise(-1, 0)
+
+      MaterialDialog(context).show {
         title(R.string.setting_resolution)
         listItemsSingleChoice(
-            res = R.array.screen_resolution_options,
+            items = options,
             initialSelection = defaultIndex
         ) { _, which, text ->
           if (which == 0) {
@@ -308,61 +306,5 @@ class SettingsFragment : PreferenceFragmentCompat() {
     stopOnShakePref.observe()
         .subscribe { stopOnShakeEntry.isChecked = it }
         .attachLifecycle(this)
-  }
-
-  private fun showOutputFolderSelector(title: String) {
-    if (!isAllGranted(WRITE_EXTERNAL_STORAGE)) {
-      runWithPermissions(WRITE_EXTERNAL_STORAGE) {
-        showOutputFolderSelector(title)
-      }
-      return
-    }
-
-    val initialFolder = File(recordingsFolderPref.get()).apply {
-      mkdirs()
-    }
-    MaterialDialog(activity!!).show {
-      title(text = title)
-      folderChooser(
-          allowFolderCreation = true,
-          initialDirectory = initialFolder
-      ) { _, folder ->
-        recordingsFolderPref.set(folder.absolutePath)
-      }
-      positiveButton(R.string.select)
-    }
-  }
-
-  private fun showNumberSelector(
-    title: String,
-    max: Int,
-    current: Int,
-    onSelection: (Int) -> Unit
-  ) {
-    val dialog = MaterialDialog(activity!!).show {
-      title(text = title)
-      message(R.string.setting_countdown_zero_note)
-      customView(R.layout.dialog_number_selector)
-      positiveButton(android.R.string.ok) {
-        val seekBar = getCustomView()!!.seeker
-        onSelection(seekBar.progress)
-      }
-    }
-
-    val customView = dialog.getCustomView() ?: return
-    customView.label.text = "$current"
-    customView.seeker.max = max
-    customView.seeker.progress = current
-    customView.seeker.onProgressChanged {
-      customView.label.text = "$it"
-    }
-  }
-
-  private fun Int.bitRateString(): String {
-    return if (this >= 1_000_000) {
-      "${this / 1_000_000}mbps"
-    } else {
-      "${this / 1_000}kbps"
-    }
   }
 }

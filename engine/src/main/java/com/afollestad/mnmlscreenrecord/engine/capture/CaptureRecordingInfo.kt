@@ -42,27 +42,10 @@ internal fun RealCaptureEngine.getRecordingInfo(context: Context): RecordingInfo
       .otherwise(shouldReturn = displayHeight)
   log("Resolution setting: $widthSetting x $heightSetting")
 
-  var frameWidth = if (isLandscape) widthSetting else heightSetting
-  var frameHeight = if (isLandscape) heightSetting else widthSetting
+  val frameWidth = if (isLandscape) heightSetting else widthSetting
+  val frameHeight = if (isLandscape) widthSetting else heightSetting
 
-  if (frameWidth >= displayWidth && frameHeight >= displayHeight) {
-    // Frame can hold the entire display. Use exact values.
-    log("Final recording info: $displayWidth x $displayHeight @ ${displayInfo.density}")
-    return RecordingInfo(
-        width = displayWidth,
-        height = displayHeight,
-        density = displayInfo.density
-    )
-  }
-
-  // Calculate new width or height to preserve aspect ratio.
-  if (isLandscape) {
-    frameWidth = displayWidth * frameHeight / displayHeight
-  } else {
-    frameHeight = displayHeight * frameWidth / displayWidth
-  }
-
-  log("(Keeping aspect) Final recording info: $frameWidth x $frameHeight @ ${displayInfo.density}")
+  log("Final recording info: $frameWidth x $frameHeight @ ${displayInfo.density}")
   return RecordingInfo(
       width = frameWidth,
       height = frameHeight,
