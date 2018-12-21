@@ -42,6 +42,7 @@
   <string name="setting_record_audio">Record Audio</string>
   <string name="setting_record_audio_on">Audio will be recorded from your microphone during capture.</string>
   <string name="setting_record_audio_off">Audio will not be recorded during capture.</string>
+  <string name="setting_record_audio_no_mic">Your device does not have a microphone and cannot record audio.</string>
 
   <string name="setting_recordings_folder">Recordings Folder</string>
   <string name="setting_recordings_folder_desc">Recordings are saved to \"%1$s\"</string>

@@ -15,6 +15,7 @@
  */
 package com.afollestad.mnmlscreenrecord.ui.main
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.os.Bundle
@@ -187,9 +188,13 @@ class MainActivity : DarkModeSwitchActivity(),
   }
 
   private fun openRecording(recording: Recording) {
-    startActivity(Intent(ACTION_VIEW).apply {
-      setDataAndType(recording.toUri(), "video/*")
-    })
+    try {
+      startActivity(Intent(ACTION_VIEW).apply {
+        setDataAndType(recording.toUri(), "video/*")
+      })
+    } catch (_: ActivityNotFoundException) {
+      toast(R.string.install_video_viewer)
+    }
   }
 
   private fun shareRecording(recording: Recording) {

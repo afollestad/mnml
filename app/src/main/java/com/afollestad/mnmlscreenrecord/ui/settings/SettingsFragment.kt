@@ -15,6 +15,7 @@
  */
 package com.afollestad.mnmlscreenrecord.ui.settings
 
+import android.content.pm.PackageManager.FEATURE_MICROPHONE
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -193,26 +194,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
         .attachLifecycle(this)
 
-    // RECORD AUDIO
-    val recordAudioEntry = findPreference(PREF_RECORD_AUDIO) as SwitchPreference
-    recordAudioEntry.setOnPreferenceChangeListener { _, newValue ->
-      if (newValue == true) {
-        runWithPermissions(RECORD_AUDIO) {
-          recordAudioPref.set(newValue as Boolean)
-          recordAudioEntry.isChecked = true
-        }
-        false
-      } else {
-        recordAudioPref.set(false)
-        true
-      }
-    }
-    recordAudioPref.observe()
-        .subscribe {
-          recordAudioEntry.isChecked = it
-          audioBitRateEntry.isVisible = it
-        }
-        .attachLifecycle(this)
+    setupRecordAudioPref()
 
     // RECORDINGS FOLDER
     val recordingsFolderEntry = findPreference(PREF_RECORDINGS_FOLDER)
@@ -257,6 +239,37 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
     stopOnShakePref.observe()
         .subscribe { stopOnShakeEntry.isChecked = it }
+        .attachLifecycle(this)
+  }
+
+  private fun setupRecordAudioPref() {
+    val context = activity ?: throw IllegalStateException("Oh no!")
+    val micPresent = context.packageManager.hasSystemFeature(FEATURE_MICROPHONE)
+    val recordAudioEntry = findPreference(PREF_RECORD_AUDIO) as SwitchPreference
+    if (!micPresent) {
+      recordAudioEntry.isEnabled = false
+      recordAudioEntry.summary = getString(R.string.setting_record_audio_no_mic)
+      return
+    }
+
+    recordAudioEntry.isEnabled = true
+    recordAudioEntry.setOnPreferenceChangeListener { _, newValue ->
+      if (newValue == true) {
+        runWithPermissions(RECORD_AUDIO) {
+          recordAudioPref.set(newValue as Boolean)
+          recordAudioEntry.isChecked = true
+        }
+        false
+      } else {
+        recordAudioPref.set(false)
+        true
+      }
+    }
+    recordAudioPref.observe()
+        .subscribe {
+          recordAudioEntry.isChecked = it
+          findPreference(PREF_AUDIO_BIT_RATE).isVisible = it
+        }
         .attachLifecycle(this)
   }
 

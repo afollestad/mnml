@@ -23,4 +23,6 @@
   </string>
   <string name="next">Next</string>
 
+  <string name="install_video_viewer">Please install a video viewer app, such as Google Photos.</string>
+
 </resources>

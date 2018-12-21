@@ -35,8 +35,13 @@ internal fun RealCaptureEngine.createAndPrepareRecorder(context: Context): Boole
   recorder = MediaRecorder().apply {
     setVideoSource(SURFACE)
     if (recordAudioPref.get()) {
-      log("Recording audio from the mic")
-      setAudioSource(MIC)
+      try {
+        setAudioSource(MIC)
+        log("Recording audio from the mic")
+      } catch (t: Throwable) {
+        onError.onNext(Exception("Unable to set the audio source to your microphone!", t))
+        return false
+      }
     }
     setOutputFormat(MPEG_4)
 
