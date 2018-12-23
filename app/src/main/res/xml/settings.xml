@@ -2,24 +2,28 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
   <PreferenceScreen
+      android:icon="@drawable/setting_icon_ui"
       android:key="ui"
       android:layout="@layout/custom_preference_screen"
       android:summary="@string/setting_category_ui_desc"
       android:title="@string/setting_category_ui"/>
 
   <PreferenceScreen
+      android:icon="@drawable/setting_icon_recording"
       android:key="recording"
       android:layout="@layout/custom_preference_screen"
       android:summary="@string/setting_category_recording_desc"
       android:title="@string/setting_category_recording"/>
 
   <PreferenceScreen
+      android:icon="@drawable/setting_icon_quality"
       android:key="quality"
       android:layout="@layout/custom_preference_screen"
       android:summary="@string/setting_category_quality_desc"
       android:title="@string/setting_category_quality"/>
 
   <PreferenceScreen
+      android:icon="@drawable/setting_icon_controls"
       android:key="controls"
       android:layout="@layout/custom_preference_screen"
       android:summary="@string/setting_category_controls_desc"
