@@ -3,5 +3,6 @@
 
   <attr format="color" name="toolbarTitleColor"/>
   <attr format="color" name="dividerColor"/>
+  <attr format="color" name="iconColor"/>
 
 </resources>

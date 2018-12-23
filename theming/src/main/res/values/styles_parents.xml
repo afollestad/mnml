@@ -7,6 +7,7 @@
 
     <item name="toolbarTitleColor">#000000</item>
     <item name="dividerColor">#1f000000</item>
+    <item name="iconColor">#000000</item>
 
     <item name="android:windowBackground">@color/colorPrimary_lightTheme</item>
 
@@ -26,6 +27,7 @@
 
     <item name="toolbarTitleColor">#ffffff</item>
     <item name="dividerColor">#1fffffff</item>
+    <item name="iconColor">#FFFFFF</item>
 
     <item name="android:windowBackground">@color/colorPrimary_darkTheme</item>
 

@@ -48,21 +48,9 @@ class SettingsActivity : DarkModeSwitchActivity() {
 
   fun setIsInRoot(root: Boolean) {
     if (root) {
-      toolbar.setNavigationIcon(
-          if (isDarkMode()) {
-            R.drawable.ic_close_darktheme
-          } else {
-            R.drawable.ic_close_lighttheme
-          }
-      )
+      toolbar.navigationIcon = getDrawable(R.drawable.ic_close)
     } else {
-      toolbar.setNavigationIcon(
-          if (isDarkMode()) {
-            R.drawable.ic_back_darktheme
-          } else {
-            R.drawable.ic_back_lighttheme
-          }
-      )
+      toolbar.navigationIcon = getDrawable(R.drawable.ic_back)
     }
   }
 
