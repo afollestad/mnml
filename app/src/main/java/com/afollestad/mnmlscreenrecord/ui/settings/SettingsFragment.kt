@@ -15,314 +15,49 @@
  */
 package com.afollestad.mnmlscreenrecord.ui.settings
 
-import android.content.pm.PackageManager.FEATURE_MICROPHONE
 import android.os.Bundle
-import android.view.View
-import android.view.WindowManager
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreference
-import com.afollestad.assent.Permission.RECORD_AUDIO
-import com.afollestad.assent.runWithPermissions
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.list.listItemsSingleChoice
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import com.afollestad.mnmlscreenrecord.R
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_AUDIO_BIT_RATE
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
-import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
-import com.afollestad.mnmlscreenrecord.common.view.onScroll
-import com.afollestad.rxkprefs.Pref
-import org.koin.android.ext.android.inject
+import com.afollestad.mnmlscreenrecord.ui.settings.base.BaseSettingsFragment
+import com.afollestad.mnmlscreenrecord.ui.settings.sub.SettingsControlsFragment
+import com.afollestad.mnmlscreenrecord.ui.settings.sub.SettingsQualityFragment
+import com.afollestad.mnmlscreenrecord.ui.settings.sub.SettingsRecordingFragment
+import com.afollestad.mnmlscreenrecord.ui.settings.sub.SettingsUiFragment
 
 /** @author Aidan Follestad (afollestad) */
-class SettingsFragment : PreferenceFragmentCompat() {
+class SettingsFragment : BaseSettingsFragment() {
 
-  // UI
-  private val darkModePref by inject<Pref<Boolean>>(name = PREF_DARK_MODE)
-  // Quality
-  private val frameRatePref by inject<Pref<Int>>(name = PREF_FRAME_RATE)
-  //private val resolutionWidthPref by inject<Pref<Int>>(name = PREF_RESOLUTION_WIDTH)
-  //private val resolutionHeightPref by inject<Pref<Int>>(name = PREF_RESOLUTION_HEIGHT)
-  private val videoBitRatePref by inject<Pref<Int>>(name = PREF_VIDEO_BIT_RATE)
-  private val audioBitRatePref by inject<Pref<Int>>(name = PREF_AUDIO_BIT_RATE)
-  // Recording
-  private val countdownPref by inject<Pref<Int>>(name = PREF_COUNTDOWN)
-  private val recordAudioPref by inject<Pref<Boolean>>(name = PREF_RECORD_AUDIO)
-  internal val recordingsFolderPref by inject<Pref<String>>(name = PREF_RECORDINGS_FOLDER)
-  // Controls
-  private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
-  private val alwaysShowNotificationPref by inject<Pref<Boolean>>(
-      name = PREF_ALWAYS_SHOW_NOTIFICATION
-  )
-  private val stopOnShakePref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SHAKE)
+  override val isRoot: Boolean get() = true
 
-  private val windowManager by inject<WindowManager>()
-
-  override fun onViewCreated(
-    view: View,
-    savedInstanceState: Bundle?
-  ) {
-    super.onViewCreated(view, savedInstanceState)
-    listView.onScroll {
-      (activity as? SettingsActivity)?.invalidateToolbarElevation(it)
-    }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    findPreference("ui").setOnPreferenceClickListener { navigateTo(it.key) }
+    findPreference("recording").setOnPreferenceClickListener { navigateTo(it.key) }
+    findPreference("quality").setOnPreferenceClickListener { navigateTo(it.key) }
+    findPreference("controls").setOnPreferenceClickListener { navigateTo(it.key) }
   }
 
   override fun onCreatePreferences(
     savedInstanceState: Bundle?,
     rootKey: String?
-  ) {
-    setPreferencesFromResource(R.xml.settings, rootKey)
+  ) = setPreferencesFromResource(R.xml.settings, rootKey)
 
-    // DARK MODE
-    val darkModeEntry = findPreference(PREF_DARK_MODE) as SwitchPreference
-    darkModeEntry.setOnPreferenceChangeListener { _, newValue ->
-      darkModePref.set(newValue as Boolean)
-      activity?.recreate()
-      true
-    }
-    darkModePref.observe()
-        .subscribe { darkModeEntry.isChecked = it }
-        .attachLifecycle(this)
-
-    // FRAME RATE
-    val frameRateEntry = findPreference(PREF_FRAME_RATE)
-    frameRateEntry.setOnPreferenceClickListener {
-      val rawValues = resources.getIntArray(R.array.frame_rate_values)
-      val currentValue = frameRatePref.get()
-      val defaultIndex = rawValues.indexOf(currentValue)
-
-      MaterialDialog(activity!!).show {
-        title(R.string.setting_framerate)
-        listItemsSingleChoice(
-            res = R.array.frame_rate_options,
-            initialSelection = defaultIndex
-        ) { _, which, _ ->
-          frameRatePref.set(rawValues[which])
-        }
-        positiveButton(R.string.select)
-      }
-      true
-    }
-    frameRatePref.observe()
-        .subscribe {
-          frameRateEntry.summary = getString(R.string.setting_framerate_desc, it)
-        }
-        .attachLifecycle(this)
-
-    // RESOLUTION
-    setupResolutionPref()
-
-    // VIDEO BIT RATE
-    val videoBitRateEntry = findPreference(PREF_VIDEO_BIT_RATE)
-    videoBitRateEntry.setOnPreferenceClickListener {
-      val rawValues = resources.getIntArray(R.array.bit_rate_values)
-      val currentValue = videoBitRatePref.get()
-      val defaultIndex = rawValues.indexOf(currentValue)
-
-      MaterialDialog(activity!!).show {
-        title(R.string.setting_bitrate)
-        listItemsSingleChoice(
-            res = R.array.bit_rate_options,
-            initialSelection = defaultIndex
-        ) { _, which, _ ->
-          videoBitRatePref.set(rawValues[which])
-        }
-        positiveButton(R.string.select)
-      }
-      true
-    }
-    videoBitRatePref.observe()
-        .subscribe {
-          videoBitRateEntry.summary = getString(R.string.setting_bitrate_desc, it.bitRateString())
-        }
-        .attachLifecycle(this)
-
-    // AUDIO BIT RATE
-    val audioBitRateEntry = findPreference(PREF_AUDIO_BIT_RATE)
-    audioBitRateEntry.isVisible = recordAudioPref.get()
-    audioBitRateEntry.setOnPreferenceClickListener {
-      val rawValues = resources.getIntArray(R.array.audio_bit_rate_values)
-      val currentValue = audioBitRatePref.get()
-      val defaultIndex = rawValues.indexOf(currentValue)
-
-      MaterialDialog(activity!!).show {
-        title(R.string.setting_audio_bitrate)
-        listItemsSingleChoice(
-            res = R.array.audio_bit_rate_options,
-            initialSelection = defaultIndex
-        ) { _, which, _ ->
-          audioBitRatePref.set(rawValues[which])
-        }
-        positiveButton(R.string.select)
-      }
-      true
-    }
-    audioBitRatePref.observe()
-        .subscribe {
-          audioBitRateEntry.summary =
-              getString(R.string.setting_audio_bitrate_desc, it.bitRateString())
-        }
-        .attachLifecycle(this)
-
-    // COUNT DOWN
-    val countdownEntry = findPreference(PREF_COUNTDOWN)
-    countdownEntry.setOnPreferenceClickListener {
-      showNumberSelector(
-          title = countdownEntry.title.toString(),
-          max = 10,
-          current = countdownPref.get()
-      ) { selection -> countdownPref.set(selection) }
-      true
-    }
-    countdownPref.observe()
-        .subscribe {
-          if (it == 0) {
-            countdownEntry.summary = resources.getString(R.string.setting_countdown_disabled)
-          } else {
-            countdownEntry.summary = resources.getQuantityString(
-                R.plurals.setting_countdown_desc, it, it
-            )
-          }
-        }
-        .attachLifecycle(this)
-
-    setupRecordAudioPref()
-
-    // RECORDINGS FOLDER
-    val recordingsFolderEntry = findPreference(PREF_RECORDINGS_FOLDER)
-    recordingsFolderEntry.setOnPreferenceClickListener {
-      showOutputFolderSelector(recordingsFolderEntry.title.toString())
-      true
-    }
-    recordingsFolderPref.observe()
-        .subscribe {
-          recordingsFolderEntry.summary = resources.getString(
-              R.string.setting_recordings_folder_desc, it
-          )
-        }
-        .attachLifecycle(this)
-
-    // STOP ON SCREEN OFF
-    val stopOnScreenOffEntry = findPreference(PREF_STOP_ON_SCREEN_OFF) as SwitchPreference
-    stopOnScreenOffEntry.setOnPreferenceChangeListener { _, newValue ->
-      stopOnScreenOffPref.set(newValue as Boolean)
-      true
-    }
-    stopOnScreenOffPref.observe()
-        .subscribe { stopOnScreenOffEntry.isChecked = it }
-        .attachLifecycle(this)
-
-    // ALWAYS SHOW NOTIFICATION
-    val alwaysShowNotificationEntry =
-      findPreference(PREF_ALWAYS_SHOW_NOTIFICATION) as SwitchPreference
-    alwaysShowNotificationEntry.setOnPreferenceChangeListener { _, newValue ->
-      alwaysShowNotificationPref.set(newValue as Boolean)
-      true
-    }
-    alwaysShowNotificationPref.observe()
-        .subscribe { alwaysShowNotificationEntry.isChecked = it }
-        .attachLifecycle(this)
-
-    // STOP ON SHAKE
-    val stopOnShakeEntry = findPreference(PREF_STOP_ON_SHAKE) as SwitchPreference
-    stopOnShakeEntry.setOnPreferenceChangeListener { _, newValue ->
-      stopOnShakePref.set(newValue as Boolean)
-      true
-    }
-    stopOnShakePref.observe()
-        .subscribe { stopOnShakeEntry.isChecked = it }
-        .attachLifecycle(this)
-  }
-
-  private fun setupRecordAudioPref() {
-    val context = activity ?: throw IllegalStateException("Oh no!")
-    val micPresent = context.packageManager.hasSystemFeature(FEATURE_MICROPHONE)
-    val recordAudioEntry = findPreference(PREF_RECORD_AUDIO) as SwitchPreference
-    if (!micPresent) {
-      recordAudioEntry.isEnabled = false
-      recordAudioEntry.summary = getString(R.string.setting_record_audio_no_mic)
-      return
+  private fun navigateTo(key: String): Boolean {
+    val target = when (key) {
+      "ui" -> SettingsUiFragment()
+      "recording" -> SettingsRecordingFragment()
+      "quality" -> SettingsQualityFragment()
+      "controls" -> SettingsControlsFragment()
+      else -> return false
     }
 
-    recordAudioEntry.isEnabled = true
-    recordAudioEntry.setOnPreferenceChangeListener { _, newValue ->
-      if (newValue == true) {
-        runWithPermissions(RECORD_AUDIO) {
-          recordAudioPref.set(newValue as Boolean)
-          recordAudioEntry.isChecked = true
-        }
-        false
-      } else {
-        recordAudioPref.set(false)
-        true
-      }
-    }
-    recordAudioPref.observe()
-        .subscribe {
-          recordAudioEntry.isChecked = it
-          findPreference(PREF_AUDIO_BIT_RATE).isVisible = it
-        }
-        .attachLifecycle(this)
-  }
+    val fm = fragmentManager ?: return false
+    fm.beginTransaction()
+        .setTransition(TRANSIT_FRAGMENT_OPEN)
+        .replace(R.id.container, target)
+        .addToBackStack(key)
+        .commit()
 
-  private fun setupResolutionPref() {
-    val resolutionEntry = findPreference("resolution")
-    resolutionEntry.isEnabled = false
-    resolutionEntry.summary =
-        "Android makes getting this to work hard. Disabled for now. https://github.com/afollestad/mnml"
-
-    /*
-    resolutionEntry.setOnPreferenceClickListener {
-      val context = activity ?: return@setOnPreferenceClickListener true
-      val options = windowManager.resolutionSettings(context)
-          .map { size -> size.toString() }
-          .toMutableList()
-          .apply { add(0, getString(R.string.use_screen_resolution)) }
-
-      val currentXByY = "${resolutionWidthPref.get()}x${resolutionHeightPref.get()}"
-      val defaultIndex = options.indexOf(currentXByY)
-          .otherwise(-1, 0)
-
-      MaterialDialog(context).show {
-        title(R.string.setting_resolution)
-        listItemsSingleChoice(
-            items = options,
-            initialSelection = defaultIndex
-        ) { _, which, text ->
-          if (which == 0) {
-            resolutionWidthPref.delete()
-            resolutionHeightPref.delete()
-          } else {
-            val splitRes = text.split('x')
-            resolutionWidthPref.set(splitRes[0].toInt())
-            resolutionHeightPref.set(splitRes[1].toInt())
-          }
-        }
-        positiveButton(R.string.select)
-      }
-      true
-    }
-    zip(resolutionWidthPref.observe(), resolutionHeightPref.observe(),
-        BiFunction<Int, Int, Pair<Int, Int>> { w, h -> Pair(w, h) })
-        .subscribe {
-          if (it.first == 0 || it.second == 0) {
-            resolutionEntry.summary =
-                resources.getString(R.string.setting_resolution_current_screen)
-          } else {
-            resolutionEntry.summary = resources.getString(
-                R.string.setting_resolution_desc, it.first, it.second
-            )
-          }
-        }
-        .attachLifecycle(this)
-    */
+    return true
   }
 }

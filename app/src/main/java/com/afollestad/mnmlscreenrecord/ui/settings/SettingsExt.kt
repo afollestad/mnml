@@ -15,6 +15,7 @@
  */
 package com.afollestad.mnmlscreenrecord.ui.settings
 
+import androidx.fragment.app.Fragment
 import com.afollestad.assent.Permission.WRITE_EXTERNAL_STORAGE
 import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.runWithPermissions
@@ -24,11 +25,12 @@ import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.files.folderChooser
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.view.onProgressChanged
+import com.afollestad.mnmlscreenrecord.ui.settings.sub.SettingsRecordingFragment
 import kotlinx.android.synthetic.main.dialog_number_selector.view.label
 import kotlinx.android.synthetic.main.dialog_number_selector.view.seeker
 import java.io.File
 
-internal fun SettingsFragment.showNumberSelector(
+internal fun Fragment.showNumberSelector(
   title: String,
   max: Int,
   current: Int,
@@ -54,7 +56,7 @@ internal fun SettingsFragment.showNumberSelector(
   }
 }
 
-internal fun SettingsFragment.showOutputFolderSelector(title: String) {
+internal fun SettingsRecordingFragment.showOutputFolderSelector(title: String) {
   if (!isAllGranted(WRITE_EXTERNAL_STORAGE)) {
     runWithPermissions(WRITE_EXTERNAL_STORAGE) {
       showOutputFolderSelector(title)
@@ -62,7 +64,7 @@ internal fun SettingsFragment.showOutputFolderSelector(title: String) {
     return
   }
 
-  val context = activity ?: throw IllegalStateException("Oh no!")
+  val context = activity ?: return
   val initialFolder = File(recordingsFolderPref.get()).apply {
     mkdirs()
   }

@@ -36,16 +36,8 @@ class SettingsActivity : DarkModeSwitchActivity() {
       appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
     }
 
-    toolbar.setNavigationIcon(
-        if (isDarkMode()) {
-          R.drawable.ic_back_darktheme
-        } else {
-          R.drawable.ic_back_lighttheme
-        }
-    )
-    toolbar.setNavigationOnClickListener {
-      navigateUpTo(Intent(this, MainActivity::class.java))
-    }
+    setIsInRoot(true)
+    toolbar.setNavigationOnClickListener { onBackPressed() }
 
     if (savedInstanceState == null) {
       supportFragmentManager.beginTransaction()
@@ -54,11 +46,39 @@ class SettingsActivity : DarkModeSwitchActivity() {
     }
   }
 
+  fun setIsInRoot(root: Boolean) {
+    if (root) {
+      toolbar.setNavigationIcon(
+          if (isDarkMode()) {
+            R.drawable.ic_close_darktheme
+          } else {
+            R.drawable.ic_close_lighttheme
+          }
+      )
+    } else {
+      toolbar.setNavigationIcon(
+          if (isDarkMode()) {
+            R.drawable.ic_back_darktheme
+          } else {
+            R.drawable.ic_back_lighttheme
+          }
+      )
+    }
+  }
+
   fun invalidateToolbarElevation(scrollY: Int) {
     if (scrollY > (toolbar.measuredHeight / 2)) {
       appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
     } else {
       appToolbar.elevation = 0f
+    }
+  }
+
+  override fun onBackPressed() {
+    if (supportFragmentManager.backStackEntryCount > 0) {
+      supportFragmentManager.popBackStack()
+    } else {
+      navigateUpTo(Intent(this, MainActivity::class.java))
     }
   }
 }

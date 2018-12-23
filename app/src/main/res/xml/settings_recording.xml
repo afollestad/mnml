@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <PreferenceCategory
+      android:layout="@layout/custom_preference_category"
+      android:title="@string/setting_category_recording">
+
+    <Preference
+        android:key="countdown"
+        android:layout="@layout/custom_preference"
+        android:title="@string/setting_countdown"/>
+
+    <SwitchPreference
+        android:key="record_audio"
+        android:layout="@layout/custom_preference"
+        android:summaryOff="@string/setting_record_audio_off"
+        android:summaryOn="@string/setting_record_audio_on"
+        android:title="@string/setting_record_audio"/>
+
+    <Preference
+        android:key="recordings_folder"
+        android:layout="@layout/custom_preference"
+        android:summary="@string/setting_recordings_folder_desc"
+        android:title="@string/setting_recordings_folder"/>
+
+  </PreferenceCategory>
+
+</PreferenceScreen>

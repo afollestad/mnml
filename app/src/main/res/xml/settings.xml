@@ -1,98 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <PreferenceCategory
-      android:layout="@layout/custom_preference_category"
-      android:title="@string/setting_category_ui">
+  <PreferenceScreen
+      android:key="ui"
+      android:layout="@layout/custom_preference_screen"
+      android:summary="@string/setting_category_ui_desc"
+      android:title="@string/setting_category_ui"/>
 
-    <SwitchPreference
-        android:key="dark_mode"
-        android:layout="@layout/custom_preference"
-        android:summaryOff="@string/setting_dark_mode_off"
-        android:summaryOn="@string/setting_dark_mode_on"
-        android:title="@string/setting_dark_mode"/>
+  <PreferenceScreen
+      android:key="recording"
+      android:layout="@layout/custom_preference_screen"
+      android:summary="@string/setting_category_recording_desc"
+      android:title="@string/setting_category_recording"/>
 
-  </PreferenceCategory>
+  <PreferenceScreen
+      android:key="quality"
+      android:layout="@layout/custom_preference_screen"
+      android:summary="@string/setting_category_quality_desc"
+      android:title="@string/setting_category_quality"/>
 
-  <PreferenceCategory
-      android:layout="@layout/custom_preference_category"
-      android:title="@string/setting_category_recording">
-
-    <Preference
-        android:key="countdown"
-        android:layout="@layout/custom_preference"
-        android:title="@string/setting_countdown"/>
-
-    <SwitchPreference
-        android:key="record_audio"
-        android:layout="@layout/custom_preference"
-        android:summaryOff="@string/setting_record_audio_off"
-        android:summaryOn="@string/setting_record_audio_on"
-        android:title="@string/setting_record_audio"/>
-
-    <Preference
-        android:key="recordings_folder"
-        android:layout="@layout/custom_preference"
-        android:summary="@string/setting_recordings_folder_desc"
-        android:title="@string/setting_recordings_folder"/>
-
-  </PreferenceCategory>
-
-  <PreferenceCategory
-      android:layout="@layout/custom_preference_category"
-      android:title="@string/setting_category_quality">
-
-    <Preference
-        android:key="frame_rate"
-        android:layout="@layout/custom_preference"
-        android:summary="@string/setting_framerate_desc"
-        android:title="@string/setting_framerate"/>
-
-    <Preference
-        android:key="resolution"
-        android:layout="@layout/custom_preference"
-        android:summary="@string/setting_resolution_desc"
-        android:title="@string/setting_resolution"/>
-
-    <Preference
-        android:key="bit_rate"
-        android:layout="@layout/custom_preference"
-        android:summary="@string/setting_bitrate_desc"
-        android:title="@string/setting_bitrate"/>
-
-    <Preference
-        android:key="audio_bit_rate"
-        android:layout="@layout/custom_preference"
-        android:summary="@string/setting_audio_bitrate_desc"
-        android:title="@string/setting_audio_bitrate"/>
-
-  </PreferenceCategory>
-
-  <PreferenceCategory
-      android:layout="@layout/custom_preference_category"
-      android:title="@string/setting_category_controls">
-
-    <SwitchPreference
-        android:key="always_show_controls_notification"
-        android:layout="@layout/custom_preference"
-        android:summaryOff="@string/setting_always_show_notification_off"
-        android:summaryOn="@string/setting_always_show_notification_on"
-        android:title="@string/setting_always_show_notification"/>
-
-    <SwitchPreference
-        android:key="stop_on_screen_off"
-        android:layout="@layout/custom_preference"
-        android:summaryOff="@string/setting_stop_on_screen_off_desc_off"
-        android:summaryOn="@string/setting_stop_on_screen_off_desc_on"
-        android:title="@string/setting_stop_on_screen_off"/>
-
-    <SwitchPreference
-        android:key="stop_on_shake"
-        android:layout="@layout/custom_preference"
-        android:summaryOff="@string/setting_stop_on_shake_off"
-        android:summaryOn="@string/setting_stop_on_shake_on"
-        android:title="@string/setting_stop_on_shake"/>
-
-  </PreferenceCategory>
+  <PreferenceScreen
+      android:key="controls"
+      android:layout="@layout/custom_preference_screen"
+      android:summary="@string/setting_category_controls_desc"
+      android:title="@string/setting_category_controls"/>
 
 </PreferenceScreen>

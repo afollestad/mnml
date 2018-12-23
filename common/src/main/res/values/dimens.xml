@@ -5,4 +5,6 @@
   <dimen name="content_inset_less">12dp</dimen>
   <dimen name="content_inset_half">8dp</dimen>
   <dimen name="content_inset_quarter">4dp</dimen>
+
+  <dimen name="content_inset_prefs">18dp</dimen>
 </resources>
