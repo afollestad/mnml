@@ -26,7 +26,7 @@ ext.versions = [
     glide             : '4.8.0',
 
     // afollestad
-    materialDialogs   : '2.0.0-rc4',
+    materialDialogs   : '2.0.0-rc5',
     rxkPrefs          : '1.2.0',
     assent            : '2.2.0',
 
