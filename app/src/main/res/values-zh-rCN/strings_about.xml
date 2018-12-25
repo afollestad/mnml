@@ -1,0 +1,15 @@
+<resources>
+  <string name="about">关于</string>
+  <string name="about_title">MNML v%1$s</string>
+  <string name="dismiss">关闭</string>
+  <string name="about_body"><![CDATA[
+        由 <b>Aidan Follestad</b> 设计和开发。<br/>
+        <a href=\'http://aidanfollestad.com\'>网站</a>&nbsp;&nbsp;
+        <a href=\'https://twitter.com/afollestad\'>Twitter</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/afollestad\'>GitHub</a>&nbsp;&nbsp;
+        <a href=\'https://www.linkedin.com/in/afollestad\'>LinkedIn</a><br/><br/>
+        这是一个<a href=\'https://github.com/afollestad/mnml\'>开源</a>项目，并使用了
+        Apache 2.0 协议。欢迎浏览我的<a href="https://play.google.com/store/apps/dev?id=8293213872477886335">其他 app</a>。
+  ]]></string>
+
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="shortcut_record_name">开始录制</string>
+  <string name="shortcut_record_name_short">屏幕录制</string>
+
+</resources>

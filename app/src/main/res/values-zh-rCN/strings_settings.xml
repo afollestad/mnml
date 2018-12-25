@@ -1,0 +1,92 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+  <!-- UI -->
+  <string name="setting_category_ui">界面</string>
+  <string name="setting_category_ui_desc">修改主界面。</string>
+
+  <string name="setting_dark_mode">暗色主题</string>
+  <string name="setting_dark_mode_on">已启用暗色主题。</string>
+  <string name="setting_dark_mode_off">已停用暗色主题。</string>
+
+  <!-- Quality -->
+  <string name="setting_category_quality">质量</string>
+  <string name="setting_category_quality_desc">修改视频和音频的录制质量。</string>
+
+  <string name="setting_bitrate">视频码率</string>
+  <string name="setting_bitrate_desc">视频将会以 %1$s 进行录制。</string>
+
+  <string name="setting_audio_bitrate">音频码率</string>
+  <string name="setting_audio_bitrate_desc">视频将会以 %1$s 进行录制。</string>
+
+  <string name="setting_framerate">帧率</string>
+  <string name="setting_framerate_desc" tools:ignore="PluralsCandidate">
+    视频将会以 %1$d fps 进行录制。
+  </string>
+
+  <string name="setting_resolution">分辨率</string>
+  <string name="setting_resolution_desc">分辨率设置为 %1$dx%2$d。</string>
+  <string name="setting_resolution_current_screen">将会根据你的屏幕分辨率进行录制。</string>
+  <string name="use_screen_resolution">使用屏幕分辨率</string>
+
+  <!-- Recording -->
+  <string name="setting_category_recording">录制</string>
+  <string name="setting_category_recording_desc">修改录制时的行为。</string>
+
+  <string name="setting_countdown">倒计时</string>
+  <string name="setting_countdown_disabled">录制会立即开始</string>
+  <plurals name="setting_countdown_desc">
+    <!-- zero gets overridden by other so we do that programatically -->
+    <item quantity="zero">@string/setting_countdown_disabled</item>
+    <item quantity="one">开始前 %1$d 秒。</item>
+    <item quantity="other">开始前 %1$d 秒。</item>
+  </plurals>
+  <string name="setting_countdown_zero_note">当设置为 0 时，倒计时会被禁用。</string>
+
+  <string name="setting_record_audio">音频录制</string>
+  <string name="setting_record_audio_on">
+    将会录制麦克风中的声音。Google 不允许 app 进行内录。
+  </string>
+  <string name="setting_record_audio_off">不会录制音频。</string>
+  <string name="setting_record_audio_no_mic">你的设备没有麦克风，无法录制音频。</string>
+
+  <string name="setting_recordings_folder">存储位置</string>
+  <string name="setting_recordings_folder_desc">录屏将被存储至“%1$s\”。</string>
+
+  <string name="setting_show_touches">显示触摸轨迹</string>
+  <string name="setting_show_touches_desc">
+    MNML 为最新版本的 Android 进行构建，然而 Google 的相关政策限制了此项设置。
+    你可以在手机的系统设置中自行启用。
+  </string>
+
+  <!-- Controls -->
+  <string name="setting_category_controls">控制</string>
+  <string name="setting_category_controls_desc">录屏控制的相关选项。</string>
+
+  <string name="setting_stop_on_screen_off">锁屏后自动停止</string>
+  <string name="setting_stop_on_screen_off_desc_on">
+    你的设备锁屏后，所有的录屏都会停止。
+  </string>
+  <string name="setting_stop_on_screen_off_desc_off">
+    你的设备锁屏后，录屏不会停止。
+  </string>
+
+  <string name="setting_always_show_notification">始终在通知中心显示</string>
+  <string name="setting_always_show_notification_on">
+    App 启动后将会显示一个用来控制录屏的通知，这条通知不会消失，直到你手动点击了关闭按钮。
+  </string>
+  <string name="setting_always_show_notification_off">
+    用来控制录屏的通知仅会在录屏过程中显示。
+  </string>
+
+  <string name="setting_stop_on_shake">摇动来停止</string>
+  <string name="setting_stop_on_shake_on">
+    摇动手机后会停止所有录屏。
+  </string>
+  <string name="setting_stop_on_shake_off">
+    摇动手机后不会停止录屏。
+  </string>
+
+  <!-- Misc -->
+  <string name="select">选择</string>
+
+</resources>

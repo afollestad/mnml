@@ -1,0 +1,27 @@
+<resources>
+
+  <string name="app_name" translatable="false">MNML 屏幕录制</string>
+  <string name="app_name_short" translatable="false">MNML</string>
+
+  <string name="recordings_empty_text">你还没有任何录屏…</string>
+
+  <string name="settings">设置</string>
+  <string name="support_me">支持我</string>
+  <string name="provide_feedback">意见反馈</string>
+
+  <string name="support_me_message"><![CDATA[
+      <b>MNML</b> 仅由我我个人创建并维护。
+      我对你的捐款表示<b>万分</b>感激，这也将激励我持续更新这个小工具。
+  ]]></string>
+  <string name="thank_you">万分感谢！</string>
+  <string name="support_me_failed">捐赠失败</string>
+  <string name="support_me_failed_try_again">错误代码 %1$s。请稍后再试 :)</string>
+  <string name="cannot_donate">无法捐赠</string>
+  <string name="cannot_donate_debug_build">
+    MNML 仅可以使用分发版本的 app 内支付，你正在使用的是调试版本。
+  </string>
+  <string name="next">下一步</string>
+
+  <string name="install_video_viewer">请安装一个视频播放软件，如 Google Photos。</string>
+
+</resources>
