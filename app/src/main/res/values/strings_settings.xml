@@ -53,6 +53,12 @@
   <string name="setting_recordings_folder">Recordings Folder</string>
   <string name="setting_recordings_folder_desc">Recordings are saved to \"%1$s\"</string>
 
+  <string name="setting_show_touches">Show Touches</string>
+  <string name="setting_show_touches_desc">
+    MNML targets the latest versions of Android and Google now restricts access to this
+    setting, unfortunately. You can manually enable it from your phone\'s settings.
+  </string>
+
   <!-- Controls -->
   <string name="setting_category_controls">Controls</string>
   <string name="setting_category_controls_desc">Modify recording controls.</string>

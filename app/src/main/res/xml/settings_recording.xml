@@ -23,6 +23,13 @@
         android:summary="@string/setting_recordings_folder_desc"
         android:title="@string/setting_recordings_folder"/>
 
+    <Preference
+        android:enabled="false"
+        android:key="show_touches"
+        android:layout="@layout/custom_preference"
+        android:summary="@string/setting_show_touches_desc"
+        android:title="@string/setting_show_touches"/>
+
   </PreferenceCategory>
 
 </PreferenceScreen>
