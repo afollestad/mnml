@@ -20,8 +20,8 @@ dependencies {
   implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + versions.coroutines
 
   // Google/AndroidX
-  api 'androidx.appcompat:appcompat:' + versions.androidx
-  implementation 'androidx.recyclerview:recyclerview:' + versions.androidx
+  api 'androidx.appcompat:appcompat:' + versions.androidxCore
+  implementation 'androidx.recyclerview:recyclerview:' + versions.androidxRecyclerView
 
   // Koin
   api 'org.koin:koin-android:' + versions.koin
