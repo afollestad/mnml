@@ -29,14 +29,12 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
-import com.afollestad.mnmlscreenrecord.BuildConfig
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
 import com.afollestad.mnmlscreenrecord.common.misc.toast
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onDebouncedClick
 import com.afollestad.mnmlscreenrecord.common.view.onScroll
-import com.afollestad.mnmlscreenrecord.donate.DonateClient
 import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationCallback
 import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationDialog
 import com.afollestad.mnmlscreenrecord.engine.permission.StorageExplanationCallback
@@ -51,11 +49,9 @@ import com.afollestad.mnmlscreenrecord.views.asEnabled
 import com.afollestad.mnmlscreenrecord.views.asIcon
 import com.afollestad.mnmlscreenrecord.views.asText
 import com.afollestad.mnmlscreenrecord.views.asVisibility
-import com.bugsnag.android.Bugsnag
 import kotlinx.android.synthetic.main.activity_main.fab
 import kotlinx.android.synthetic.main.activity_main.list
 import kotlinx.android.synthetic.main.include_appbar.toolbar
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlinx.android.synthetic.main.activity_main.empty_view as emptyView
 import kotlinx.android.synthetic.main.include_appbar.app_toolbar as appToolbar
@@ -73,7 +69,6 @@ class MainActivity : DarkModeSwitchActivity(),
   }
 
   private val viewModel by viewModel<MainViewModel>()
-  private val donateClient by inject<DonateClient>()
 
   private lateinit var adapter: RecordingAdapter
 
@@ -87,7 +82,6 @@ class MainActivity : DarkModeSwitchActivity(),
 
     lifecycle.run {
       addObserver(viewModel)
-      addObserver(donateClient)
     }
 
     viewModel.onRecordings()
@@ -177,20 +171,12 @@ class MainActivity : DarkModeSwitchActivity(),
       when (item.itemId) {
         R.id.about -> AboutDialog.show(this@MainActivity)
         R.id.support_me -> supportMe()
-        R.id.provide_feedback -> {
-          startActivity(Intent(ACTION_VIEW).apply {
-            data = "https://github.com/afollestad/mnml/issues/new/choose".toUri()
-          })
-        }
+        R.id.provide_feedback -> viewUrl("https://github.com/afollestad/mnml/issues/new/choose")
         R.id.settings -> {
           startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
         }
-        R.id.share -> {
-          shareRecording(adapter.getSelection().single())
-        }
-        R.id.delete -> {
-          viewModel.deleteRecordings(adapter.getSelection())
-        }
+        R.id.share -> shareRecording(adapter.getSelection().single())
+        R.id.delete -> viewModel.deleteRecordings(adapter.getSelection())
       }
       true
     }
@@ -233,10 +219,57 @@ class MainActivity : DarkModeSwitchActivity(),
     viewModel.permissionGranted()
   }
 
+  private fun supportMe() {
+    MaterialDialog(this).show {
+      title(R.string.support_me)
+      message(R.string.support_me_message, html = true, lineHeightMultiplier = 1.4f)
+      listItemsSingleChoice(R.array.donation_options) { _, index, _ ->
+        toast(R.string.thank_you)
+        if (index == 0) {
+          viewUrlWithApp("https://cash.me/\$afollestad", pkg = "com.squareup.cash")
+        } else {
+          viewUrlWithApp("https://venmo.com/afollestad", pkg = "com.venmo")
+        }
+      }
+      positiveButton(R.string.next)
+    }
+  }
+
   private fun shareRecording(recording: Recording) {
     startActivity(Intent(ACTION_SEND).apply {
       setDataAndType(recording.toUri(), "video/*")
     })
+  }
+
+  private fun viewUrl(url: String) {
+    try {
+      startActivity(Intent(ACTION_VIEW).apply {
+        data = url.toUri()
+      })
+    } catch (_: ActivityNotFoundException) {
+      toast(R.string.install_web_browser)
+    }
+  }
+
+  private fun viewUrlWithApp(
+    url: String,
+    pkg: String
+  ) {
+    val intent = Intent(ACTION_VIEW).apply {
+      data = url.toUri()
+    }
+    val resInfo = packageManager.queryIntentActivities(intent, 0)
+    for (info in resInfo) {
+      if (info.activityInfo.packageName.toLowerCase().contains(pkg) ||
+          info.activityInfo.name.toLowerCase().contains(pkg)
+      ) {
+        startActivity(intent.apply {
+          setPackage(info.activityInfo.packageName)
+        })
+        return
+      }
+    }
+    viewUrl(url)
   }
 
   private fun checkForMediaProjectionAvailability() {
@@ -256,48 +289,5 @@ class MainActivity : DarkModeSwitchActivity(),
         onDismiss { finish() }
       }
     }
-  }
-
-  private fun supportMe() {
-    if (BuildConfig.DEBUG) {
-      MaterialDialog(this).show {
-        title(R.string.cannot_donate)
-        message(R.string.cannot_donate_debug_build)
-        positiveButton(R.string.okay)
-      }
-      return
-    }
-
-    donateClient.onError()
-        .subscribe {
-          Bugsnag.notify(it)
-          MaterialDialog(this).show {
-            title(R.string.support_me_failed)
-            message(text = getString(R.string.support_me_failed_try_again, it.reason))
-            positiveButton(android.R.string.ok)
-            cancelOnTouchOutside(false)
-            cancelable(false)
-          }
-        }
-        .attachLifecycle(this)
-
-    donateClient.onReady()
-        .subscribe { options ->
-          val optionNames = options.map {
-            it.title.replace(" (MNML Screen Recorder)", "")
-          }
-          MaterialDialog(this).show {
-            title(R.string.support_me)
-            message(R.string.support_me_message, html = true, lineHeightMultiplier = 1.4f)
-            listItemsSingleChoice(items = optionNames) { _, index, _ ->
-              val selection = options[index]
-              if (donateClient.makePurchase(this@MainActivity, selection)) {
-                toast(R.string.thank_you)
-              }
-            }
-            positiveButton(R.string.next)
-          }
-        }
-        .attachLifecycle(this)
   }
 }

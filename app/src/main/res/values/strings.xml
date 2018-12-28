@@ -15,15 +15,9 @@
       appreciated and encourage continued support.
   ]]></string>
   <string name="thank_you">Thank you very much!</string>
-  <string name="support_me_failed">Donation Failed</string>
-  <string name="support_me_failed_try_again">Error code %1$s. Please try again later :)</string>
-  <string name="cannot_donate">Unable to Donate</string>
-  <string name="cannot_donate_debug_build">
-    MNML is only able to access in-app billing services from release builds. You are running a
-    debug build.
-  </string>
   <string name="next">Next</string>
 
   <string name="install_video_viewer">Please install a video viewer app, such as Google Photos.</string>
+  <string name="install_web_browser">Please install a web browser app, such as Google Chrome.</string>
 
 </resources>
