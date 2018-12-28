@@ -39,6 +39,7 @@ internal fun RealCaptureEngine.createAndPrepareRecorder(context: Context): Boole
         setAudioSource(MIC)
         log("Recording audio from the mic")
       } catch (t: Throwable) {
+        recorder = null
         onError.onNext(Exception("Unable to set the audio source to your microphone!", t))
         return false
       }
@@ -76,9 +77,11 @@ internal fun RealCaptureEngine.createAndPrepareRecorder(context: Context): Boole
       prepare()
       log("Media recorder prepared")
     } catch (fe: FileNotFoundException) {
+      recorder = null
       onError.onNext(FileSystemException(fe))
       return false
     } catch (t: Throwable) {
+      recorder = null
       onError.onNext(PrepareFailedException(t))
       return false
     }
