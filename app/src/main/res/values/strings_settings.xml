@@ -8,6 +8,15 @@
   <string name="setting_dark_mode_on">Dark mode is enabled.</string>
   <string name="setting_dark_mode_off">Dark mode is disabled.</string>
 
+  <string name="setting_dark_mode_automatic">Automatic Dark Mode</string>
+  <string name="setting_dark_mode_automatic_on">Dark mode turns itself on and off based on the time of day.</string>
+  <string name="setting_dark_mode_automatic_off">Dark mode is only enabled when you switch it on and remains on until you switch it off.</string>
+
+  <string name="setting_dark_mode_automatic_start">Dark Mode Start</string>
+  <string name="setting_dark_mode_automatic_start_desc">Dark mode turns itself on at %1$s.</string>
+  <string name="setting_dark_mode_automatic_end">Dark Mode End</string>
+  <string name="setting_dark_mode_automatic_end_desc">Dark mode turns itself off at %1$s.</string>
+
   <!-- Quality -->
   <string name="setting_category_quality">Quality</string>
   <string name="setting_category_quality_desc">Modify audio and video quality.</string>

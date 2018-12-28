@@ -12,6 +12,25 @@
         android:summaryOn="@string/setting_dark_mode_on"
         android:title="@string/setting_dark_mode"/>
 
+    <SwitchPreference
+        android:key="dark_mode_automatic"
+        android:layout="@layout/custom_preference"
+        android:summaryOff="@string/setting_dark_mode_automatic_off"
+        android:summaryOn="@string/setting_dark_mode_automatic_on"
+        android:title="@string/setting_dark_mode_automatic"/>
+
+    <Preference
+        android:key="dark_mode_automatic_start"
+        android:layout="@layout/custom_preference"
+        android:summary="@string/setting_dark_mode_automatic_start_desc"
+        android:title="@string/setting_dark_mode_automatic_start"/>
+
+    <Preference
+        android:key="dark_mode_automatic_end"
+        android:layout="@layout/custom_preference"
+        android:summary="@string/setting_dark_mode_automatic_end_desc"
+        android:title="@string/setting_dark_mode_automatic_end"/>
+
   </PreferenceCategory>
 
 </PreferenceScreen>

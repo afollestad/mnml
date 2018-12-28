@@ -21,6 +21,9 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_N
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_AUDIO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_AUTOMATIC
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_END
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_START
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
@@ -39,9 +42,21 @@ val prefModule = module {
 
   single { rxkPrefs(get(), "settings") }
 
-  // Misc
+  // UI
   factory(name = PREF_DARK_MODE) {
     get<RxkPrefs>().boolean(PREF_DARK_MODE, false)
+  }
+
+  factory(name = PREF_DARK_MODE_AUTOMATIC) {
+    get<RxkPrefs>().boolean(PREF_DARK_MODE_AUTOMATIC, false)
+  }
+
+  factory(name = PREF_DARK_MODE_START) {
+    get<RxkPrefs>().string(PREF_DARK_MODE_START, "22:00")
+  }
+
+  factory(name = PREF_DARK_MODE_END) {
+    get<RxkPrefs>().string(PREF_DARK_MODE_END, "8:00")
   }
 
   // Quality

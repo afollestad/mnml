@@ -54,6 +54,7 @@ class SettingsControlsFragment : BaseSettingsFragment() {
       true
     }
     alwaysShowNotificationPref.observe()
+        .distinctUntilChanged()
         .subscribe { alwaysShowNotificationEntry.isChecked = it }
         .attachLifecycle(this)
   }
@@ -65,6 +66,7 @@ class SettingsControlsFragment : BaseSettingsFragment() {
       true
     }
     stopOnScreenOffPref.observe()
+        .distinctUntilChanged()
         .subscribe { stopOnScreenOffEntry.isChecked = it }
         .attachLifecycle(this)
   }
@@ -76,6 +78,7 @@ class SettingsControlsFragment : BaseSettingsFragment() {
       true
     }
     stopOnShakePref.observe()
+        .distinctUntilChanged()
         .subscribe { stopOnShakeEntry.isChecked = it }
         .attachLifecycle(this)
   }

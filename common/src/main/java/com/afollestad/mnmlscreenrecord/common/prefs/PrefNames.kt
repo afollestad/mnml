@@ -20,6 +20,9 @@ object PrefNames {
 
   // Misc
   const val PREF_DARK_MODE = "dark_mode"
+  const val PREF_DARK_MODE_AUTOMATIC = "dark_mode_automatic"
+  const val PREF_DARK_MODE_START = "dark_mode_automatic_start"
+  const val PREF_DARK_MODE_END = "dark_mode_automatic_end"
 
   // Quality
   const val PREF_FRAME_RATE = "frame_rate"

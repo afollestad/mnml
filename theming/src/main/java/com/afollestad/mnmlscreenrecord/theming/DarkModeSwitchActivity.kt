@@ -18,24 +18,40 @@ package com.afollestad.mnmlscreenrecord.theming
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_AUTOMATIC
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_END
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_START
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.rxkprefs.Pref
+import io.reactivex.Observable.combineLatest
+import io.reactivex.functions.Function4
 import org.koin.android.ext.android.inject
 import timber.log.Timber.d as log
 
 /** @author Aidan Follestad (afollestad) */
 abstract class DarkModeSwitchActivity : AppCompatActivity() {
 
-  private var isDark: Boolean = false
+  private var isDarkModeEnabled: Boolean = false
   private val darkModePref by inject<Pref<Boolean>>(name = PREF_DARK_MODE)
+  private val darkModeAutomaticPref by inject<Pref<Boolean>>(name = PREF_DARK_MODE_AUTOMATIC)
+  private val darkModeStartPref by inject<Pref<String>>(name = PREF_DARK_MODE_START)
+  private val darkModeEndPref by inject<Pref<String>>(name = PREF_DARK_MODE_END)
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    isDark = darkModePref.get()
+    isDarkModeEnabled = isDarkMode()
     setTheme(themeRes())
     super.onCreate(savedInstanceState)
 
-    darkModePref.observe()
-        .filter { it != isDark }
+    val darkMode = darkModePref.observe()
+    val darkModeAutomatic = darkModeAutomaticPref.observe()
+    val darkModeStart = darkModeStartPref.observe()
+    val darkModeEnd = darkModeEndPref.observe()
+
+    combineLatest(darkMode, darkModeAutomatic, darkModeStart, darkModeEnd,
+        Function4<Boolean, Boolean, String, String, DarkModeSettings> { on, auto, start, end ->
+          DarkModeSettings(on, auto, start, end)
+        })
+        .filter { it.isEnabled() != isDarkModeEnabled }
         .subscribe {
           log("Theme changed, recreating Activity.")
           recreate()
@@ -43,7 +59,15 @@ abstract class DarkModeSwitchActivity : AppCompatActivity() {
         .attachLifecycle(this)
   }
 
-  fun isDarkMode() = darkModePref.get()
+  fun isDarkMode(): Boolean {
+    val settings = DarkModeSettings(
+        on = darkModePref.get(),
+        auto = darkModeAutomaticPref.get(),
+        start = darkModeStartPref.get(),
+        end = darkModeEndPref.get()
+    )
+    return settings.isEnabled()
+  }
 
   protected open fun themeRes() = if (isDarkMode()) {
     R.style.AppTheme_Dark

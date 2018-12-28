@@ -60,6 +60,7 @@ class SettingsRecordingFragment : BaseSettingsFragment() {
       true
     }
     countdownPref.observe()
+        .distinctUntilChanged()
         .subscribe {
           countdownEntry.summary = if (it == 0) {
             resources.getString(R.string.setting_countdown_disabled)
@@ -97,6 +98,7 @@ class SettingsRecordingFragment : BaseSettingsFragment() {
       }
     }
     recordAudioPref.observe()
+        .distinctUntilChanged()
         .subscribe { recordAudioEntry.isChecked = it }
         .attachLifecycle(this)
   }
@@ -108,6 +110,7 @@ class SettingsRecordingFragment : BaseSettingsFragment() {
       true
     }
     recordingsFolderPref.observe()
+        .distinctUntilChanged()
         .subscribe {
           recordingsFolderEntry.summary = resources.getString(
               R.string.setting_recordings_folder_desc, it

@@ -71,6 +71,7 @@ class SettingsQualityFragment : BaseSettingsFragment() {
       true
     }
     frameRatePref.observe()
+        .distinctUntilChanged()
         .subscribe {
           frameRateEntry.summary = getString(R.string.setting_framerate_desc, it)
         }
@@ -150,6 +151,7 @@ class SettingsQualityFragment : BaseSettingsFragment() {
       true
     }
     videoBitRatePref.observe()
+        .distinctUntilChanged()
         .subscribe {
           videoBitRateEntry.summary = getString(R.string.setting_bitrate_desc, it.bitRateString())
         }
@@ -179,6 +181,7 @@ class SettingsQualityFragment : BaseSettingsFragment() {
       true
     }
     audioBitRatePref.observe()
+        .distinctUntilChanged()
         .subscribe {
           audioBitRateEntry.summary =
               getString(R.string.setting_audio_bitrate_desc, it.bitRateString())
