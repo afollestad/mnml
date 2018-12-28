@@ -2,6 +2,7 @@
 
   <string name="app_name" translatable="false">MNML Screen Recorder</string>
   <string name="app_name_short" translatable="false">MNML</string>
+  <string name="app_name_short_withNumber" translatable="false">MNML (%1$d)</string>
 
   <string name="recordings_empty_text">You have no recordings, yet…</string>
 

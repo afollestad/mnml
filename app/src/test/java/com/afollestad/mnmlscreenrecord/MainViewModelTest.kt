@@ -219,7 +219,7 @@ class MainViewModelTest {
         currentTimeMillis(),
         1024
     )
-    viewModel.deleteRecording(recording)
+    viewModel.deleteRecordings(listOf(recording))
 
     verify(recordingManager, times(1)).deleteRecording(recording)
     // Call to refreshRecordings() triggers this...

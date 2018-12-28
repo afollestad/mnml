@@ -174,13 +174,15 @@ class MainViewModel(
   }
 
   /**
-   * Deletes a recording's file and content provider entry - refreshes recordings
+   * Deletes recordings' files and content provider entries - refreshes recordings
    * afterwards, causing an emission to [onRecordings].
    */
-  fun deleteRecording(recording: Recording) = launch {
-    log("deleteRecording(${recording.id})")
+  fun deleteRecordings(recordings: List<Recording>) = launch {
     withContext(ioDispatcher) {
-      recordingManager.deleteRecording(recording)
+      for (recording in recordings) {
+        log("deleteRecording(${recording.id})")
+        recordingManager.deleteRecording(recording)
+      }
     }
     refreshRecordings()
   }

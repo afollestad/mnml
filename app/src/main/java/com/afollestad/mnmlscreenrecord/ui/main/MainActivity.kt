@@ -17,6 +17,7 @@ package com.afollestad.mnmlscreenrecord.ui.main
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.Intent.ACTION_SEND
 import android.content.Intent.ACTION_VIEW
 import android.os.Bundle
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
@@ -27,7 +28,6 @@ import com.afollestad.assent.askForPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.callbacks.onDismiss
-import com.afollestad.materialdialogs.list.listItems
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.afollestad.mnmlscreenrecord.BuildConfig
 import com.afollestad.mnmlscreenrecord.R
@@ -59,11 +59,14 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlinx.android.synthetic.main.activity_main.empty_view as emptyView
 import kotlinx.android.synthetic.main.include_appbar.app_toolbar as appToolbar
+import kotlinx.android.synthetic.main.include_appbar.toolbar_title as toolbarTitle
 
 /** @author Aidan Follestad (afollestad) */
 class MainActivity : DarkModeSwitchActivity(),
     StorageExplanationCallback,
-    OverlayExplanationCallback {
+    OverlayExplanationCallback,
+    AdapterCallback {
+
   companion object {
     private const val DRAW_OVER_OTHER_APP_PERMISSION = 68
     private const val STORAGE_PERMISSION = 64
@@ -132,8 +135,44 @@ class MainActivity : DarkModeSwitchActivity(),
     )
   }
 
+  override fun onEditModeChange(
+    inEditMode: Boolean,
+    selection: Int
+  ) {
+    if (inEditMode) {
+      if (toolbar.navigationIcon == null) {
+        toolbar.run {
+          setNavigationIcon(R.drawable.ic_close)
+          menu.clear()
+          inflateMenu(R.menu.edit_mode)
+        }
+      }
+      toolbarTitle.text = getString(R.string.app_name_short_withNumber, selection)
+      toolbar.menu.findItem(R.id.share)
+          .isVisible = selection == 1
+    } else {
+      toolbar.run {
+        navigationIcon = null
+        menu.clear()
+        inflateMenu(R.menu.main)
+      }
+      toolbarTitle.text = getString(R.string.app_name_short)
+    }
+  }
+
+  override fun onRecordingClicked(recording: Recording) {
+    try {
+      startActivity(Intent(ACTION_VIEW).apply {
+        setDataAndType(recording.toUri(), "video/*")
+      })
+    } catch (_: ActivityNotFoundException) {
+      toast(R.string.install_video_viewer)
+    }
+  }
+
   private fun setupToolbar() = toolbar.run {
     inflateMenu(R.menu.main)
+    setNavigationOnClickListener { adapter.exitEditMode() }
     setOnMenuItemClickListener { item ->
       when (item.itemId) {
         R.id.about -> AboutDialog.show(this@MainActivity)
@@ -146,20 +185,19 @@ class MainActivity : DarkModeSwitchActivity(),
         R.id.settings -> {
           startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
         }
+        R.id.share -> {
+          shareRecording(adapter.getSelection().single())
+        }
+        R.id.delete -> {
+          viewModel.deleteRecordings(adapter.getSelection())
+        }
       }
       true
     }
   }
 
   private fun setupGrid() {
-    adapter = RecordingAdapter { recording, longClick ->
-      if (longClick) {
-        showRecordingOptions(recording)
-      } else {
-        openRecording(recording)
-      }
-    }
-
+    adapter = RecordingAdapter(this)
     list.layoutManager = LinearLayoutManager(this)
     list.adapter = adapter
     list.onScroll { invalidateToolbarElevation(it) }
@@ -178,6 +216,14 @@ class MainActivity : DarkModeSwitchActivity(),
     invalidateToolbarElevation(list.computeVerticalScrollOffset())
   }
 
+  override fun onBackPressed() {
+    if (adapter.isEditMode()) {
+      adapter.exitEditMode()
+    } else {
+      super.onBackPressed()
+    }
+  }
+
   override fun onActivityResult(
     requestCode: Int,
     resultCode: Int,
@@ -187,32 +233,10 @@ class MainActivity : DarkModeSwitchActivity(),
     viewModel.permissionGranted()
   }
 
-  private fun openRecording(recording: Recording) {
-    try {
-      startActivity(Intent(ACTION_VIEW).apply {
-        setDataAndType(recording.toUri(), "video/*")
-      })
-    } catch (_: ActivityNotFoundException) {
-      toast(R.string.install_video_viewer)
-    }
-  }
-
   private fun shareRecording(recording: Recording) {
-    startActivity(Intent(Intent.ACTION_SEND).apply {
+    startActivity(Intent(ACTION_SEND).apply {
       setDataAndType(recording.toUri(), "video/*")
     })
-  }
-
-  private fun showRecordingOptions(recording: Recording) {
-    MaterialDialog(this).show {
-      title(text = recording.name)
-      listItems(R.array.recording_options_dialog) { _, index, _ ->
-        when (index) {
-          0 -> shareRecording(recording)
-          1 -> viewModel.deleteRecording(recording)
-        }
-      }
-    }
   }
 
   private fun checkForMediaProjectionAvailability() {

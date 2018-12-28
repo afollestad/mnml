@@ -5,18 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/accent_ripple"
-    android:paddingLeft="@dimen/content_inset"
-    android:paddingRight="@dimen/content_inset"
+    android:paddingEnd="@dimen/content_inset"
+    android:paddingStart="@dimen/content_inset_half"
     >
+
+  <androidx.appcompat.widget.AppCompatCheckBox
+      android:id="@+id/checkBox"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentStart="true"
+      android:layout_centerVertical="true"
+      android:layout_marginEnd="@dimen/content_inset_half"
+      android:clickable="false"
+      android:focusable="false"
+      />
 
   <androidx.appcompat.widget.AppCompatImageView
       android:id="@+id/thumbnail"
       android:layout_width="@dimen/list_thumbnail_size"
       android:layout_height="@dimen/list_thumbnail_size"
-      android:layout_alignParentStart="true"
+      android:layout_alignWithParentIfMissing="true"
       android:layout_marginBottom="@dimen/content_inset"
       android:layout_marginEnd="@dimen/content_inset"
+      android:layout_marginStart="@dimen/content_inset_half"
       android:layout_marginTop="@dimen/content_inset"
+      android:layout_toEndOf="@+id/checkBox"
       android:background="@drawable/divider_border"
       android:scaleType="centerCrop"
       tools:background="#400099CC"

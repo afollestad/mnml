@@ -18,63 +18,59 @@ package com.afollestad.mnmlscreenrecord.ui.main
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.view.onDebouncedClick
+import com.afollestad.mnmlscreenrecord.common.view.showOrHide
 import com.afollestad.mnmlscreenrecord.engine.recordings.Recording
+import com.afollestad.mnmlscreenrecord.ui.main.RecordingAdapter.RecordingViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import kotlinx.android.synthetic.main.list_item_recording.view.checkBox
 import kotlinx.android.synthetic.main.list_item_recording.view.details
 import kotlinx.android.synthetic.main.list_item_recording.view.name
 import kotlinx.android.synthetic.main.list_item_recording.view.thumbnail
 
-class RecordingViewHolder(
-  itemView: View,
-  private val adapter: RecordingAdapter
-) : RecyclerView.ViewHolder(itemView), OnLongClickListener {
+interface AdapterCallback {
+  fun onRecordingClicked(recording: Recording)
 
-  override fun onLongClick(v: View?): Boolean {
-    adapter.itemClicked(adapterPosition, true)
-    return false
-  }
-
-  init {
-    itemView.onDebouncedClick { adapter.itemClicked(adapterPosition, false) }
-    itemView.setOnLongClickListener(this)
-  }
-
-  /**
-   * Binds a recording to this list item's view.
-   */
-  @SuppressLint("SetTextI18n")
-  fun bind(recording: Recording) {
-    Glide.with(itemView.thumbnail)
-        .asBitmap()
-        .apply(RequestOptions().frame(0))
-        .load(recording.toUri())
-        .into(itemView.thumbnail)
-    itemView.name.text = recording.name
-    itemView.details.text = "${recording.sizeString()} – ${recording.timestampString()}"
-  }
+  fun onEditModeChange(
+    inEditMode: Boolean,
+    selection: Int
+  )
 }
 
 /** @author Aidan Follestad (@afollestad) */
 class RecordingAdapter(
-  private val onClick: (recording: Recording, longClick: Boolean) -> Unit
+  private val callback: AdapterCallback
 ) : RecyclerView.Adapter<RecordingViewHolder>() {
 
   private var recordings = mutableListOf<Recording>()
+  private val checkedItems = mutableListOf<Int>()
 
-  internal fun itemClicked(
-    position: Int,
-    long: Boolean
-  ) = onClick(recordings[position], long)
-
-  internal fun set(recordings: List<Recording>) {
+  fun set(recordings: List<Recording>) {
     this.recordings = recordings.toMutableList()
     notifyDataSetChanged()
+  }
+
+  fun enterEditMode(withIndex: Int) {
+    checkedItems.add(withIndex)
+    notifyItemRangeChanged(0, itemCount)
+    callback.onEditModeChange(true, checkedItems.size)
+  }
+
+  fun exitEditMode() {
+    if (checkedItems.isEmpty()) return
+    checkedItems.clear()
+    notifyItemRangeChanged(0, itemCount)
+    callback.onEditModeChange(false, 0)
+  }
+
+  fun isEditMode() = checkedItems.isNotEmpty()
+
+  fun getSelection() = List(checkedItems.size) { index ->
+    recordings[checkedItems[index]]
   }
 
   override fun onCreateViewHolder(
@@ -92,4 +88,50 @@ class RecordingAdapter(
     holder: RecordingViewHolder,
     position: Int
   ) = holder.bind(recordings[position])
+
+  private fun itemClicked(position: Int) {
+    if (checkedItems.isEmpty()) {
+      callback.onRecordingClicked(recordings[position])
+      return
+    }
+    if (checkedItems.contains(position)) {
+      checkedItems.remove(position)
+    } else {
+      checkedItems.add(position)
+    }
+    callback.onEditModeChange(checkedItems.isNotEmpty(), checkedItems.size)
+    if (checkedItems.isEmpty()) {
+      notifyItemRangeChanged(0, itemCount)
+    } else {
+      notifyItemChanged(position)
+    }
+  }
+
+  class RecordingViewHolder(
+    itemView: View,
+    private val adapter: RecordingAdapter
+  ) : RecyclerView.ViewHolder(itemView) {
+
+    init {
+      itemView.onDebouncedClick { adapter.itemClicked(adapterPosition) }
+      itemView.setOnLongClickListener {
+        adapter.enterEditMode(adapterPosition)
+        true
+      }
+    }
+
+    /** Binds a recording to this list item's view.*/
+    @SuppressLint("SetTextI18n")
+    fun bind(recording: Recording) {
+      Glide.with(itemView.thumbnail)
+          .asBitmap()
+          .apply(RequestOptions().frame(0))
+          .load(recording.toUri())
+          .into(itemView.thumbnail)
+      itemView.name.text = recording.name
+      itemView.details.text = "${recording.sizeString()} – ${recording.timestampString()}"
+      itemView.checkBox.showOrHide(adapter.checkedItems.isNotEmpty())
+      itemView.checkBox.isChecked = adapter.checkedItems.contains(adapterPosition)
+    }
+  }
 }
