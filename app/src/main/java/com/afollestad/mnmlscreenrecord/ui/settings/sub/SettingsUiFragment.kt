@@ -25,6 +25,7 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_STA
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.theming.splitTime
 import com.afollestad.mnmlscreenrecord.ui.settings.base.BaseSettingsFragment
+import com.afollestad.mnmlscreenrecord.ui.settings.dialogs.TimeCallback
 import com.afollestad.mnmlscreenrecord.ui.settings.dialogs.TimePickerDialog
 import com.afollestad.rxkprefs.Pref
 import org.koin.android.ext.android.inject
@@ -35,7 +36,7 @@ import java.util.Calendar.MINUTE
 import java.util.Locale
 
 /** @author Aidan Follestad (@afollestad) */
-class SettingsUiFragment : BaseSettingsFragment() {
+class SettingsUiFragment : BaseSettingsFragment(), TimeCallback {
 
   private val darkModePref by inject<Pref<Boolean>>(name = PREF_DARK_MODE)
   private val darkModeAutoPref by inject<Pref<Boolean>>(name = PREF_DARK_MODE_AUTOMATIC)
@@ -79,8 +80,7 @@ class SettingsUiFragment : BaseSettingsFragment() {
         .attachLifecycle(this)
 
     darkModeStartEntry.setOnPreferenceClickListener {
-      val fm = fragmentManager ?: return@setOnPreferenceClickListener false
-      TimePickerDialog.show(fm, it.key, it.title)
+      TimePickerDialog.show(this, it.key, it.title)
       true
     }
     darkModeStartPref.observe()
@@ -92,8 +92,7 @@ class SettingsUiFragment : BaseSettingsFragment() {
         .attachLifecycle(this)
 
     darkModeEndEntry.setOnPreferenceClickListener {
-      val fm = fragmentManager ?: return@setOnPreferenceClickListener false
-      TimePickerDialog.show(fm, it.key, it.title)
+      TimePickerDialog.show(this, it.key, it.title)
       true
     }
     darkModeEndPref.observe()
@@ -103,6 +102,15 @@ class SettingsUiFragment : BaseSettingsFragment() {
               getString(R.string.setting_dark_mode_automatic_end_desc, formattedTime)
         }
         .attachLifecycle(this)
+  }
+
+  override fun onTimeSelected(
+    key: String,
+    hour: Int,
+    minute: Int
+  ) {
+    val pref by inject<Pref<String>>(name = key)
+    pref.set("$hour:$minute")
   }
 }
 

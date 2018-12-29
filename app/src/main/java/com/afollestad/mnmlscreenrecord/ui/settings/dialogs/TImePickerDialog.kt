@@ -19,7 +19,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.Fragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -30,6 +30,14 @@ import com.afollestad.mnmlscreenrecord.theming.splitTime
 import com.afollestad.rxkprefs.Pref
 import org.koin.android.ext.android.inject
 
+interface TimeCallback {
+  fun onTimeSelected(
+    key: String,
+    hour: Int,
+    minute: Int
+  )
+}
+
 /** @author Aidan Follestad (@afollestad) */
 class TimePickerDialog : DialogFragment() {
 
@@ -38,18 +46,18 @@ class TimePickerDialog : DialogFragment() {
     private const val KEY_ID = "id"
     private const val KEY_TITLE = "title"
 
-    fun show(
-      fragmentManager: FragmentManager,
+    fun <T> show(
+      fragment: T,
       id: String,
       title: CharSequence
-    ) {
+    ) where T : Fragment, T : TimeCallback {
       val dialog = TimePickerDialog().apply {
         arguments = Bundle().apply {
           putString(KEY_ID, id)
           putString(KEY_TITLE, title.toString())
         }
       }
-      dialog.show(fragmentManager, TAG)
+      dialog.show(fragment.childFragmentManager, TAG)
     }
   }
 
@@ -57,21 +65,24 @@ class TimePickerDialog : DialogFragment() {
     val context = activity ?: blowUp()
     val args = arguments ?: blowUp()
     val id = arguments?.getString(KEY_ID) ?: blowUp()
-    val pref by inject<Pref<String>>(name = id)
 
     val dialog = MaterialDialog(context)
         .title(text = args.getString(KEY_TITLE))
         .customView(R.layout.dialog_clock)
+        .noAutoDismiss()
         .positiveButton(android.R.string.ok) {
+          val callback = parentFragment as? TimeCallback ?: blowUp()
           val customView = it.getCustomView() ?: return@positiveButton
           val clock = customView.findViewById<TimePicker>(R.id.clock)
-          pref.set("${clock.hour}:${clock.minute}")
+          callback.onTimeSelected(id, clock.hour, clock.minute)
+          dismiss()
         }
         .onDismiss { dismiss() }
         .onCancel { dismiss() }
 
     val customView = dialog.getCustomView() ?: blowUp()
     val clock = customView.findViewById<TimePicker>(R.id.clock)
+    val pref by inject<Pref<String>>(name = id)
     val time = pref.get()
         .splitTime()
     clock.hour = time[0]

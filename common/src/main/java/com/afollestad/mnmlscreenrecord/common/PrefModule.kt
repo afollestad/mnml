@@ -52,7 +52,7 @@ val prefModule = module {
   }
 
   factory(name = PREF_DARK_MODE_START) {
-    get<RxkPrefs>().string(PREF_DARK_MODE_START, "22:00")
+    get<RxkPrefs>().string(PREF_DARK_MODE_START, "20:00")
   }
 
   factory(name = PREF_DARK_MODE_END) {
