@@ -8,7 +8,6 @@
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
   <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
-  <uses-permission android:name="com.android.vending.BILLING"/>
   <uses-permission android:name="TASKS"/>
 
   <application
