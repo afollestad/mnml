@@ -24,7 +24,6 @@ ext.versions = [
     androidxPrefs       : '1.0.0',
 
     // Other Google
-    billing             : '1.2',
     lifecycle           : '2.0.0',
 
     // Glide
