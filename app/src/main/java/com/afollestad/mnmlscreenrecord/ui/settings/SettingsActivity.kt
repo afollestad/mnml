@@ -32,10 +32,6 @@ class SettingsActivity : DarkModeSwitchActivity() {
     setContentView(R.layout.activity_settings)
 
     toolbarTitle.setText(R.string.settings)
-    if (!isDarkMode()) {
-      appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
-    }
-
     setIsInRoot(true)
     toolbar.setNavigationOnClickListener { onBackPressed() }
 
