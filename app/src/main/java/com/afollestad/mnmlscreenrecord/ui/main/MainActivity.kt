@@ -98,10 +98,10 @@ class MainActivity : DarkModeSwitchActivity(),
         .asEnabled(this, fab)
 
     viewModel.onNeedOverlayPermission()
-        .subscribe { OverlayExplanationDialog.show(this@MainActivity) }
+        .subscribe { OverlayExplanationDialog.show(this) }
         .attachLifecycle(this)
     viewModel.onNeedStoragePermission()
-        .subscribe { StorageExplanationDialog.show(this@MainActivity) }
+        .subscribe { StorageExplanationDialog.show(this) }
         .attachLifecycle(this)
 
     checkForMediaProjectionAvailability()
