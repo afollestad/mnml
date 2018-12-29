@@ -32,7 +32,7 @@ ext.versions = [
 
     // afollestad
     materialDialogs     : '2.0.0-rc5',
-    rxkPrefs            : '1.2.0',
+    rxkPrefs            : '1.2.1',
     assent              : '2.2.2',
 
     // RxJava
