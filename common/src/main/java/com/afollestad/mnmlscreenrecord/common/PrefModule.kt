@@ -82,7 +82,7 @@ val prefModule = module {
 
   // Recording
   factory(name = PREF_COUNTDOWN) {
-    get<RxkPrefs>().integer(PREF_COUNTDOWN, 0)
+    get<RxkPrefs>().integer(PREF_COUNTDOWN, 3)
   }
 
   factory(name = PREF_RECORDINGS_FOLDER) {
