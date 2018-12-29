@@ -87,10 +87,7 @@ val prefModule = module {
 
   factory(name = PREF_RECORDINGS_FOLDER) {
     val dcim = getExternalStoragePublicDirectory(DIRECTORY_DCIM)
-    var default = File(dcim.parentFile, "MNML Screen Recorder")
-    if (!default.canWrite()) {
-      default = File(dcim, "MNML Screen Recorder")
-    }
+    val default = File(dcim.parentFile, "MNML Screen Recorder")
     get<RxkPrefs>().string(PREF_RECORDINGS_FOLDER, default.absolutePath)
   }
 
