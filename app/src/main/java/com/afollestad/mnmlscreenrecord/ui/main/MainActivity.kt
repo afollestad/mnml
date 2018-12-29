@@ -142,8 +142,10 @@ class MainActivity : DarkModeSwitchActivity(),
         }
       }
       toolbarTitle.text = getString(R.string.app_name_short_withNumber, selection)
-      toolbar.menu.findItem(R.id.share)
-          .isVisible = selection == 1
+      toolbar.menu.run {
+        findItem(R.id.share).isVisible = selection == 1
+        findItem(R.id.delete).isEnabled = selection > 0
+      }
     } else {
       toolbar.run {
         navigationIcon = null

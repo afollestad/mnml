@@ -69,8 +69,11 @@ class RecordingAdapter(
 
   fun isEditMode() = checkedItems.isNotEmpty()
 
-  fun getSelection() = List(checkedItems.size) { index ->
-    recordings[checkedItems[index]]
+  fun getSelection(): List<Recording> {
+    return if (checkedItems.isEmpty()) listOf()
+    else List(checkedItems.size) { index ->
+      recordings[checkedItems[index]]
+    }
   }
 
   override fun onCreateViewHolder(
