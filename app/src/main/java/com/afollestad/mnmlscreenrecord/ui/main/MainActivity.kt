@@ -178,7 +178,10 @@ class MainActivity : DarkModeSwitchActivity(),
           startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
         }
         R.id.share -> shareRecording(adapter.getSelection().single())
-        R.id.delete -> viewModel.deleteRecordings(adapter.getSelection())
+        R.id.delete -> {
+          viewModel.deleteRecordings(adapter.getSelection())
+          adapter.exitEditMode()
+        }
       }
       true
     }
