@@ -178,7 +178,7 @@ class MainViewModelTest {
         .test()
     viewModel.refreshRecordings()
 
-    emptyViewVisibility.assertValues(true, true)
+    emptyViewVisibility.assertValues(true)
     needStoragePermission.assertValueCount(1)
     onRecordings.assertNoValues()
     verify(recordingManager, never()).getRecordings()
@@ -205,7 +205,7 @@ class MainViewModelTest {
         .test()
     viewModel.refreshRecordings()
 
-    emptyViewVisibility.assertValues(true, false)
+    emptyViewVisibility.assertValues(false, false)
     needStoragePermission.assertNoValues()
     onRecordings.assertValues(recordings)
   }

@@ -72,9 +72,7 @@ class MainViewModel(
 
   // Main
   private val recordings = MutableLiveData<List<Recording>>()
-  private val emptyViewVisibility = MutableLiveData<Boolean>().apply {
-    value = true
-  }
+  private val emptyViewVisibility = MutableLiveData<Boolean>()
 
   // FAB
   private val fabColorRes = MutableLiveData<Int>()
@@ -166,6 +164,7 @@ class MainViewModel(
       return@launch
     }
 
+    emptyViewVisibility.value = false
     val result = withContext(ioDispatcher) {
       recordingManager.getRecordings()
     }
