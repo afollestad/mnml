@@ -2,7 +2,7 @@
 
   <!-- UI -->
   <string name="setting_category_ui">UI</string>
-  <string name="setting_category_ui_desc">Modify the main UI.</string>
+  <string name="setting_category_ui_desc">Modify the app\'s UI theming.</string>
 
   <string name="setting_dark_mode">Dark Mode</string>
   <string name="setting_dark_mode_on">Dark mode is enabled.</string>
@@ -19,7 +19,7 @@
 
   <!-- Quality -->
   <string name="setting_category_quality">Quality</string>
-  <string name="setting_category_quality_desc">Modify audio and video quality.</string>
+  <string name="setting_category_quality_desc">Modify audio and video quality such as frame rate and bit rate.</string>
 
   <string name="setting_bitrate">Video Bit Rate</string>
   <string name="setting_bitrate_desc">Screen capture will record at %1$s</string>
@@ -39,13 +39,12 @@
 
   <!-- Recording -->
   <string name="setting_category_recording">Recording</string>
-  <string name="setting_category_recording_desc">Modify recording behavior.</string>
+  <string name="setting_category_recording_desc">Modify recording behavior, such as a start countdown, showing on-screen touches, etc.</string>
 
   <string name="setting_countdown">Countdown</string>
   <string name="setting_countdown_disabled">Recording will begin immediately.</string>
   <plurals name="setting_countdown_desc">
-    <!-- zero gets overridden by other so we do that programatically -->
-    <item quantity="zero">@string/setting_countdown_disabled</item>
+    <item quantity="zero" translatable="false">@string/setting_countdown_disabled</item>
     <item quantity="one">%1$d second before recording begins.</item>
     <item quantity="other">%1$d seconds before recording begins.</item>
   </plurals>
@@ -70,7 +69,7 @@
 
   <!-- Controls -->
   <string name="setting_category_controls">Controls</string>
-  <string name="setting_category_controls_desc">Modify recording controls.</string>
+  <string name="setting_category_controls_desc">Modify recording controls, such as stop on shake, stop on screen off, etc.</string>
 
   <string name="setting_stop_on_screen_off">Stop on Screen Off</string>
   <string name="setting_stop_on_screen_off_desc_on">
