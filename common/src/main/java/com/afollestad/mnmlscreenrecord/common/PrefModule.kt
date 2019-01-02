@@ -29,6 +29,7 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FO
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RESOLUTION_HEIGHT
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RESOLUTION_WIDTH
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_SHOW_TOUCHES
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
@@ -93,6 +94,10 @@ val prefModule = module {
 
   factory(name = PREF_RECORD_AUDIO) {
     get<RxkPrefs>().boolean(PREF_RECORD_AUDIO, false)
+  }
+
+  factory(name = PREF_SHOW_TOUCHES) {
+    get<RxkPrefs>().boolean(PREF_SHOW_TOUCHES, false)
   }
 
   // Controls

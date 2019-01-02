@@ -32,11 +32,14 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FO
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RESOLUTION_HEIGHT
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RESOLUTION_WIDTH
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_SHOW_TOUCHES
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.engine.capture.CaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.capture.RealCaptureEngine
 import com.afollestad.mnmlscreenrecord.engine.overlay.OverlayManager
 import com.afollestad.mnmlscreenrecord.engine.overlay.RealOverlayManager
+import com.afollestad.mnmlscreenrecord.engine.overlay.RealShowTouchesManager
+import com.afollestad.mnmlscreenrecord.engine.overlay.ShowTouchesManager
 import com.afollestad.mnmlscreenrecord.engine.recordings.RealRecordingManager
 import com.afollestad.mnmlscreenrecord.engine.recordings.RealRecordingScanner
 import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingManager
@@ -88,4 +91,11 @@ val engineModule = module {
   } bind OverlayManager::class
 
   factory { RealServiceController(get()) } bind ServiceController::class
+
+  factory {
+    RealShowTouchesManager(
+        get(),
+        get(name = PREF_SHOW_TOUCHES)
+    )
+  } bind ShowTouchesManager::class
 }

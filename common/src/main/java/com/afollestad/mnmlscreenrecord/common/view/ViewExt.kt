@@ -18,6 +18,7 @@ package com.afollestad.mnmlscreenrecord.common.view
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.ScrollView
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
 
@@ -67,6 +68,10 @@ fun RecyclerView.onScroll(scroll: (Int) -> Unit) {
       scroll(computeVerticalScrollOffset())
     }
   })
+}
+
+fun ScrollView.onScroll(scroll: (Int) -> Unit) {
+  viewTreeObserver.addOnScrollChangedListener { scroll(scrollY) }
 }
 
 /**

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:padding="@dimen/content_inset"
+      >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/write_secure_settings_permission"
+        style="@style/AppTheme.TextAppearance.Subheader.Accent"
+        />
+
+    <TextView
+        android:text="@string/write_secure_settings_permission_desc"
+        style="@style/WriteSecureSettings.Body"
+        />
+
+    <View style="@style/Divider"/>
+
+    <TextView
+        android:layout_marginTop="0dp"
+        android:text="@string/write_secure_settings_step1"
+        style="@style/WriteSecureSettings.Header"
+        />
+
+    <TextView
+        android:text="@string/write_secure_settings_step1_desc"
+        style="@style/WriteSecureSettings.Body"
+        />
+
+    <TextView
+        android:text="@string/write_secure_settings_step2"
+        style="@style/WriteSecureSettings.Header"
+        />
+
+    <TextView
+        android:text="@string/write_secure_settings_step2_desc"
+        style="@style/WriteSecureSettings.Body"
+        />
+
+    <TextView
+        android:text="@string/write_secure_settings_step3"
+        style="@style/WriteSecureSettings.Header"
+        />
+
+    <LinearLayout
+        android:id="@+id/install_adb_option1"
+        android:layout_marginTop="@dimen/content_inset_half"
+        tools:ignore="UseCompoundDrawables"
+        style="@style/WriteSecureSettings.Option"
+        >
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="@dimen/content_inset_more"
+          android:src="@drawable/ic_watch_video"
+          tools:ignore="ContentDescription"
+          />
+
+      <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/write_secure_settings_step3_option1"
+          style="@style/AppTheme.TextAppearance.Body"
+          />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/install_adb_option2"
+        tools:ignore="UseCompoundDrawables"
+        style="@style/WriteSecureSettings.Option"
+        >
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="@dimen/content_inset_more"
+          android:src="@drawable/ic_link"
+          tools:ignore="ContentDescription"
+          />
+
+      <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/write_secure_settings_step3_option2"
+          style="@style/AppTheme.TextAppearance.Body"
+          />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/install_adb_option3"
+        tools:ignore="UseCompoundDrawables"
+        style="@style/WriteSecureSettings.Option"
+        >
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="@dimen/content_inset_more"
+          android:src="@drawable/ic_link"
+          tools:ignore="ContentDescription"
+          />
+
+      <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/write_secure_settings_step3_option3"
+          style="@style/AppTheme.TextAppearance.Body"
+          />
+
+    </LinearLayout>
+
+    <TextView
+        android:text="@string/write_secure_settings_step4"
+        style="@style/WriteSecureSettings.Header"
+        />
+
+    <TextView
+        android:text="@string/write_secure_settings_step4_desc"
+        style="@style/WriteSecureSettings.Body"
+        />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/content_inset_quarter"
+        >
+
+      <TextView
+          android:id="@+id/adb_command"
+          android:layout_marginTop="@dimen/content_inset_quarter"
+          android:background="@drawable/divider_border"
+          android:maxLines="1"
+          android:paddingBottom="@dimen/content_inset_more"
+          android:paddingLeft="@dimen/content_inset"
+          android:paddingRight="@dimen/content_inset"
+          android:paddingTop="@dimen/content_inset_more"
+          android:text="@string/write_secure_settings_step4_command"
+          style="@style/WriteSecureSettings.Body"
+          />
+
+    </HorizontalScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/check_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/content_inset"
+        android:text="@string/write_secure_settings_verify"
+        style="@style/Widget.MaterialComponents.Button"
+        />
+
+  </LinearLayout>
+
+</ScrollView>

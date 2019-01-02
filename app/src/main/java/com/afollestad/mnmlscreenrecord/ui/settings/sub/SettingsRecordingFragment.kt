@@ -17,6 +17,7 @@ package com.afollestad.mnmlscreenrecord.ui.settings.sub
 
 import android.content.pm.PackageManager.FEATURE_MICROPHONE
 import android.os.Bundle
+import androidx.fragment.app.FragmentTransaction
 import androidx.preference.SwitchPreference
 import com.afollestad.assent.Permission.RECORD_AUDIO
 import com.afollestad.assent.runWithPermissions
@@ -24,7 +25,9 @@ import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_SHOW_TOUCHES
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
+import com.afollestad.mnmlscreenrecord.engine.overlay.ShowTouchesManager
 import com.afollestad.mnmlscreenrecord.ui.settings.base.BaseSettingsFragment
 import com.afollestad.mnmlscreenrecord.ui.settings.showNumberSelector
 import com.afollestad.mnmlscreenrecord.ui.settings.showOutputFolderSelector
@@ -37,6 +40,9 @@ class SettingsRecordingFragment : BaseSettingsFragment() {
   private val countdownPref by inject<Pref<Int>>(name = PREF_COUNTDOWN)
   private val recordAudioPref by inject<Pref<Boolean>>(name = PREF_RECORD_AUDIO)
   internal val recordingsFolderPref by inject<Pref<String>>(name = PREF_RECORDINGS_FOLDER)
+  private val showTouchesPref by inject<Pref<Boolean>>(name = PREF_SHOW_TOUCHES)
+
+  private val showTouchesManager by inject<ShowTouchesManager>()
 
   override fun onCreatePreferences(
     savedInstanceState: Bundle?,
@@ -47,6 +53,7 @@ class SettingsRecordingFragment : BaseSettingsFragment() {
     setupCountdownPref()
     setupRecordAudioPref()
     setupRecordingsFolderPref()
+    setupShowTouchesPref()
   }
 
   private fun setupCountdownPref() {
@@ -116,6 +123,41 @@ class SettingsRecordingFragment : BaseSettingsFragment() {
               R.string.setting_recordings_folder_desc, it
           )
         }
+        .attachLifecycle(this)
+  }
+
+  private fun setupShowTouchesPref() {
+    val showTouchesEntry = findPreference(PREF_SHOW_TOUCHES) as SwitchPreference
+
+    if (!showTouchesManager.canShowTouches()) {
+      showTouchesPref.set(false)
+      showTouchesEntry.isChecked = false
+      showTouchesEntry.setSummaryOn(R.string.setting_show_touches_permission_needed_desc)
+      showTouchesEntry.setSummaryOff(R.string.setting_show_touches_permission_needed_desc)
+      showTouchesEntry.onPreferenceChangeListener = null
+      showTouchesEntry.setOnPreferenceClickListener {
+        val fm = fragmentManager ?: return@setOnPreferenceClickListener false
+        fm.beginTransaction()
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .replace(R.id.container, SecureSettingsInstructionsFragment())
+            .addToBackStack("write_secure_settings")
+            .commit()
+        true
+      }
+      return
+    }
+
+    showTouchesEntry.setSummaryOn(R.string.setting_show_touches_on_desc)
+    showTouchesEntry.setSummaryOff(R.string.setting_show_touches_off_desc)
+    showTouchesEntry.onPreferenceClickListener = null
+    showTouchesEntry.setOnPreferenceChangeListener { _, newValue ->
+      showTouchesPref.set(newValue as Boolean)
+      true
+    }
+
+    showTouchesPref.observe()
+        .distinctUntilChanged()
+        .subscribe { showTouchesEntry.isChecked = it }
         .attachLifecycle(this)
   }
 }

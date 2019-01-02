@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="write_secure_settings_permission">Write Secure Settings Permission</string>
+  <string name="write_secure_settings_permission_desc">
+    As of Android 6.0 (Marshmallow), Google no longer allows apps to get access to this permission
+    from your device itself. Now, you need to manually grant this permission from an external
+    computer running macOS/Windows/Linux. It will only be used for things such as toggling your
+    phone\'s \"Show Touches\" setting.
+  </string>
+
+  <string name="write_secure_settings_step1">1. Enable Developer Mode</string>
+  <string name="write_secure_settings_step1_desc">
+    Go to your phone\'s settings -> About Phone (under \"System\" on Android 9) -> Tap the
+    \"Build Number\" seven times or until you see a message saying \"you are a developer\".
+  </string>
+
+  <string name="write_secure_settings_step2">2. Enable USB Debugging</string>
+  <string name="write_secure_settings_step2_desc">
+    Go to your phone\'s settings -> Developer Options -> Enable USB Debugging. Plug your phone
+    into your computer, and grant your computer access to your phone in the dialog that opens on
+    your phone.
+  </string>
+
+  <string name="write_secure_settings_step3">3. Install ADB on your Computer</string>
+  <string name="write_secure_settings_step3_option1">Gadget Hacks - Run ADB commands using Google Chrome</string>
+  <string name="write_secure_settings_step3_link1">
+    https://www.youtube.com/watch?v=CDuxcrrWLnY
+  </string>
+  <string name="write_secure_settings_step3_option2">Lifehacker - The Easiest Way to Install Android ADB</string>
+  <string name="write_secure_settings_step3_link2">
+    https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378
+  </string>
+  <string name="write_secure_settings_step3_option3">XDA Developers - How to Install ADB…</string>
+  <string name="write_secure_settings_step3_link3">
+    https://www.xda-developers.com/install-adb-windows-macos-linux
+  </string>
+
+  <string name="write_secure_settings_step4">4. Run ADB Command</string>
+  <string name="write_secure_settings_step4_desc">From your computer, while your phone is plugged into it, run:</string>
+  <string name="write_secure_settings_step4_command">adb shell pm grant %1$s android.permission.WRITE_SECURE_SETTINGS</string>
+
+  <string name="write_secure_settings_verify">Verify Access</string>
+  <string name="write_secure_settings_verify_denied">Write secure settings permission isn\'t granted yet…</string>
+
+</resources>

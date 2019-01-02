@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="WriteSecureSettings"/>
+
+  <style name="WriteSecureSettings.Header" parent="AppTheme.TextAppearance.Subheader">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">@dimen/content_inset</item>
+  </style>
+
+  <style name="WriteSecureSettings.Body" parent="AppTheme.TextAppearance.Body">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">@dimen/content_inset_less</item>
+  </style>
+
+  <style name="WriteSecureSettings.Option">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:background">@drawable/accent_ripple</item>
+    <item name="android:gravity">center</item>
+    <item name="android:paddingTop">@dimen/content_inset_less</item>
+    <item name="android:paddingBottom">@dimen/content_inset_less</item>
+    <item name="android:minHeight">48dp</item>
+    <item name="android:orientation">horizontal</item>
+  </style>
+
+  <style name="Divider">
+    <item name="android:background">?dividerColor</item>
+    <item name="android:layout_marginTop">@dimen/content_inset</item>
+    <item name="android:layout_marginBottom">@dimen/content_inset</item>
+    <item name="android:layout_height">1dp</item>
+    <item name="android:layout_width">match_parent</item>
+  </style>
+
+</resources>

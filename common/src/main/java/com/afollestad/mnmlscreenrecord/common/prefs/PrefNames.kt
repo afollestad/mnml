@@ -35,6 +35,7 @@ object PrefNames {
   const val PREF_COUNTDOWN = "countdown"
   const val PREF_RECORD_AUDIO = "record_audio"
   const val PREF_RECORDINGS_FOLDER = "recordings_folder"
+  const val PREF_SHOW_TOUCHES = "show_touches"
 
   // Controls
   const val PREF_ALWAYS_SHOW_NOTIFICATION = "always_show_controls_notification"

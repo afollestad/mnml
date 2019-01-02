@@ -62,10 +62,12 @@
   <string name="setting_recordings_folder_desc">Recordings are saved to \"%1$s\"</string>
 
   <string name="setting_show_touches">Show Touches</string>
-  <string name="setting_show_touches_desc">
-    MNML targets the latest versions of Android and Google now restricts access to this
-    setting, unfortunately. You can manually enable it from your phone\'s settings.
+  <string name="setting_show_touches_permission_needed_desc">
+    Google restricts this heavily on newer versions of Android. You need access to a computer in
+    order to give this app permission to write secure settings. Tap for instructions.
   </string>
+  <string name="setting_show_touches_on_desc">On-screen taps will be visible in your recorded videos.</string>
+  <string name="setting_show_touches_off_desc">On-screen taps will NOT be visible in your recorded videos.</string>
 
   <!-- Controls -->
   <string name="setting_category_controls">Controls</string>

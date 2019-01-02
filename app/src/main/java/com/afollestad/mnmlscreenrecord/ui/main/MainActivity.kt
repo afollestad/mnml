@@ -16,6 +16,7 @@
 package com.afollestad.mnmlscreenrecord.ui.main
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_SEND
 import android.content.Intent.ACTION_VIEW
@@ -246,16 +247,6 @@ class MainActivity : DarkModeSwitchActivity(),
     })
   }
 
-  private fun viewUrl(url: String) {
-    try {
-      startActivity(Intent(ACTION_VIEW).apply {
-        data = url.toUri()
-      })
-    } catch (_: ActivityNotFoundException) {
-      toast(R.string.install_web_browser)
-    }
-  }
-
   private fun viewUrlWithApp(
     url: String,
     pkg: String
@@ -294,5 +285,15 @@ class MainActivity : DarkModeSwitchActivity(),
         onDismiss { finish() }
       }
     }
+  }
+}
+
+internal fun Context.viewUrl(url: String) {
+  try {
+    startActivity(Intent(ACTION_VIEW).apply {
+      data = url.toUri()
+    })
+  } catch (_: ActivityNotFoundException) {
+    toast(R.string.install_web_browser)
   }
 }
