@@ -230,12 +230,12 @@ class MainActivity : DarkModeSwitchActivity(),
       title(R.string.support_me)
       message(R.string.support_me_message, html = true, lineHeightMultiplier = 1.4f)
       listItemsSingleChoice(R.array.donation_options) { _, index, _ ->
-        toast(R.string.thank_you)
-        if (index == 0) {
-          viewUrlWithApp("https://cash.me/\$afollestad", pkg = "com.squareup.cash")
-        } else {
-          viewUrlWithApp("https://venmo.com/afollestad", pkg = "com.venmo")
+        when (index) {
+          0 -> viewUrl("https://paypal.me/AidanFollestad")
+          1 -> viewUrlWithApp("https://cash.me/\$afollestad", pkg = "com.squareup.cash")
+          2 -> viewUrlWithApp("https://venmo.com/afollestad", pkg = "com.venmo")
         }
+        toast(R.string.thank_you)
       }
       positiveButton(R.string.next)
     }

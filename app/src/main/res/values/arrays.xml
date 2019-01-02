@@ -2,8 +2,9 @@
 <resources>
 
   <string-array name="donation_options">
-    <item>via Cash App (Square)</item>
-    <item>via Venmo (PayPal)</item>
+    <item>via PayPal</item>
+    <item>via Cash App</item>
+    <item>via Venmo</item>
   </string-array>
 
   <string-array name="bit_rate_options" translatable="false">
