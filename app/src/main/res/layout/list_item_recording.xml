@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/accent_ripple"
     android:paddingEnd="@dimen/content_inset"
-    android:paddingStart="@dimen/content_inset_half"
+    android:paddingStart="@dimen/content_inset_less"
     >
 
   <androidx.appcompat.widget.AppCompatCheckBox

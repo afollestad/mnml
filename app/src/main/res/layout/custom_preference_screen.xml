@@ -6,7 +6,10 @@
     android:baselineAligned="false"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:padding="@dimen/content_inset"
+    android:paddingBottom="@dimen/content_inset"
+    android:paddingEnd="@dimen/content_inset"
+    android:paddingStart="@dimen/content_inset_less"
+    android:paddingTop="@dimen/content_inset"
     >
 
   <androidx.appcompat.widget.AppCompatImageView
