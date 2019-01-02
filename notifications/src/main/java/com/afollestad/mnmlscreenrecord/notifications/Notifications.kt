@@ -168,6 +168,13 @@ class RealNotifications(
         R.layout.foreground_notification
     ).apply {
       setTextViewText(R.id.notification_text, app.getString(contentText))
+    }
+
+    val remoteViewsExpanded = RemoteViews(
+        "com.afollestad.mnmlscreenrecord",
+        R.layout.foreground_notification_expanded
+    ).apply {
+      setTextViewText(R.id.notification_text, app.getString(contentText))
       setOnClickPendingIntent(R.id.action_record, recordIntent)
       setViewVisibility(R.id.action_record, !isRecording)
       setOnClickPendingIntent(R.id.action_stop, broadcast(STOP_REQUEST, STOP_ACTION))
@@ -181,6 +188,7 @@ class RealNotifications(
           setContentIntent(appIntent)
           setStyle(NotificationCompat.DecoratedCustomViewStyle())
           setCustomContentView(remoteViews)
+          setCustomBigContentView(remoteViewsExpanded)
         }
         .build()
   }
