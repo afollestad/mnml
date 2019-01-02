@@ -39,7 +39,7 @@
 
   <!-- Recording -->
   <string name="setting_category_recording">Recording</string>
-  <string name="setting_category_recording_desc">Modify recording behavior, such as a start countdown, showing on-screen touches, etc.</string>
+  <string name="setting_category_recording_desc">Modify recording behavior, such as a start countdown, the output folder, etc.</string>
 
   <string name="setting_countdown">Countdown</string>
   <string name="setting_countdown_disabled">Recording will begin immediately.</string>
