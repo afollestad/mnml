@@ -8,7 +8,7 @@ MNML, pronounced "minimal", is a free and simple screen recorder for Android. Th
 screen recorders out there now that are badly designed, have too many unnecessary features, 
 or have ads.
 
-<img src="https://raw.githubusercontent.com/afollestad/mnml/master/showcase1.png" width="250" /><img src="https://raw.githubusercontent.com/afollestad/mnml/master/showcase2.png" width="250" />
+<img src="https://raw.githubusercontent.com/afollestad/mnml/master/showcase3.png" width="600" />
 
 **Redistributing this app as your own is NOT permitted.**
 
