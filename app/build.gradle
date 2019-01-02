@@ -53,6 +53,7 @@ dependencies {
   implementation 'androidx.preference:preference:' + versions.androidxPrefs
   implementation 'androidx.lifecycle:lifecycle-extensions:' + versions.lifecycle
   kapt 'androidx.lifecycle:lifecycle-compiler:' + versions.lifecycle
+  implementation 'androidx.browser:browser:' + versions.androidxBrowser
 
   // Koin
   implementation 'org.koin:koin-androidx-scope:' + versions.koin

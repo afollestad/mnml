@@ -22,6 +22,7 @@ import android.content.Intent.ACTION_VIEW
 import android.content.Intent.EXTRA_STREAM
 import android.os.Bundle
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.assent.Permission.WRITE_EXTERNAL_STORAGE
@@ -30,6 +31,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
+import com.afollestad.materialdialogs.utils.MDUtil.resolveColor
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
 import com.afollestad.mnmlscreenrecord.common.misc.toast
@@ -250,10 +252,13 @@ class MainActivity : DarkModeSwitchActivity(),
   }
 
   private fun viewUrl(url: String) {
+    val customTabsIntent = CustomTabsIntent.Builder()
+        .apply {
+          setToolbarColor(resolveColor(this@MainActivity, attr = R.attr.colorPrimary))
+        }
+        .build()
     try {
-      startActivity(Intent(ACTION_VIEW).apply {
-        data = url.toUri()
-      })
+      customTabsIntent.launchUrl(this, url.toUri())
     } catch (_: ActivityNotFoundException) {
       toast(R.string.install_web_browser)
     }

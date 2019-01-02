@@ -22,6 +22,7 @@ ext.versions = [
     androidxRecyclerView: '1.0.0',
     androidxMaterial    : '1.0.0',
     androidxPrefs       : '1.0.0',
+    androidxBrowser     : '1.0.0',
 
     // Other Google
     lifecycle           : '2.0.0',
