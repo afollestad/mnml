@@ -19,6 +19,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.Intent.ACTION_SEND
 import android.content.Intent.ACTION_VIEW
+import android.content.Intent.EXTRA_STREAM
 import android.os.Bundle
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
 import androidx.lifecycle.Observer
@@ -241,8 +242,10 @@ class MainActivity : DarkModeSwitchActivity(),
   }
 
   private fun shareRecording(recording: Recording) {
+    val uri = recording.toUri()
     startActivity(Intent(ACTION_SEND).apply {
-      setDataAndType(recording.toUri(), "video/*")
+      setDataAndType(uri, "video/*")
+      putExtra(EXTRA_STREAM, uri)
     })
   }
 
