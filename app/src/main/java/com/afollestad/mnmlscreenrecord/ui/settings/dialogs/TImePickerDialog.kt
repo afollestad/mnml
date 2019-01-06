@@ -64,7 +64,7 @@ class TimePickerDialog : DialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val context = activity ?: blowUp()
     val args = arguments ?: blowUp()
-    val id = arguments?.getString(KEY_ID) ?: blowUp()
+    val id = args.getString(KEY_ID) ?: blowUp()
 
     val dialog = MaterialDialog(context)
         .title(text = args.getString(KEY_TITLE))
