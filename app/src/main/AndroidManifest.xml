@@ -7,6 +7,7 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
   <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+  <uses-permission android:name="android.permission.INTERNET"/>
 
   <uses-permission android:name="TASKS"/>
 
@@ -52,6 +53,9 @@
       </intent-filter>
     </activity>
 
+    <meta-data
+        android:name="io.fabric.ApiKey"
+        android:value="${fabricKey}"/>
     <meta-data
         android:name="preloaded_fonts"
         android:resource="@array/preloaded_fonts"/>

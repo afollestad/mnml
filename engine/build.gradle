@@ -26,7 +26,9 @@ dependencies {
   implementation 'com.afollestad:assent:' + versions.assent
 
   // Debug
-  implementation 'com.bugsnag:bugsnag-android:' + versions.bugsnag
+  implementation("com.crashlytics.sdk.android:crashlytics:${versions.fabric}") {
+    transitive = true
+  }
 }
 
 apply from: '../spotless.gradle'
