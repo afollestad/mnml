@@ -13,7 +13,7 @@ def getFabricApiKey() {
   }
   Properties properties = new Properties()
   properties.load(propsFile.newDataInputStream())
-  return properties.getProperty("bugsnag.apikey") ?: ""
+  return properties.getProperty("fabric.apikey") ?: ""
 }
 
 android {
