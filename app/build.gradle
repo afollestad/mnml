@@ -4,9 +4,9 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'com.bugsnag.android.gradle'
+apply plugin: 'io.fabric'
 
-def getBugsnagApiKey() {
+def getFabricApiKey() {
   def propsFile = project.rootProject.file('local.properties')
   if (!propsFile.exists()) {
     return ""
@@ -26,14 +26,15 @@ android {
     targetSdkVersion versions.compileSdk
     versionCode versions.publishVersionCode
     versionName versions.publishVersion
+    manifestPlaceholders = [fabricKey:getFabricApiKey()]
   }
 
   buildTypes {
     debug {
-      buildConfigField "String", "BUGSNAG_API_KEY", "\"\""
+      buildConfigField "String", "FABRIC_API_KEY", "\"\""
     }
     release {
-      buildConfigField "String", "BUGSNAG_API_KEY", "\"${getBugsnagApiKey()}\""
+      buildConfigField "String", "FABRIC_API_KEY", "\"${getFabricApiKey()}\""
     }
   }
 }
@@ -69,7 +70,9 @@ dependencies {
   kapt 'com.github.bumptech.glide:compiler:' + versions.glide
 
   // Debug
-  implementation 'com.bugsnag:bugsnag-android:' + versions.bugsnag
+  implementation("com.crashlytics.sdk.android:crashlytics:${versions.fabric}") {
+    transitive = true
+  }
 
   // Test
   testImplementation 'junit:junit:' + versions.junit

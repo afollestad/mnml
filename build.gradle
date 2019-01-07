@@ -7,13 +7,14 @@ buildscript {
   repositories {
     google()
     jcenter()
+    maven { url 'https://maven.fabric.io/public' }
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:' + versions.gradlePlugin
     classpath 'com.diffplug.spotless:spotless-plugin-gradle:' + versions.spotlessPlugin
     classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:' + versions.kotlin
     classpath 'com.github.ben-manes:gradle-versions-plugin:' + versions.versionPlugin
-    classpath 'com.bugsnag:bugsnag-android-gradle-plugin:' + versions.bugsnagPlugin
+    classpath 'io.fabric.tools:gradle:' + versions.fabricPlugin
   }
 }
 

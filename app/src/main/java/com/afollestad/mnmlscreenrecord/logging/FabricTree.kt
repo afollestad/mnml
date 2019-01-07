@@ -15,18 +15,11 @@
  */
 package com.afollestad.mnmlscreenrecord.logging
 
-import android.util.Log.ASSERT
-import android.util.Log.DEBUG
-import android.util.Log.ERROR
-import android.util.Log.INFO
-import android.util.Log.VERBOSE
-import android.util.Log.WARN
-import com.bugsnag.android.BreadcrumbType.STATE
-import com.bugsnag.android.Bugsnag
+import com.crashlytics.android.Crashlytics
 import timber.log.Timber
 
 /** @author Aidan Follestad (@afollestad) */
-class BugsnagTree : Timber.Tree() {
+class FabricTree : Timber.Tree() {
 
   override fun log(
     priority: Int,
@@ -35,20 +28,10 @@ class BugsnagTree : Timber.Tree() {
     t: Throwable?
   ) {
     if (t != null) {
-      Bugsnag.leaveBreadcrumb("crash_tag", STATE, mutableMapOf("tag" to tag))
-      Bugsnag.notify(t)
+      Crashlytics.setString("crash_tag", tag)
+      Crashlytics.logException(t)
     } else {
-      Bugsnag.leaveBreadcrumb("${priority.priorityString()}${tag ?: "??"}: $message")
+      Crashlytics.log(priority, tag, message)
     }
-  }
-
-  private fun Int.priorityString() = when (this) {
-    VERBOSE -> "W/"
-    DEBUG -> "D/"
-    INFO -> "I/"
-    WARN -> "W/"
-    ERROR -> "E/"
-    ASSERT -> "A/"
-    else -> "?"
   }
 }
