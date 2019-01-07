@@ -5,7 +5,7 @@
   <color name="colorPrimaryDark_lightTheme">#F5F5F5</color>
 
   <color name="colorPrimary_darkTheme">#212121</color>
-  <color name="colorPrimaryDark_darkTheme">#000000</color>
+  <color name="colorPrimaryDark_darkTheme">#212121</color>
 
   <color name="colorAccent">#2979FF</color>
   <color name="colorAccent_translucent">#402979FF</color>
