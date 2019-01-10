@@ -37,6 +37,7 @@ ext.versions = [
 
     // RxJava
     rxJava              : '2.2.4',
+    rxAndroid           : '2.1.0',
 
     // Square
     seismic             : '1.0.2',

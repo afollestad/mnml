@@ -69,6 +69,7 @@ class MainViewModel(
   // One-off Subjects (these do not want to storage values, just emit events)
   private val needStoragePermission = PublishSubject.create<Unit>()
   private val needOverlayPermission = PublishSubject.create<Unit>()
+  private val onError = PublishSubject.create<Exception>()
 
   // Main
   private val recordings = MutableLiveData<List<Recording>>()
@@ -115,6 +116,10 @@ class MainViewModel(
   /** Emits when the app needs system overlay permissions. */
   @CheckResult
   fun onNeedOverlayPermission(): Observable<Unit> = needOverlayPermission
+
+  /** Emits when an error occurs that the user should see. */
+  @CheckResult
+  fun onError(): Observable<Exception> = onError
 
   // Lifecycle Events
 
@@ -166,7 +171,12 @@ class MainViewModel(
 
     emptyViewVisibility.value = false
     val result = withContext(ioDispatcher) {
-      recordingManager.getRecordings()
+      try {
+        recordingManager.getRecordings()
+      } catch (e: Exception) {
+        onError.onNext(e)
+        emptyList<Recording>()
+      }
     }
     recordings.value = result
     emptyViewVisibility.value = result.isEmpty()

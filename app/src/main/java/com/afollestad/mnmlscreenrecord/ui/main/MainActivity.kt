@@ -44,6 +44,7 @@ import com.afollestad.mnmlscreenrecord.engine.permission.StorageExplanationCallb
 import com.afollestad.mnmlscreenrecord.engine.permission.StorageExplanationDialog
 import com.afollestad.mnmlscreenrecord.engine.recordings.Recording
 import com.afollestad.mnmlscreenrecord.engine.service.BackgroundService.Companion.PERMISSION_DENIED
+import com.afollestad.mnmlscreenrecord.engine.service.ErrorDialogActivity
 import com.afollestad.mnmlscreenrecord.theming.DarkModeSwitchActivity
 import com.afollestad.mnmlscreenrecord.ui.about.AboutDialog
 import com.afollestad.mnmlscreenrecord.ui.settings.SettingsActivity
@@ -52,6 +53,7 @@ import com.afollestad.mnmlscreenrecord.views.asEnabled
 import com.afollestad.mnmlscreenrecord.views.asIcon
 import com.afollestad.mnmlscreenrecord.views.asText
 import com.afollestad.mnmlscreenrecord.views.asVisibility
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import kotlinx.android.synthetic.main.activity_main.fab
 import kotlinx.android.synthetic.main.activity_main.list
 import kotlinx.android.synthetic.main.include_appbar.toolbar
@@ -101,10 +103,16 @@ class MainActivity : DarkModeSwitchActivity(),
         .asEnabled(this, fab)
 
     viewModel.onNeedOverlayPermission()
+        .observeOn(mainThread())
         .subscribe { OverlayExplanationDialog.show(this) }
         .attachLifecycle(this)
     viewModel.onNeedStoragePermission()
+        .observeOn(mainThread())
         .subscribe { StorageExplanationDialog.show(this) }
+        .attachLifecycle(this)
+    viewModel.onError()
+        .observeOn(mainThread())
+        .subscribe { ErrorDialogActivity.show(this, it) }
         .attachLifecycle(this)
 
     checkForMediaProjectionAvailability()
