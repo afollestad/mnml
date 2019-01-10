@@ -55,7 +55,7 @@
     Audio will be recorded from your microphone during capture. Google does not allow apps to
     record internal audio.
   </string>
-  <string name="setting_record_audio_off">Audio will not be recorded during capture.</string>
+  <string name="setting_record_audio_off">Audio will not be recorded during capture. Note that Google does not allow internal audio to be recorded, only from your microphone.</string>
   <string name="setting_record_audio_no_mic">Your device does not have a microphone and cannot record audio.</string>
 
   <string name="setting_recordings_folder">Recordings Folder</string>
