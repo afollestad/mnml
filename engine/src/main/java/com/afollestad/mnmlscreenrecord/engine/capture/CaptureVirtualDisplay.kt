@@ -43,8 +43,11 @@ internal fun RealCaptureEngine.createVirtualDisplayAndStart(context: Context) {
 
 internal fun RealCaptureEngine.createVirtualDisplay(context: Context): VirtualDisplay {
   val recordingInfo = getRecordingInfo(context)
-  val surface = recorder?.surface ?: throw Exception(
+  val engineRecorder = recorder ?: throw Exception(
       "Recorder is unexpectedly null, this appears to be a device-specific issue."
+  )
+  val surface = engineRecorder.surface ?: throw Exception(
+      "Recorder Surface is unexpectedly null."
   )
   val width = recordingInfo.width
   val height = recordingInfo.height
