@@ -15,6 +15,8 @@
  */
 package com.afollestad.mnmlscreenrecord.ui.settings
 
+import android.os.Environment.DIRECTORY_DCIM
+import android.os.Environment.getExternalStoragePublicDirectory
 import androidx.fragment.app.Fragment
 import com.afollestad.assent.Permission.WRITE_EXTERNAL_STORAGE
 import com.afollestad.assent.isAllGranted
@@ -65,9 +67,13 @@ internal fun SettingsRecordingFragment.showOutputFolderSelector(title: String) {
   }
 
   val context = activity ?: return
-  val initialFolder = File(recordingsFolderPref.get()).apply {
-    mkdirs()
+  var initialFolder = File(recordingsFolderPref.get())
+  if (!initialFolder.canWrite()) {
+    val dcim = getExternalStoragePublicDirectory(DIRECTORY_DCIM)
+    initialFolder = File(dcim, "MNML Recordings")
   }
+  initialFolder.mkdirs()
+
   MaterialDialog(context).show {
     title(text = title)
     folderChooser(
