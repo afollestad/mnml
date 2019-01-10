@@ -19,8 +19,10 @@ import android.app.Application
 import android.content.Context
 import android.content.Context.MEDIA_PROJECTION_SERVICE
 import android.content.Context.SENSOR_SERVICE
+import android.content.Context.VIBRATOR_SERVICE
 import android.hardware.SensorManager
 import android.media.projection.MediaProjectionManager
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.appcompat.view.ContextThemeWrapper
@@ -62,6 +64,8 @@ val engineModule = module {
   }
 
   factory<SensorManager> { get<Application>().systemService(SENSOR_SERVICE) }
+
+  factory<Vibrator> { get<Application>().systemService(VIBRATOR_SERVICE) }
 
   factory {
     RealRecordingManager(get(), get(name = PREF_RECORDINGS_FOLDER))

@@ -38,6 +38,9 @@ ext.versions = [
     // RxJava
     rxJava              : '2.2.4',
 
+    // Square
+    seismic             : '1.0.2',
+
     // Debug
     timber              : '4.7.1',
     fabric              : '2.9.8@aar',

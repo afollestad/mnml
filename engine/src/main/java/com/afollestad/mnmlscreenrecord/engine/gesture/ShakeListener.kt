@@ -17,35 +17,53 @@
 
 package com.afollestad.mnmlscreenrecord.engine.gesture
 
-import android.hardware.Sensor
-import android.hardware.Sensor.TYPE_ACCELEROMETER
 import android.hardware.SensorManager
-import android.hardware.SensorManager.SENSOR_DELAY_UI
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.VibrationEffect.DEFAULT_AMPLITUDE
+import android.os.Vibrator
+import com.squareup.seismic.ShakeDetector
 import timber.log.Timber.d as log
 
 /** @author Aidan Follestad (@afollestad) */
 internal class ShakeListener(
   private val sensorManager: SensorManager,
-  callback: ShakeCallback
-) {
+  private val vibrator: Vibrator,
+  private val callback: () -> Unit
+) : ShakeDetector.Listener {
 
-  private val shakeDetector = ShakeDetector(callback)
-  private var accelerometer: Sensor? = null
+  companion object {
+    private const val VIBRATION_DURATION = 200L
+  }
+
+  override fun hearShake() {
+    log("Detected shake")
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      vibrator.vibrate(VibrationEffect.createOneShot(VIBRATION_DURATION, DEFAULT_AMPLITUDE))
+    } else {
+      @Suppress("DEPRECATION")
+      vibrator.vibrate(VIBRATION_DURATION)
+    }
+    callback.invoke()
+  }
+
+  private var shakeDetector: ShakeDetector? = null
 
   /** Initializes the shake detector. */
   fun start() {
     log("start()")
-    accelerometer = sensorManager.getDefaultSensor(TYPE_ACCELEROMETER)
-    sensorManager.registerListener(shakeDetector, accelerometer, SENSOR_DELAY_UI)
+    if (shakeDetector != null) {
+      return
+    }
+    shakeDetector = ShakeDetector(this).apply {
+      start(sensorManager)
+    }
   }
 
   /** Stops the shake detector. */
   fun stop() {
-    if (accelerometer == null) {
-      return
-    }
     log("stop()")
-    sensorManager.unregisterListener(shakeDetector)
-    accelerometer = null
+    shakeDetector?.stop()
+    shakeDetector = null
   }
 }

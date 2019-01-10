@@ -25,6 +25,9 @@ dependencies {
   implementation 'com.afollestad.material-dialogs:core:' + versions.materialDialogs
   implementation 'com.afollestad:assent:' + versions.assent
 
+  // Square
+  implementation 'com.squareup:seismic:' + versions.seismic
+
   // Debug
   implementation("com.crashlytics.sdk.android:crashlytics:${versions.fabric}") {
     transitive = true

@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.afollestad.mnmlscreenrecord.engine">
 
+  <uses-permission android:name="android.permission.VIBRATE"/>
+
   <application>
 
     <service

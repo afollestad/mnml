@@ -21,6 +21,7 @@ import android.content.Intent.ACTION_SCREEN_OFF
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.hardware.SensorManager
 import android.os.IBinder
+import android.os.Vibrator
 import androidx.lifecycle.LifecycleOwner
 import com.afollestad.mnmlscreenrecord.common.intent.IntentReceiver
 import com.afollestad.mnmlscreenrecord.common.lifecycle.SimpleLifecycle
@@ -73,6 +74,7 @@ class BackgroundService : Service(), LifecycleOwner {
   private val recordingManager by inject<RecordingManager>()
   private val mainActivityClass by inject<Class<*>>(name = MAIN_ACTIVITY_CLASS)
   private val sensorManager by inject<SensorManager>()
+  private val vibrator by inject<Vibrator>()
   private val permissionChecker by inject<PermissionChecker>()
 
   private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
@@ -81,11 +83,9 @@ class BackgroundService : Service(), LifecycleOwner {
   )
   private val stopOnShakePref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SHAKE)
 
-  private val shakeListener = ShakeListener(sensorManager) {
-    if (it == 2) {
-      log("Got 2 shakes!")
-      stopRecording(false)
-    }
+  private val shakeListener = ShakeListener(sensorManager, vibrator) {
+    log("Got 2 shakes!")
+    stopRecording(false)
   }
 
   override fun onBind(intent: Intent?): IBinder? = null
