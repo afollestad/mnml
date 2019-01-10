@@ -84,7 +84,6 @@ class BackgroundService : Service(), LifecycleOwner {
   private val stopOnShakePref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SHAKE)
 
   private val shakeListener = ShakeListener(sensorManager, vibrator) {
-    log("Got 2 shakes!")
     stopRecording(false)
   }
 
