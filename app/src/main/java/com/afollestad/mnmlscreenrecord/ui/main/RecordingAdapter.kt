@@ -51,6 +51,7 @@ class RecordingAdapter(
 
   fun set(recordings: List<Recording>) {
     this.recordings = recordings.toMutableList()
+    this.checkedItems.clear()
     notifyDataSetChanged()
   }
 
