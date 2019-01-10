@@ -37,7 +37,8 @@ object PrefNames {
   const val PREF_RECORDINGS_FOLDER = "recordings_folder"
 
   // Controls
-  const val PREF_ALWAYS_SHOW_NOTIFICATION = "always_show_controls_notification"
+  const val PREF_ALWAYS_SHOW_CONTROLS = "always_show_controls_notification"
   const val PREF_STOP_ON_SCREEN_OFF = "stop_on_screen_off"
   const val PREF_STOP_ON_SHAKE = "stop_on_shake"
+  const val PREF_FLOATING_CONTROLS = "floating_controls"
 }

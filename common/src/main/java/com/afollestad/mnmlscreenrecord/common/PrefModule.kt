@@ -17,13 +17,14 @@ package com.afollestad.mnmlscreenrecord.common
 
 import android.os.Environment.DIRECTORY_DCIM
 import android.os.Environment.getExternalStoragePublicDirectory
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_CONTROLS
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_AUDIO_BIT_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_AUTOMATIC
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_END
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_START
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FLOATING_CONTROLS
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
@@ -100,11 +101,15 @@ val prefModule = module {
     get<RxkPrefs>().boolean(PREF_STOP_ON_SCREEN_OFF, true)
   }
 
-  factory(name = PREF_ALWAYS_SHOW_NOTIFICATION) {
-    get<RxkPrefs>().boolean(PREF_ALWAYS_SHOW_NOTIFICATION, false)
+  factory(name = PREF_ALWAYS_SHOW_CONTROLS) {
+    get<RxkPrefs>().boolean(PREF_ALWAYS_SHOW_CONTROLS, false)
   }
 
   factory(name = PREF_STOP_ON_SHAKE) {
     get<RxkPrefs>().boolean(PREF_STOP_ON_SHAKE, true)
+  }
+
+  factory(name = PREF_FLOATING_CONTROLS) {
+    get<RxkPrefs>().boolean(PREF_FLOATING_CONTROLS, false)
   }
 }

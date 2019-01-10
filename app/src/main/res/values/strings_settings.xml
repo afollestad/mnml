@@ -79,15 +79,6 @@
     When your screen is turned off, nothing special will happen.
   </string>
 
-  <string name="setting_always_show_notification">Always Show Notification</string>
-  <string name="setting_always_show_notification_on">
-    The persistent controls notification is shown when the app is launched, and won\'t go
-    away until you dismiss it with the \'X\' button.
-  </string>
-  <string name="setting_always_show_notification_off">
-    The persistent controls notification is only show when capture is in-progress.
-  </string>
-
   <string name="setting_stop_on_shake">Stop on Shake</string>
   <string name="setting_stop_on_shake_on">
     Shaking your device will stop any active screen recording.
@@ -95,6 +86,19 @@
   <string name="setting_stop_on_shake_off">
     Shaking your device won\'t do anything special.
   </string>
+
+  <string name="setting_floating_controls">Floating Controls</string>
+  <string name="setting_floating_controls_on">
+    A floating button is overlaid on your screen to quickly start &amp; stop recording.
+  </string>
+  <string name="setting_floating_controls_off">The floating button is disabled.</string>
+
+  <string name="setting_always_show_controls">Always Show Controls</string>
+  <string name="setting_always_show_controls_on">
+    Controls such as the notification &amp; the floating button are shown when the app is launched,
+    and won\'t go away until you dismiss the notification or floating button.
+  </string>
+  <string name="setting_always_show_controls_off">Controls are only shown when capture is in-progress.</string>
 
   <!-- Misc -->
   <string name="select">Select</string>

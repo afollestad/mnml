@@ -17,7 +17,7 @@ package com.afollestad.mnmlscreenrecord.di
 
 import com.afollestad.mnmlscreenrecord.common.Qualifiers.IO_DISPATCHER
 import com.afollestad.mnmlscreenrecord.common.Qualifiers.MAIN_DISPATCHER
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_NOTIFICATION
+import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_CONTROLS
 import com.afollestad.mnmlscreenrecord.ui.main.MainViewModel
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -36,7 +36,7 @@ val viewModelModule = module {
         get(),
         get(),
         get(),
-        get(name = PREF_ALWAYS_SHOW_NOTIFICATION)
+        get(name = PREF_ALWAYS_SHOW_CONTROLS)
     )
   }
 }

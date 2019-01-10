@@ -20,6 +20,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
@@ -47,11 +48,25 @@ class OverlayExplanationDialog : DialogFragment() {
         Crashlytics.log("Not showing OverlayExplanationDialog due to IllegalStateException.")
       }
     }
+
+    fun <T> show(context: T) where T : Fragment, T : OverlayExplanationCallback {
+      val dialog = OverlayExplanationDialog()
+      try {
+        dialog.show(context.childFragmentManager, TAG)
+      } catch (_: java.lang.IllegalStateException) {
+        Crashlytics.log("Not showing OverlayExplanationDialog due to IllegalStateException.")
+      }
+    }
   }
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val context = activity ?: throw IllegalStateException("Oh no!")
-    val callback = context as OverlayExplanationCallback
+    var callback = context as? OverlayExplanationCallback
+    if (callback == null) {
+      callback = parentFragment as? OverlayExplanationCallback ?: throw IllegalStateException(
+          "Couldn't find callback from Activity or parent Fragment."
+      )
+    }
 
     try {
       return MaterialDialog(context)
