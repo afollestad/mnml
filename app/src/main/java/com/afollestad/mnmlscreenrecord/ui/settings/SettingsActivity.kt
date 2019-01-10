@@ -34,7 +34,11 @@ class SettingsActivity : DarkModeSwitchActivity() {
     toolbarTitle.setText(R.string.settings)
     setIsInRoot(true)
     toolbar.setNavigationOnClickListener {
-      navigateUpTo(Intent(this, MainActivity::class.java))
+      if (supportFragmentManager.backStackEntryCount > 0) {
+        supportFragmentManager.popBackStack()
+      } else {
+        navigateUpTo(Intent(this, MainActivity::class.java))
+      }
     }
 
     if (savedInstanceState == null) {
