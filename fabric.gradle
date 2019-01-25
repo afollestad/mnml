@@ -1,0 +1,32 @@
+apply plugin: 'io.fabric'
+
+ext.getFabricApiKey = {
+  return System.getenv('FABRIC_APIKEY') ?: "0"
+}
+
+ext.getFabricApiSecret = {
+  return System.getenv('FABRIC_APISECRET') ?: "0"
+}
+
+def buildFabricProperties() {
+  def propertiesFile = file("fabric.properties")
+  def apiSecret = getFabricApiSecret()
+  def apiKey = getFabricApiKey()
+
+  if (apiSecret == "0" || apiKey == "0") {
+    logger.warn("API key and/or secret env variables not found, defaulting to 0.")
+  }
+  if (propertiesFile.exists()) {
+    propertiesFile.delete()
+  }
+
+  def commentMessage = "suppress inspection \"UnusedProperty\" for whole file"
+  ant.propertyfile(file: "fabric.properties", comment: commentMessage) {
+    entry(key: "apiSecret", value: apiSecret)
+    entry(key: "apiKey", value: apiKey)
+  }
+}
+
+afterEvaluate {
+  buildFabricProperties()
+}

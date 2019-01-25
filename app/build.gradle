@@ -4,17 +4,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'io.fabric'
-
-def getFabricApiKey() {
-  def propsFile = project.rootProject.file('local.properties')
-  if (!propsFile.exists()) {
-    return ""
-  }
-  Properties properties = new Properties()
-  properties.load(propsFile.newDataInputStream())
-  return properties.getProperty("fabric.apikey") ?: ""
-}
+apply from: '../fabric.gradle'
 
 android {
   compileSdkVersion versions.compileSdk
@@ -26,7 +16,6 @@ android {
     targetSdkVersion versions.compileSdk
     versionCode versions.publishVersionCode
     versionName versions.publishVersion
-    manifestPlaceholders = [fabricKey:getFabricApiKey()]
   }
 
   buildTypes {
