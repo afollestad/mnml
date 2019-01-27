@@ -35,6 +35,11 @@ import com.afollestad.rxkprefs.Pref
 interface OverlayManager {
 
   /**
+   * Returns true if a countdown is in progress.
+   */
+  fun isCountingDown(): Boolean
+
+  /**
    * Returns true if a countdown is configured when recording starts.
    */
   fun willCountdown(): Boolean
@@ -57,11 +62,17 @@ class RealOverlayManager(
     private const val SECOND = 1000L
   }
 
+  private var isCountingDown: Boolean = false
+
+  override fun isCountingDown() = isCountingDown
+
   override fun willCountdown() = countdownPref.get() > 0
 
   override fun countdown(finished: () -> Unit) {
+    isCountingDown = true
     val time = countdownPref.get()
     if (time <= 0) {
+      isCountingDown = false
       finished()
       return
     }
@@ -96,6 +107,7 @@ class RealOverlayManager(
     view.text = "$nextSecond"
     if (nextSecond == 0) {
       windowManager.removeView(view)
+      isCountingDown = false
       finished()
       return
     }

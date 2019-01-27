@@ -162,7 +162,7 @@ class BackgroundService : Service(), LifecycleOwner {
   }
 
   private fun startRecording() {
-    if (captureEngine.isStarted()) {
+    if (captureEngine.isStarted() || overlayManager.isCountingDown()) {
       return
     } else if (!permissionChecker.hasStoragePermission()) {
       startActivity(
