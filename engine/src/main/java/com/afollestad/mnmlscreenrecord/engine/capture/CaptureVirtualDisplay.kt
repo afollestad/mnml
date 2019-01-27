@@ -26,6 +26,7 @@ internal fun RealCaptureEngine.createVirtualDisplayAndStart(context: Context) {
   // Tiny delay so we don't record the cast "start now" dialog.
   handler.postDelayed({
     try {
+      log("createVirtualDisplayAndStart - recorder = $recorder")
       recorder?.start() ?: throw Exception(
           "Recorder is unexpectedly null, this appears to be a device-specific issue."
       )
@@ -43,6 +44,7 @@ internal fun RealCaptureEngine.createVirtualDisplayAndStart(context: Context) {
 
 internal fun RealCaptureEngine.createVirtualDisplay(context: Context): VirtualDisplay {
   val recordingInfo = getRecordingInfo(context)
+  log("createVirtualDisplay - recorder = $recorder")
   val engineRecorder = recorder ?: throw Exception(
       "Recorder is unexpectedly null, this appears to be a device-specific issue."
   )
