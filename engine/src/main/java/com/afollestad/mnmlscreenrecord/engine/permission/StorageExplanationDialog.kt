@@ -58,7 +58,10 @@ class StorageExplanationDialog : DialogFragment() {
           .title(R.string.storage_permission_prompt)
           .message(R.string.storage_permission_prompt_desc)
           .cancelOnTouchOutside(false)
-          .positiveButton(R.string.okay) { callback.onShouldAskForStoragePermission() }
+          .positiveButton(R.string.okay) {
+            dismiss()
+            callback.onShouldAskForStoragePermission()
+          }
           .onDismiss { dismiss() }
           .onCancel { dismiss() }
     } catch (e: InvocationTargetException) {
@@ -67,6 +70,7 @@ class StorageExplanationDialog : DialogFragment() {
           .setTitle(R.string.storage_permission_prompt)
           .setMessage(R.string.storage_permission_prompt_desc)
           .setPositiveButton(R.string.okay) { _, _ ->
+            dismiss()
             callback.onShouldAskForStoragePermission()
           }
           .setOnCancelListener { dismiss() }

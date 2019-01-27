@@ -73,7 +73,10 @@ class OverlayExplanationDialog : DialogFragment() {
           .title(R.string.overlay_permission_prompt)
           .message(R.string.overlay_permission_prompt_desc)
           .cancelOnTouchOutside(false)
-          .positiveButton(R.string.okay) { callback.onShouldAskForOverlayPermission() }
+          .positiveButton(R.string.okay) {
+            dismiss()
+            callback.onShouldAskForOverlayPermission()
+          }
           .onDismiss { dismiss() }
           .onCancel { dismiss() }
     } catch (e: InvocationTargetException) {
@@ -82,6 +85,7 @@ class OverlayExplanationDialog : DialogFragment() {
           .setTitle(R.string.overlay_permission_prompt)
           .setMessage(R.string.overlay_permission_prompt_desc)
           .setPositiveButton(R.string.okay) { _, _ ->
+            dismiss()
             callback.onShouldAskForOverlayPermission()
           }
           .setOnCancelListener { dismiss() }
