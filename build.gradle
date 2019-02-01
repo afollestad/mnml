@@ -22,7 +22,6 @@ allprojects {
   repositories {
     google()
     jcenter()
-    maven { url "https://dl.bintray.com/drummer-aidan/maven" }
   }
 
   tasks.withType(Javadoc).all {
