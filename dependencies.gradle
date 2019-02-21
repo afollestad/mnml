@@ -7,13 +7,13 @@ ext.versions = [
     publishVersionCode  : 27,
 
     // Plugins
-    gradlePlugin        : '3.3.0',
-    spotlessPlugin      : '3.17.0',
+    gradlePlugin        : '3.3.1',
+    spotlessPlugin      : '3.18.0',
     versionPlugin       : '0.20.0',
     fabricPlugin        : '1.+',
 
     // Kotlin
-    kotlin              : '1.3.20',
+    kotlin              : '1.3.21',
     coroutines          : '1.1.1',
     koin                : '1.0.2',
 
@@ -28,27 +28,27 @@ ext.versions = [
     lifecycle           : '2.0.0',
 
     // Glide
-    glide               : '4.8.0',
+    glide               : '4.9.0',
 
     // afollestad
-    materialDialogs     : '2.0.0-rc9',
-    rxkPrefs            : '1.2.2',
+    materialDialogs     : '2.0.0',
+    rxkPrefs            : '1.2.4',
     assent              : '2.2.3',
 
     // RxJava
     rxJava              : '2.2.6',
-    rxAndroid           : '2.1.0',
+    rxAndroid           : '2.1.1',
 
     // Square
     seismic             : '1.0.2',
 
     // Debug
     timber              : '4.7.1',
-    fabric              : '2.9.8@aar',
+    fabric              : '2.9.9@aar',
 
     // Test
     junit               : '4.12',
-    mockito             : '2.23.4',
+    mockito             : '2.24.5',
     mockitoKotlin       : '2.1.0',
     truth               : '0.42',
     androidxTest        : '1.1.0',
