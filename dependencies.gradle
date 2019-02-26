@@ -31,8 +31,8 @@ ext.versions = [
     glide               : '4.9.0',
 
     // afollestad
-    materialDialogs     : '2.0.0',
-    rxkPrefs            : '1.2.4',
+    materialDialogs     : '2.0.3',
+    rxkPrefs            : '1.2.5',
     assent              : '2.2.3',
 
     // RxJava
@@ -50,7 +50,7 @@ ext.versions = [
     junit               : '4.12',
     mockito             : '2.24.5',
     mockitoKotlin       : '2.1.0',
-    truth               : '0.42',
+    truth               : '0.43',
     androidxTest        : '1.1.0',
     archTesting         : '2.0.0'
 ]
