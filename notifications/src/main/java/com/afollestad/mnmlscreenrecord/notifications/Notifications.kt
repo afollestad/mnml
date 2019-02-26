@@ -24,6 +24,7 @@ import android.app.PendingIntent.FLAG_CANCEL_CURRENT
 import android.content.Intent
 import android.content.Intent.ACTION_SEND
 import android.content.Intent.ACTION_VIEW
+import android.content.Intent.EXTRA_STREAM
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.media.MediaMetadataRetriever
 import android.os.Build.VERSION.SDK_INT
@@ -214,11 +215,13 @@ class RealNotifications(
         },
         FLAG_CANCEL_CURRENT
     )
+    val shareUri = recording.toUri()
     val sharePendingIntent = PendingIntent.getActivity(
         app,
         SHARE_REQUEST,
         Intent(ACTION_SEND).apply {
-          setDataAndType(recording.toUri(), "video/*")
+          setDataAndType(shareUri, "video/*")
+          putExtra(EXTRA_STREAM, shareUri)
         },
         FLAG_CANCEL_CURRENT
     )
