@@ -44,22 +44,20 @@ class MnmlApp : Application() {
       Timber.plant(DebugTree())
     }
 
-    if (BuildConfig.FABRIC_API_KEY.isNotEmpty()) {
-      Timber.plant(FabricTree())
-      Fabric.with(this, Crashlytics())
-    }
+    Timber.plant(FabricTree())
+    Fabric.with(this, Crashlytics())
 
     val modules = listOf(
-      commonModule,
-      notificationsModule,
-      prefModule,
-      engineModule,
-      mainModule,
-      viewModelModule
+        commonModule,
+        notificationsModule,
+        prefModule,
+        engineModule,
+        mainModule,
+        viewModelModule
     )
     startKoin(
-      androidContext = this,
-      modules = modules
+        androidContext = this,
+        modules = modules
     )
 
     val notifications by inject<Notifications>()

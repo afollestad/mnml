@@ -10,6 +10,7 @@ ext.versions = [
     gradlePlugin        : '3.3.2',
     spotlessPlugin      : '3.19.0',
     versionPlugin       : '0.21.0',
+    googleServices      : '4.2.0',
     fabricPlugin        : '1.+',
 
     // Kotlin
@@ -25,6 +26,7 @@ ext.versions = [
     androidxBrowser     : '1.0.0',
 
     // Other Google
+    firebaseCore        : '16.0.7',
     lifecycle           : '2.0.0',
 
     // Glide
