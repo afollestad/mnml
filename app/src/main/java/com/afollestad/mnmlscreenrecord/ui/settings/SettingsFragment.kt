@@ -18,6 +18,8 @@ package com.afollestad.mnmlscreenrecord.ui.settings
 import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import com.afollestad.mnmlscreenrecord.R
+import com.afollestad.mnmlscreenrecord.theming.DarkModeSwitchActivity
+import com.afollestad.mnmlscreenrecord.theming.NightMode.UNKNOWN
 import com.afollestad.mnmlscreenrecord.ui.settings.base.BaseSettingsFragment
 import com.afollestad.mnmlscreenrecord.ui.settings.sub.SettingsControlsFragment
 import com.afollestad.mnmlscreenrecord.ui.settings.sub.SettingsQualityFragment
@@ -31,10 +33,16 @@ class SettingsFragment : BaseSettingsFragment() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    findPreference("ui").setOnPreferenceClickListener { navigateTo(it.key) }
     findPreference("recording").setOnPreferenceClickListener { navigateTo(it.key) }
     findPreference("quality").setOnPreferenceClickListener { navigateTo(it.key) }
     findPreference("controls").setOnPreferenceClickListener { navigateTo(it.key) }
+
+    val activity = activity as? DarkModeSwitchActivity
+    if (activity != null && activity.getCurrentNightMode() != UNKNOWN) {
+      findPreference("ui").isVisible = false
+    } else {
+      findPreference("ui").setOnPreferenceClickListener { navigateTo(it.key) }
+    }
   }
 
   override fun onCreatePreferences(
