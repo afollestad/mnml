@@ -7,9 +7,9 @@ ext.versions = [
     publishVersionCode  : 27,
 
     // Plugins
-    gradlePlugin        : '3.3.1',
-    spotlessPlugin      : '3.18.0',
-    versionPlugin       : '0.20.0',
+    gradlePlugin        : '3.3.2',
+    spotlessPlugin      : '3.19.0',
+    versionPlugin       : '0.21.0',
     fabricPlugin        : '1.+',
 
     // Kotlin
@@ -48,7 +48,7 @@ ext.versions = [
 
     // Test
     junit               : '4.12',
-    mockito             : '2.24.5',
+    mockito             : '2.25.0',
     mockitoKotlin       : '2.1.0',
     truth               : '0.43',
     androidxTest        : '1.1.0',
