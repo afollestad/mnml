@@ -15,6 +15,7 @@
  */
 package com.afollestad.mnmlscreenrecord.ui.main
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.Intent.ACTION_SEND
@@ -24,13 +25,12 @@ import android.os.Bundle
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.assent.Permission.WRITE_EXTERNAL_STORAGE
 import com.afollestad.assent.askForPermissions
+import com.afollestad.inlineactivityresult.startActivityForResult
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.callbacks.onDismiss
-import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.afollestad.materialdialogs.utils.MDUtil.resolveColor
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
@@ -38,6 +38,7 @@ import com.afollestad.mnmlscreenrecord.common.misc.toast
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onDebouncedClick
 import com.afollestad.mnmlscreenrecord.common.view.onScroll
+import com.afollestad.mnmlscreenrecord.common.view.showOrHide
 import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationCallback
 import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationDialog
 import com.afollestad.mnmlscreenrecord.engine.permission.StorageExplanationCallback
@@ -52,30 +53,54 @@ import com.afollestad.mnmlscreenrecord.views.asBackgroundTint
 import com.afollestad.mnmlscreenrecord.views.asEnabled
 import com.afollestad.mnmlscreenrecord.views.asIcon
 import com.afollestad.mnmlscreenrecord.views.asText
-import com.afollestad.mnmlscreenrecord.views.asVisibility
+import com.afollestad.recyclical.datasource.emptySelectableDataSourceTyped
+import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.viewholder.hasSelection
+import com.afollestad.recyclical.viewholder.isSelected
+import com.afollestad.recyclical.withItem
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
+import kotlinx.android.synthetic.main.activity_main.empty_view
 import kotlinx.android.synthetic.main.activity_main.fab
 import kotlinx.android.synthetic.main.activity_main.list
 import kotlinx.android.synthetic.main.include_appbar.toolbar
+import kotlinx.android.synthetic.main.list_item_recording.view.thumbnail
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlinx.android.synthetic.main.activity_main.empty_view as emptyView
 import kotlinx.android.synthetic.main.include_appbar.app_toolbar as appToolbar
 import kotlinx.android.synthetic.main.include_appbar.toolbar_title as toolbarTitle
 
 /** @author Aidan Follestad (afollestad) */
 class MainActivity : DarkModeSwitchActivity(),
     StorageExplanationCallback,
-    OverlayExplanationCallback,
-    AdapterCallback {
-
-  companion object {
-    private const val DRAW_OVER_OTHER_APP_PERMISSION = 68
-    private const val STORAGE_PERMISSION = 64
-  }
+    OverlayExplanationCallback {
 
   private val viewModel by viewModel<MainViewModel>()
-
-  private lateinit var adapter: RecordingAdapter
+  private val dataSource = emptySelectableDataSourceTyped<Recording>().apply {
+    onSelectionChange {
+      if (it.hasSelection()) {
+        if (toolbar.navigationIcon == null) {
+          toolbar.run {
+            setNavigationIcon(R.drawable.ic_close)
+            menu.clear()
+            inflateMenu(R.menu.edit_mode)
+          }
+        }
+        toolbarTitle.text = getString(R.string.app_name_short_withNumber, it.getSelectionCount())
+        toolbar.menu.run {
+          findItem(R.id.share).isVisible = it.getSelectionCount() == 1
+          findItem(R.id.delete).isEnabled = it.getSelectionCount() > 0
+        }
+      } else {
+        toolbar.run {
+          navigationIcon = null
+          menu.clear()
+          inflateMenu(R.menu.main)
+        }
+        toolbarTitle.text = getString(R.string.app_name_short)
+      }
+    }
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -84,15 +109,16 @@ class MainActivity : DarkModeSwitchActivity(),
     setupGrid()
 
     fab.onDebouncedClick { viewModel.fabClicked() }
-
-    lifecycle.run {
-      addObserver(viewModel)
-    }
+    lifecycle.addObserver(viewModel)
 
     viewModel.onRecordings()
-        .observe(this, Observer { adapter.set(it) })
-    viewModel.onEmptyViewVisibility()
-        .asVisibility(this, emptyView)
+        .observe(this, Observer {
+          dataSource.set(
+              newItems = it,
+              areTheSame = Recording.Companion::areTheSame,
+              areContentsTheSame = Recording.Companion::areContentsTheSame
+          )
+        })
     viewModel.onFabColorRes()
         .asBackgroundTint(this, fab)
     viewModel.onFabIconRes()
@@ -118,6 +144,19 @@ class MainActivity : DarkModeSwitchActivity(),
     checkForMediaProjectionAvailability()
   }
 
+  override fun onResume() {
+    super.onResume()
+    invalidateToolbarElevation(list.computeVerticalScrollOffset())
+  }
+
+  override fun onBackPressed() {
+    if (dataSource.hasSelection()) {
+      dataSource.deselectAll()
+    } else {
+      super.onBackPressed()
+    }
+  }
+
   override fun onShouldAskForStoragePermission() {
     askForPermissions(WRITE_EXTERNAL_STORAGE, requestCode = STORAGE_PERMISSION) { res ->
       if (!res.isAllGranted(WRITE_EXTERNAL_STORAGE)) {
@@ -135,39 +174,66 @@ class MainActivity : DarkModeSwitchActivity(),
         "package:$packageName".toUri()
     )
     startActivityForResult(
-        intent,
-        DRAW_OVER_OTHER_APP_PERMISSION
-    )
-  }
-
-  override fun onEditModeChange(
-    inEditMode: Boolean,
-    selection: Int
-  ) {
-    if (inEditMode) {
-      if (toolbar.navigationIcon == null) {
-        toolbar.run {
-          setNavigationIcon(R.drawable.ic_close)
-          menu.clear()
-          inflateMenu(R.menu.edit_mode)
-        }
-      }
-      toolbarTitle.text = getString(R.string.app_name_short_withNumber, selection)
-      toolbar.menu.run {
-        findItem(R.id.share).isVisible = selection == 1
-        findItem(R.id.delete).isEnabled = selection > 0
-      }
-    } else {
-      toolbar.run {
-        navigationIcon = null
-        menu.clear()
-        inflateMenu(R.menu.main)
-      }
-      toolbarTitle.text = getString(R.string.app_name_short)
+        intent = intent,
+        requestCode = DRAW_OVER_OTHER_APP_PERMISSION
+    ) { _, _ ->
+      viewModel.permissionGranted()
     }
   }
 
-  override fun onRecordingClicked(recording: Recording) {
+  private fun setupToolbar() = toolbar.run {
+    inflateMenu(R.menu.main)
+    setNavigationOnClickListener { dataSource.deselectAll() }
+    setOnMenuItemClickListener { item ->
+      when (item.itemId) {
+        R.id.about -> AboutDialog.show(this@MainActivity)
+        R.id.provide_feedback -> viewUrl("https://github.com/afollestad/mnml/issues/new/choose")
+        R.id.settings -> {
+          startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+        }
+        R.id.share -> shareRecording(dataSource.getSelectedItems().single())
+        R.id.delete -> {
+          viewModel.deleteRecordings(dataSource.getSelectedItems())
+          dataSource.deselectAll()
+        }
+      }
+      true
+    }
+  }
+
+  @SuppressLint("SetTextI18n")
+  private fun setupGrid() {
+    list.setup {
+      withDataSource(dataSource)
+      withEmptyView(empty_view)
+      withItem<Recording, RecordingViewHolder>(R.layout.list_item_recording) {
+        onBind(::RecordingViewHolder) { _, item ->
+          Glide.with(thumbnail)
+              .asBitmap()
+              .apply(RequestOptions().frame(0))
+              .load(item.toUri())
+              .into(itemView.thumbnail)
+          name.text = item.name
+          details.text = "${item.sizeString()} – ${item.timestampString()}"
+          checkBox.showOrHide(hasSelection())
+          checkBox.isChecked = isSelected()
+        }
+        onClick {
+          if (hasSelection()) {
+            toggleSelection()
+          } else {
+            onRecordingClicked(item)
+          }
+        }
+        onLongClick {
+          toggleSelection()
+        }
+      }
+    }
+    list.onScroll { invalidateToolbarElevation(it) }
+  }
+
+  private fun onRecordingClicked(recording: Recording) {
     try {
       startActivity(Intent(ACTION_VIEW).apply {
         setDataAndType(recording.toUri(), "video/*")
@@ -177,77 +243,11 @@ class MainActivity : DarkModeSwitchActivity(),
     }
   }
 
-  private fun setupToolbar() = toolbar.run {
-    inflateMenu(R.menu.main)
-    setNavigationOnClickListener { adapter.exitEditMode() }
-    setOnMenuItemClickListener { item ->
-      when (item.itemId) {
-        R.id.about -> AboutDialog.show(this@MainActivity)
-        R.id.support_me -> supportMe()
-        R.id.provide_feedback -> viewUrl("https://github.com/afollestad/mnml/issues/new/choose")
-        R.id.settings -> {
-          startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
-        }
-        R.id.share -> shareRecording(adapter.getSelection().single())
-        R.id.delete -> {
-          viewModel.deleteRecordings(adapter.getSelection())
-          adapter.exitEditMode()
-        }
-      }
-      true
-    }
-  }
-
-  private fun setupGrid() {
-    adapter = RecordingAdapter(this)
-    list.layoutManager = LinearLayoutManager(this)
-    list.adapter = adapter
-    list.onScroll { invalidateToolbarElevation(it) }
-  }
-
   private fun invalidateToolbarElevation(scrollY: Int) {
     if (scrollY > (toolbar.measuredHeight / 2)) {
       appToolbar.elevation = resources.getDimension(R.dimen.raised_toolbar_elevation)
     } else {
       appToolbar.elevation = 0f
-    }
-  }
-
-  override fun onResume() {
-    super.onResume()
-    invalidateToolbarElevation(list.computeVerticalScrollOffset())
-  }
-
-  override fun onBackPressed() {
-    if (adapter.isEditMode()) {
-      adapter.exitEditMode()
-    } else {
-      super.onBackPressed()
-    }
-  }
-
-  override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-  ) {
-    super.onActivityResult(requestCode, resultCode, data)
-    viewModel.permissionGranted()
-  }
-
-  private fun supportMe() {
-    MaterialDialog(this).show {
-      title(R.string.support_me)
-      message(R.string.support_me_message, html = true, lineHeightMultiplier = 1.4f)
-      listItemsSingleChoice(R.array.donation_options) { _, index, _ ->
-        when (index) {
-          0 -> viewUrl("https://paypal.me/AidanFollestad")
-          1 -> viewUrlWithApp("https://cash.me/\$afollestad", pkg = "com.squareup.cash")
-          2 -> viewUrlWithApp("https://venmo.com/afollestad", pkg = "com.venmo")
-        }
-        toast(R.string.thank_you)
-      }
-      positiveButton(R.string.next)
     }
   }
 
@@ -272,27 +272,6 @@ class MainActivity : DarkModeSwitchActivity(),
     }
   }
 
-  private fun viewUrlWithApp(
-    url: String,
-    pkg: String
-  ) {
-    val intent = Intent(ACTION_VIEW).apply {
-      data = url.toUri()
-    }
-    val resInfo = packageManager.queryIntentActivities(intent, 0)
-    for (info in resInfo) {
-      if (info.activityInfo.packageName.toLowerCase().contains(pkg) ||
-          info.activityInfo.name.toLowerCase().contains(pkg)
-      ) {
-        startActivity(intent.apply {
-          setPackage(info.activityInfo.packageName)
-        })
-        return
-      }
-    }
-    viewUrl(url)
-  }
-
   private fun checkForMediaProjectionAvailability() {
     try {
       Class.forName("android.media.projection.MediaProjectionManager")
@@ -310,5 +289,10 @@ class MainActivity : DarkModeSwitchActivity(),
         onDismiss { finish() }
       }
     }
+  }
+
+  private companion object {
+    private const val DRAW_OVER_OTHER_APP_PERMISSION = 68
+    private const val STORAGE_PERMISSION = 64
   }
 }

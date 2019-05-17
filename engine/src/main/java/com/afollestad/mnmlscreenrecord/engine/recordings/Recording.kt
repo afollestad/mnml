@@ -43,6 +43,22 @@ data class Recording(
       )
     }
 
+    // Return true if items represent the same entity, e.g. by ID or name
+    fun areTheSame(
+      left: Recording,
+      right: Recording
+    ): Boolean {
+      return right.id == left.id
+    }
+
+    // Return true if all contents in the items are equal
+    fun areContentsTheSame(
+      left: Recording,
+      right: Recording
+    ): Boolean {
+      return right.path == left.path && right.timestamp == left.timestamp
+    }
+
     @Suppress("unused")
     @JvmField
     val CREATOR = object : Creator<Recording> {

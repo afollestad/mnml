@@ -27,6 +27,7 @@
         android:title="@string/setting_always_show_controls"/>
 
     <SwitchPreference
+        android:enabled="false"
         android:key="floating_controls"
         android:layout="@layout/custom_preference"
         android:summaryOff="@string/setting_floating_controls_off"

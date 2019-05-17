@@ -18,6 +18,7 @@
     <item name="md_font_title">@font/lato_bold</item>
     <item name="md_font_body">@font/lato</item>
     <item name="md_font_button">@font/lato_bold</item>
+    <item name="md_color_button_text">?colorAccent</item>
   </style>
 
   <style name="AppThemeParent.Dark" parent="Theme.MaterialComponents.NoActionBar">
@@ -38,6 +39,7 @@
     <item name="md_font_title">@font/lato_bold</item>
     <item name="md_font_body">@font/lato</item>
     <item name="md_font_button">@font/lato_bold</item>
+    <item name="md_color_button_text">?colorAccent</item>
   </style>
 
 </resources>

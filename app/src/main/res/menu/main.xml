@@ -4,9 +4,6 @@
       android:id="@+id/about"
       android:title="@string/about"/>
   <item
-      android:id="@+id/support_me"
-      android:title="@string/support_me"/>
-  <item
       android:id="@+id/provide_feedback"
       android:title="@string/provide_feedback"/>
   <item

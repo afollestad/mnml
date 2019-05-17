@@ -87,10 +87,6 @@ class MainViewModel(
   @CheckResult
   fun onRecordings(): LiveData<List<Recording>> = recordings
 
-  /** Emits when the empty view's visibility should be changed. */
-  @CheckResult
-  fun onEmptyViewVisibility(): LiveData<Boolean> = emptyViewVisibility
-
   /** Emits when the FAB's background color should be changed. */
   @CheckResult
   fun onFabColorRes(): LiveData<Int> = fabColorRes

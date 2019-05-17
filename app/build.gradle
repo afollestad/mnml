@@ -8,6 +8,11 @@ android {
   compileSdkVersion versions.compileSdk
   buildToolsVersion versions.buildTools
 
+  packagingOptions {
+    exclude 'META-INF/core_release.kotlin_module'
+    exclude 'META-INF/library_release.kotlin_module'
+  }
+
   defaultConfig {
     applicationId "com.afollestad.mnmlscreenrecord"
     minSdkVersion versions.minSdk
@@ -44,6 +49,7 @@ dependencies {
   implementation 'com.afollestad.material-dialogs:files:' + versions.materialDialogs
   implementation 'com.afollestad:assent:' + versions.assent
   implementation 'com.afollestad:recyclical:' + versions.recyclical
+  implementation 'com.afollestad:inline-activity-result:' + versions.inlineActivityResult
 
   // Glide
   implementation 'com.github.bumptech.glide:glide:' + versions.glide

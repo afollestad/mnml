@@ -7,15 +7,7 @@
   <string name="recordings_empty_text">You have no recordings, yet…</string>
 
   <string name="settings">Settings</string>
-  <string name="support_me">Donate</string>
   <string name="provide_feedback">Provide Feedback</string>
-
-  <string name="support_me_message"><![CDATA[
-      <b>MNML</b> was created and is maintained by one person. Donations are <b>much</b>
-      appreciated and encourage continued support.
-  ]]></string>
-  <string name="thank_you">Thank you very much!</string>
-  <string name="next">Next</string>
 
   <string name="install_video_viewer">Please install a video viewer app, such as Google Photos.</string>
   <string name="install_web_browser">Please install a web browser app, such as Google Chrome.</string>
