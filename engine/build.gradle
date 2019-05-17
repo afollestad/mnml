@@ -19,7 +19,7 @@ dependencies {
   implementation project(':theming')
 
   // Kotlin
-  implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + versions.kotlin
+  implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:' + versions.kotlin
 
   // afollestad
   implementation 'com.afollestad.material-dialogs:core:' + versions.materialDialogs
