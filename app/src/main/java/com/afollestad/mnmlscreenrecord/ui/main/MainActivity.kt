@@ -41,10 +41,9 @@ import com.afollestad.mnmlscreenrecord.common.view.onDebouncedClick
 import com.afollestad.mnmlscreenrecord.common.view.onScroll
 import com.afollestad.mnmlscreenrecord.common.view.setOnMenuItemDebouncedClickListener
 import com.afollestad.mnmlscreenrecord.common.view.showOrHide
+import com.afollestad.mnmlscreenrecord.engine.permission.MnmlRationaleHandler
 import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationCallback
 import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationDialog
-import com.afollestad.mnmlscreenrecord.engine.permission.StorageExplanationCallback
-import com.afollestad.mnmlscreenrecord.engine.permission.StorageExplanationDialog
 import com.afollestad.mnmlscreenrecord.engine.recordings.Recording
 import com.afollestad.mnmlscreenrecord.engine.service.BackgroundService.Companion.PERMISSION_DENIED
 import com.afollestad.mnmlscreenrecord.engine.service.ErrorDialogActivity
@@ -73,36 +72,35 @@ import kotlinx.android.synthetic.main.include_appbar.app_toolbar as appToolbar
 import kotlinx.android.synthetic.main.include_appbar.toolbar_title as toolbarTitle
 
 /** @author Aidan Follestad (afollestad) */
-class MainActivity : DarkModeSwitchActivity(),
-    StorageExplanationCallback,
-    OverlayExplanationCallback {
+class MainActivity : DarkModeSwitchActivity(), OverlayExplanationCallback {
 
   private val viewModel by viewModel<MainViewModel>()
-  private val dataSource = emptySelectableDataSourceTyped<Recording>().apply {
-    onSelectionChange {
-      if (it.hasSelection()) {
-        if (toolbar.navigationIcon == null) {
-          toolbar.run {
-            setNavigationIcon(R.drawable.ic_close)
-            menu.clear()
-            inflateMenu(R.menu.edit_mode)
+  private val dataSource =
+    emptySelectableDataSourceTyped<Recording>().apply {
+      onSelectionChange {
+        if (it.hasSelection()) {
+          if (toolbar.navigationIcon == null) {
+            toolbar.run {
+              setNavigationIcon(R.drawable.ic_close)
+              menu.clear()
+              inflateMenu(R.menu.edit_mode)
+            }
           }
+          toolbarTitle.text = getString(R.string.app_name_short_withNumber, it.getSelectionCount())
+          toolbar.menu.run {
+            findItem(R.id.share).isVisible = it.getSelectionCount() == 1
+            findItem(R.id.delete).isEnabled = it.getSelectionCount() > 0
+          }
+        } else {
+          toolbar.run {
+            navigationIcon = null
+            menu.clear()
+            inflateMenu(R.menu.main)
+          }
+          toolbarTitle.text = getString(R.string.app_name_short)
         }
-        toolbarTitle.text = getString(R.string.app_name_short_withNumber, it.getSelectionCount())
-        toolbar.menu.run {
-          findItem(R.id.share).isVisible = it.getSelectionCount() == 1
-          findItem(R.id.delete).isEnabled = it.getSelectionCount() > 0
-        }
-      } else {
-        toolbar.run {
-          navigationIcon = null
-          menu.clear()
-          inflateMenu(R.menu.main)
-        }
-        toolbarTitle.text = getString(R.string.app_name_short)
       }
     }
-  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -136,7 +134,7 @@ class MainActivity : DarkModeSwitchActivity(),
         .attachLifecycle(this)
     viewModel.onNeedStoragePermission()
         .observeOn(mainThread())
-        .subscribe { StorageExplanationDialog.show(this) }
+        .subscribe { onShouldAskForStoragePermission() }
         .attachLifecycle(this)
     viewModel.onError()
         .observeOn(mainThread())
@@ -159,17 +157,6 @@ class MainActivity : DarkModeSwitchActivity(),
     }
   }
 
-  override fun onShouldAskForStoragePermission() {
-    askForPermissions(WRITE_EXTERNAL_STORAGE, requestCode = STORAGE_PERMISSION) { res ->
-      if (!res.isAllGranted(WRITE_EXTERNAL_STORAGE)) {
-        sendBroadcast(Intent(PERMISSION_DENIED))
-        toast(R.string.permission_denied_note)
-      } else {
-        viewModel.permissionGranted()
-      }
-    }
-  }
-
   override fun onShouldAskForOverlayPermission() {
     val intent = Intent(
         ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -180,6 +167,21 @@ class MainActivity : DarkModeSwitchActivity(),
         requestCode = DRAW_OVER_OTHER_APP_PERMISSION
     ) { _, _ ->
       viewModel.permissionGranted()
+    }
+  }
+
+  private fun onShouldAskForStoragePermission() {
+    askForPermissions(
+        WRITE_EXTERNAL_STORAGE,
+        requestCode = STORAGE_PERMISSION,
+        rationaleHandler = MnmlRationaleHandler(this)
+    ) { res ->
+      if (!res.isAllGranted(WRITE_EXTERNAL_STORAGE)) {
+        sendBroadcast(Intent(PERMISSION_DENIED))
+        toast(R.string.permission_denied_note)
+      } else {
+        viewModel.permissionGranted()
+      }
     }
   }
 

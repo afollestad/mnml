@@ -27,7 +27,7 @@ import com.afollestad.mnmlscreenrecord.engine.service.ServiceController
 import org.koin.android.ext.android.inject
 
 /** @author Aidan Follestad (@afollestad) */
-class StoragePermissionActivity : AppCompatActivity(), StorageExplanationCallback {
+class StoragePermissionActivity : AppCompatActivity() {
   companion object {
     const val STORAGE_REQUEST = 98
   }
@@ -36,11 +36,11 @@ class StoragePermissionActivity : AppCompatActivity(), StorageExplanationCallbac
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    StorageExplanationDialog.show(this)
-  }
-
-  override fun onShouldAskForStoragePermission() {
-    askForPermissions(WRITE_EXTERNAL_STORAGE, requestCode = STORAGE_REQUEST) { res ->
+    askForPermissions(
+        WRITE_EXTERNAL_STORAGE,
+        requestCode = STORAGE_REQUEST,
+        rationaleHandler = MnmlRationaleHandler(this)
+    ) { res ->
       if (!res.isAllGranted(WRITE_EXTERNAL_STORAGE)) {
         sendBroadcast(Intent(PERMISSION_DENIED))
         toast(R.string.permission_denied_note)
