@@ -1,0 +1,17 @@
+﻿<resources>
+
+  <string name="about">Acerca de</string>
+  <string name="about_title">MNML v%1$s</string>
+  <string name="dismiss">Descartar</string>
+  <string name="about_body"><![CDATA[
+        Aplicación diseñada y desarrollada por <b>Aidan&nbsp;Follestad</b>.<br/>
+        <a href=\'https://af.codes\'>Sitio web</a>&nbsp;&nbsp;
+        <a href=\'https://twitter.com/afollestad\'>Twitter</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/afollestad\'>GitHub</a>&nbsp;&nbsp;
+        <a href=\'https://www.linkedin.com/in/afollestad\'>LinkedIn</a><br/><br/>
+        Este proyecto es de <a href=\'https://github.com/afollestad/mnml\'>código libre</a> y
+        cuenta con la licencia Apache&nbsp;2.0. Consulta mis <a href="https://play.google.com/store/apps/dev?id=8293213872477886335">otras apps</a>.
+        <br/>Revisa la <a href=\'https://af.codes/privacypolicies/mnml.html\'>Política de Privacidad</a>.
+  ]]></string>
+
+</resources>
