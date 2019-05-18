@@ -39,6 +39,7 @@ import com.afollestad.mnmlscreenrecord.common.misc.toast
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.common.view.onDebouncedClick
 import com.afollestad.mnmlscreenrecord.common.view.onScroll
+import com.afollestad.mnmlscreenrecord.common.view.setOnMenuItemDebouncedClickListener
 import com.afollestad.mnmlscreenrecord.common.view.showOrHide
 import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationCallback
 import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationDialog
@@ -185,7 +186,7 @@ class MainActivity : DarkModeSwitchActivity(),
   private fun setupToolbar() = toolbar.run {
     inflateMenu(R.menu.main)
     setNavigationOnClickListener { dataSource.deselectAll() }
-    setOnMenuItemClickListener { item ->
+    setOnMenuItemDebouncedClickListener { item ->
       when (item.itemId) {
         R.id.about -> AboutDialog.show(this@MainActivity)
         R.id.provide_feedback -> viewUrl("https://github.com/afollestad/mnml/issues/new/choose")
@@ -196,7 +197,6 @@ class MainActivity : DarkModeSwitchActivity(),
           dataSource.deselectAll()
         }
       }
-      true
     }
   }
 

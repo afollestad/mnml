@@ -15,42 +15,38 @@
  */
 package com.afollestad.mnmlscreenrecord.common.view
 
-import android.view.View
-import java.lang.System.currentTimeMillis
+import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
 
 private const val DEFAULT_DEBOUNCE_INTERVAL = 750L
 
 /** @author Aidan Follestad (@afollestad) */
-abstract class DebouncedOnClickListener(
+abstract class DebouncedMenuItemClickListener(
   private val delayBetweenClicks: Long = DEFAULT_DEBOUNCE_INTERVAL
-) : View.OnClickListener {
+) : Toolbar.OnMenuItemClickListener {
   private var lastClickTimestamp = -1L
 
   @Deprecated(
-      message = "onDebouncedClick should be overridden instead.",
-      replaceWith = ReplaceWith("onDebouncedClick(v)")
+      message = "onDebouncedMenuItemClick should be overridden instead.",
+      replaceWith = ReplaceWith("onDebouncedMenuItemClick(item)")
   )
-  override fun onClick(v: View) {
-    val now = currentTimeMillis()
+  override fun onMenuItemClick(item: MenuItem): Boolean {
+    val now = System.currentTimeMillis()
     if (lastClickTimestamp == -1L || now >= (lastClickTimestamp + delayBetweenClicks)) {
-      onDebouncedClick(v)
+      onDebouncedMenuItemClick(item)
     }
     lastClickTimestamp = now
+    return true
   }
 
-  abstract fun onDebouncedClick(v: View)
+  abstract fun onDebouncedMenuItemClick(item: MenuItem)
 }
 
-/**
- * Sets a click listener that prevents quick repeated clicks.
- *
- * @author Aidan Follestad (@afollestad)
- */
-fun View.onDebouncedClick(
+fun Toolbar.setOnMenuItemDebouncedClickListener(
   delayBetweenClicks: Long = DEFAULT_DEBOUNCE_INTERVAL,
-  click: (view: View) -> Unit
+  block: (MenuItem) -> Unit
 ) {
-  setOnClickListener(object : DebouncedOnClickListener(delayBetweenClicks) {
-    override fun onDebouncedClick(v: View) = click(v)
+  setOnMenuItemClickListener(object : DebouncedMenuItemClickListener(delayBetweenClicks) {
+    override fun onDebouncedMenuItemClick(item: MenuItem) = block(item)
   })
 }
