@@ -18,13 +18,13 @@ package com.afollestad.mnmlscreenrecord.engine.service
 import android.app.Service
 import android.content.Intent
 import android.content.Intent.ACTION_SCREEN_OFF
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.hardware.SensorManager
 import android.os.IBinder
 import android.os.Vibrator
 import androidx.lifecycle.LifecycleOwner
 import com.afollestad.mnmlscreenrecord.common.intent.IntentReceiver
 import com.afollestad.mnmlscreenrecord.common.lifecycle.SimpleLifecycle
+import com.afollestad.mnmlscreenrecord.common.misc.startActivity
 import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_CONTROLS
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
@@ -166,16 +166,10 @@ class BackgroundService : Service(), LifecycleOwner {
     if (captureEngine.isStarted() || overlayManager.isCountingDown()) {
       return
     } else if (!permissionChecker.hasStoragePermission()) {
-      startActivity(
-          Intent(this, StoragePermissionActivity::class.java)
-              .addFlags(FLAG_ACTIVITY_NEW_TASK)
-      )
+      startActivity<StoragePermissionActivity>()
       return
     } else if (!permissionChecker.hasOverlayPermission() && overlayManager.willCountdown()) {
-      startActivity(
-          Intent(this, OverlayPermissionActivity::class.java)
-              .addFlags(FLAG_ACTIVITY_NEW_TASK)
-      )
+      startActivity<OverlayPermissionActivity>()
       return
     }
     overlayManager.countdown {

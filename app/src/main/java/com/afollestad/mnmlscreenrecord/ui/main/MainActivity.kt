@@ -33,6 +33,7 @@ import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.utils.MDUtil.resolveColor
 import com.afollestad.mnmlscreenrecord.R
+import com.afollestad.mnmlscreenrecord.common.misc.startActivity
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
 import com.afollestad.mnmlscreenrecord.common.misc.toast
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
@@ -188,9 +189,7 @@ class MainActivity : DarkModeSwitchActivity(),
       when (item.itemId) {
         R.id.about -> AboutDialog.show(this@MainActivity)
         R.id.provide_feedback -> viewUrl("https://github.com/afollestad/mnml/issues/new/choose")
-        R.id.settings -> {
-          startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
-        }
+        R.id.settings -> startActivity<SettingsActivity>()
         R.id.share -> shareRecording(dataSource.getSelectedItems().single())
         R.id.delete -> {
           viewModel.deleteRecordings(dataSource.getSelectedItems())

@@ -26,6 +26,7 @@ import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Handler
 import android.view.WindowManager
+import com.afollestad.mnmlscreenrecord.common.misc.startActivity
 import com.afollestad.mnmlscreenrecord.engine.permission.CapturePermissionActivity
 import com.afollestad.rxkprefs.Pref
 import io.reactivex.Observable
@@ -147,9 +148,8 @@ class RealCaptureEngine(
 
     if (projection == null) {
       log("Projection is null, requesting permission...")
-      context.startActivity(
-          Intent(context, CapturePermissionActivity::class.java)
-              .addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_MULTIPLE_TASK)
+      context.startActivity<CapturePermissionActivity>(
+          flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_MULTIPLE_TASK
       )
       return
     }

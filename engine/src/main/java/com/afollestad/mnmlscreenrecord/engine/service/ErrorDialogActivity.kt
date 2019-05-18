@@ -17,7 +17,6 @@ package com.afollestad.mnmlscreenrecord.engine.service
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +25,7 @@ import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.callbacks.onDismiss
+import com.afollestad.mnmlscreenrecord.common.misc.startActivity
 import com.crashlytics.android.Crashlytics
 
 const val KEY_ERROR = "error"
@@ -75,11 +75,10 @@ class ErrorDialogActivity : AppCompatActivity() {
       if (error !is FileSystemException) {
         Crashlytics.logException(error)
       }
-
-      context.startActivity(Intent(context, ErrorDialogActivity::class.java).apply {
-        putExtra(KEY_ERROR, error)
-        addFlags(FLAG_ACTIVITY_NEW_TASK)
-      })
+      context.startActivity<ErrorDialogActivity>(
+          flags = FLAG_ACTIVITY_NEW_TASK,
+          extras = Bundle().apply { putSerializable(KEY_ERROR, error) }
+      )
     }
   }
 
