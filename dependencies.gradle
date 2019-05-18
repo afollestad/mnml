@@ -33,7 +33,7 @@ ext.versions = [
     glide               : '4.9.0',
 
     // afollestad
-    materialDialogs     : '3.0.0-alpha2',
+    materialDialogs     : '3.0.0-alpha3',
     rxkPrefs            : '1.2.5',
     assent              : '2.3.0',
     recyclical          : '0.9.1',
