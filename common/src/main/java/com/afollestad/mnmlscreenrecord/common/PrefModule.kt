@@ -24,7 +24,6 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_AUTOMATIC
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_END
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_START
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FLOATING_CONTROLS
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FRAME_RATE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
@@ -108,9 +107,5 @@ val prefModule = module {
 
   factory(named(PREF_STOP_ON_SHAKE)) {
     get<RxkPrefs>().boolean(PREF_STOP_ON_SHAKE, true)
-  }
-
-  factory(named(PREF_FLOATING_CONTROLS)) {
-    get<RxkPrefs>().boolean(PREF_FLOATING_CONTROLS, false)
   }
 }

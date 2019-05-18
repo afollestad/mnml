@@ -87,12 +87,6 @@
     Shaking your device won\'t do anything special.
   </string>
 
-  <string name="setting_floating_controls">Floating Controls</string>
-  <string name="setting_floating_controls_on">
-    A floating button is overlaid on your screen to quickly start &amp; stop recording.
-  </string>
-  <string name="setting_floating_controls_off">The floating button is disabled.</string>
-
   <string name="setting_always_show_controls">Always Show Controls</string>
   <string name="setting_always_show_controls_on">
     Controls such as the notification &amp; the floating button are shown when the app is launched,

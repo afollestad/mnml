@@ -23,12 +23,10 @@ import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
 import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_CONTROLS
-import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_FLOATING_CONTROLS
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
 import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationCallback
-import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationDialog
 import com.afollestad.mnmlscreenrecord.ui.settings.base.BaseSettingsFragment
 import com.afollestad.rxkprefs.Pref
 import org.koin.android.ext.android.inject
@@ -43,7 +41,6 @@ class SettingsControlsFragment : BaseSettingsFragment(), OverlayExplanationCallb
       named(PREF_ALWAYS_SHOW_CONTROLS)
   )
   private val stopOnShakePref by inject<Pref<Boolean>>(named(PREF_STOP_ON_SHAKE))
-  private val floatingControlsPref by inject<Pref<Boolean>>(named(PREF_FLOATING_CONTROLS))
 
   override fun onCreatePreferences(
     savedInstanceState: Bundle?,
@@ -54,7 +51,6 @@ class SettingsControlsFragment : BaseSettingsFragment(), OverlayExplanationCallb
     setupAlwaysShowControlsPref()
     setupStopOnScreenOffPref()
     setupStopOnShakePref()
-    setupFloatingControlsPref()
   }
 
   private fun setupAlwaysShowControlsPref() {
@@ -70,23 +66,6 @@ class SettingsControlsFragment : BaseSettingsFragment(), OverlayExplanationCallb
         .attachLifecycle(this)
   }
 
-  private fun setupFloatingControlsPref() {
-    val floatingControlsEntry =
-      findPreference(PREF_FLOATING_CONTROLS) as SwitchPreference
-    floatingControlsEntry.setOnPreferenceChangeListener { _, newValue ->
-      if (permissionChecker.hasOverlayPermission()) {
-        floatingControlsPref.set(newValue as Boolean)
-        true
-      } else {
-        OverlayExplanationDialog.show(this@SettingsControlsFragment)
-        false
-      }
-    }
-    floatingControlsPref.observe()
-        .subscribe { floatingControlsEntry.isChecked = it }
-        .attachLifecycle(this)
-  }
-
   override fun onShouldAskForOverlayPermission() {
     val intent = Intent(
         ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -96,17 +75,6 @@ class SettingsControlsFragment : BaseSettingsFragment(), OverlayExplanationCallb
         intent,
         DRAW_OVER_OTHER_APP_PERMISSION
     )
-  }
-
-  override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-  ) {
-    super.onActivityResult(requestCode, resultCode, data)
-    if (requestCode == DRAW_OVER_OTHER_APP_PERMISSION && permissionChecker.hasOverlayPermission()) {
-      floatingControlsPref.set(true)
-    }
   }
 
   private fun setupStopOnScreenOffPref() {
