@@ -16,7 +16,7 @@ ext.versions = [
     // Kotlin
     kotlin              : '1.3.31',
     coroutines          : '1.2.1',
-    koin                : '1.0.2',
+    koin                : '2.0.0-GA4',
 
     // AndroidX
     androidxCore        : '1.0.2',

@@ -45,7 +45,9 @@ import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingManager
 import com.afollestad.mnmlscreenrecord.engine.recordings.RecordingScanner
 import com.afollestad.mnmlscreenrecord.engine.service.RealServiceController
 import com.afollestad.mnmlscreenrecord.engine.service.ServiceController
-import org.koin.dsl.module.module
+import org.koin.core.qualifier.named
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 /** @author Aidan Follestad (@afollestad) */
 val engineModule = module {
@@ -68,7 +70,7 @@ val engineModule = module {
   factory<Vibrator> { get<Application>().systemService(VIBRATOR_SERVICE) }
 
   factory {
-    RealRecordingManager(get(), get(name = PREF_RECORDINGS_FOLDER))
+    RealRecordingManager(get(), get(named(PREF_RECORDINGS_FOLDER)))
   } bind RecordingManager::class
 
   single { RealRecordingScanner(get(), get()) } bind RecordingScanner::class
@@ -77,18 +79,18 @@ val engineModule = module {
     RealCaptureEngine(
         get(),
         get(),
-        get(name = PREF_RECORDINGS_FOLDER),
-        get(name = PREF_VIDEO_BIT_RATE),
-        get(name = PREF_FRAME_RATE),
-        get(name = PREF_RECORD_AUDIO),
-        get(name = PREF_AUDIO_BIT_RATE),
-        get(name = PREF_RESOLUTION_WIDTH),
-        get(name = PREF_RESOLUTION_HEIGHT)
+        get(named(PREF_RECORDINGS_FOLDER)),
+        get(named(PREF_VIDEO_BIT_RATE)),
+        get(named(PREF_FRAME_RATE)),
+        get(named(PREF_RECORD_AUDIO)),
+        get(named(PREF_AUDIO_BIT_RATE)),
+        get(named(PREF_RESOLUTION_WIDTH)),
+        get(named(PREF_RESOLUTION_HEIGHT))
     )
   } bind CaptureEngine::class
 
   factory {
-    RealOverlayManager(get(), get(), get(name = PREF_COUNTDOWN), get())
+    RealOverlayManager(get(), get(), get(named(PREF_COUNTDOWN)), get())
   } bind OverlayManager::class
 
   factory { RealServiceController(get()) } bind ServiceController::class

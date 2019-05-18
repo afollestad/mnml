@@ -29,6 +29,7 @@ import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.theming.splitTime
 import com.afollestad.rxkprefs.Pref
 import org.koin.android.ext.android.inject
+import org.koin.core.qualifier.named
 
 interface TimeCallback {
   fun onTimeSelected(
@@ -72,7 +73,7 @@ class TimePickerDialog : DialogFragment() {
         .noAutoDismiss()
         .positiveButton(android.R.string.ok) {
           val callback = parentFragment as? TimeCallback ?: blowUp()
-          val customView = it.getCustomView() ?: return@positiveButton
+          val customView = it.getCustomView()
           val clock = customView.findViewById<TimePicker>(R.id.clock)
           callback.onTimeSelected(id, clock.hour, clock.minute)
           dismiss()
@@ -80,9 +81,9 @@ class TimePickerDialog : DialogFragment() {
         .onDismiss { dismiss() }
         .onCancel { dismiss() }
 
-    val customView = dialog.getCustomView() ?: blowUp()
+    val customView = dialog.getCustomView()
     val clock = customView.findViewById<TimePicker>(R.id.clock)
-    val pref by inject<Pref<String>>(name = id)
+    val pref by inject<Pref<String>>(named(id))
     val time = pref.get()
         .splitTime()
     clock.hour = time[0]

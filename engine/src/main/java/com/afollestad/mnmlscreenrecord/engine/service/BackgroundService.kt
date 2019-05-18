@@ -48,6 +48,7 @@ import com.afollestad.mnmlscreenrecord.notifications.STOP_ACTION
 import com.afollestad.rxkprefs.Pref
 import io.reactivex.Observable.merge
 import org.koin.android.ext.android.inject
+import org.koin.core.qualifier.named
 import timber.log.Timber.d as log
 
 /**
@@ -72,16 +73,16 @@ class BackgroundService : Service(), LifecycleOwner {
   private val captureEngine by inject<CaptureEngine>()
   private val recordingScanner by inject<RecordingScanner>()
   private val recordingManager by inject<RecordingManager>()
-  private val mainActivityClass by inject<Class<*>>(name = MAIN_ACTIVITY_CLASS)
+  private val mainActivityClass by inject<Class<*>>(named(MAIN_ACTIVITY_CLASS))
   private val sensorManager by inject<SensorManager>()
   private val vibrator by inject<Vibrator>()
   private val permissionChecker by inject<PermissionChecker>()
 
-  private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
+  private val stopOnScreenOffPref by inject<Pref<Boolean>>(named(PREF_STOP_ON_SCREEN_OFF))
   private val alwaysShowNotificationPref by inject<Pref<Boolean>>(
-      name = PREF_ALWAYS_SHOW_CONTROLS
+      named(PREF_ALWAYS_SHOW_CONTROLS)
   )
-  private val stopOnShakePref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SHAKE)
+  private val stopOnShakePref by inject<Pref<Boolean>>(named(PREF_STOP_ON_SHAKE))
 
   private val shakeListener = ShakeListener(sensorManager, vibrator) {
     stopRecording(false)

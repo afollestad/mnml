@@ -35,7 +35,8 @@ import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_VIDEO_BIT_RATE
 import com.afollestad.rxkprefs.RxkPrefs
 import com.afollestad.rxkprefs.rxkPrefs
-import org.koin.dsl.module.module
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 import java.io.File
 
 /** @author Aidan Follestad (@afollestad) */
@@ -44,72 +45,72 @@ val prefModule = module {
   single { rxkPrefs(get(), "settings") }
 
   // UI
-  factory(name = PREF_DARK_MODE) {
+  factory(named(PREF_DARK_MODE)) {
     get<RxkPrefs>().boolean(PREF_DARK_MODE, false)
   }
 
-  factory(name = PREF_DARK_MODE_AUTOMATIC) {
+  factory(named(PREF_DARK_MODE_AUTOMATIC)) {
     get<RxkPrefs>().boolean(PREF_DARK_MODE_AUTOMATIC, false)
   }
 
-  factory(name = PREF_DARK_MODE_START) {
+  factory(named(PREF_DARK_MODE_START)) {
     get<RxkPrefs>().string(PREF_DARK_MODE_START, "20:00")
   }
 
-  factory(name = PREF_DARK_MODE_END) {
+  factory(named(PREF_DARK_MODE_END)) {
     get<RxkPrefs>().string(PREF_DARK_MODE_END, "8:00")
   }
 
   // Quality
-  factory(name = PREF_FRAME_RATE) {
+  factory(named(PREF_FRAME_RATE)) {
     get<RxkPrefs>().integer(PREF_FRAME_RATE, 30)
   }
 
-  factory(name = PREF_RESOLUTION_WIDTH) {
+  factory(named(PREF_RESOLUTION_WIDTH)) {
     get<RxkPrefs>().integer(PREF_RESOLUTION_WIDTH, 0)
   }
 
-  factory(name = PREF_RESOLUTION_HEIGHT) {
+  factory(named(PREF_RESOLUTION_HEIGHT)) {
     get<RxkPrefs>().integer(PREF_RESOLUTION_HEIGHT, 0)
   }
 
-  factory(name = PREF_VIDEO_BIT_RATE) {
+  factory(named(PREF_VIDEO_BIT_RATE)) {
     get<RxkPrefs>().integer(PREF_VIDEO_BIT_RATE, 8_000_000)
   }
 
-  factory(name = PREF_AUDIO_BIT_RATE) {
+  factory(named(PREF_AUDIO_BIT_RATE)) {
     get<RxkPrefs>().integer(PREF_AUDIO_BIT_RATE, 128_000)
   }
 
   // Recording
-  factory(name = PREF_COUNTDOWN) {
+  factory(named(PREF_COUNTDOWN)) {
     get<RxkPrefs>().integer(PREF_COUNTDOWN, 3)
   }
 
-  factory(name = PREF_RECORDINGS_FOLDER) {
+  factory(named(PREF_RECORDINGS_FOLDER)) {
     val dcim = getExternalStoragePublicDirectory(DIRECTORY_DCIM)
     val default = File(dcim, "MNML Recordings")
     get<RxkPrefs>().string(PREF_RECORDINGS_FOLDER, default.absolutePath)
   }
 
-  factory(name = PREF_RECORD_AUDIO) {
+  factory(named(PREF_RECORD_AUDIO)) {
     get<RxkPrefs>().boolean(PREF_RECORD_AUDIO, false)
   }
 
   // Controls
-  factory(name = PREF_STOP_ON_SCREEN_OFF) {
+  factory(named(PREF_STOP_ON_SCREEN_OFF)) {
     get<RxkPrefs>().boolean(PREF_STOP_ON_SCREEN_OFF, true)
   }
 
-  factory(name = PREF_ALWAYS_SHOW_CONTROLS) {
+  factory(named(PREF_ALWAYS_SHOW_CONTROLS)) {
     get<RxkPrefs>().boolean(PREF_ALWAYS_SHOW_CONTROLS, false)
   }
 
-  factory(name = PREF_STOP_ON_SHAKE) {
+  factory(named(PREF_STOP_ON_SHAKE)) {
     get<RxkPrefs>().boolean(PREF_STOP_ON_SHAKE, true)
   }
 
-  factory(name = PREF_FLOATING_CONTROLS) {
+  factory(named(PREF_FLOATING_CONTROLS)) {
     get<RxkPrefs>().boolean(PREF_FLOATING_CONTROLS, false)
   }
 }

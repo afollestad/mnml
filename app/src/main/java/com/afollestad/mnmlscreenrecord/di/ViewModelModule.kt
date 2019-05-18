@@ -19,16 +19,16 @@ import com.afollestad.mnmlscreenrecord.common.Qualifiers.IO_DISPATCHER
 import com.afollestad.mnmlscreenrecord.common.Qualifiers.MAIN_DISPATCHER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_CONTROLS
 import com.afollestad.mnmlscreenrecord.ui.main.MainViewModel
-import org.koin.androidx.viewmodel.ext.koin.viewModel
-import org.koin.dsl.module.module
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
 /** @author Aidan Follestad (@afollestad) */
 val viewModelModule = module {
-
   viewModel {
     MainViewModel(
-        get(name = MAIN_DISPATCHER),
-        get(name = IO_DISPATCHER),
+        get(named(MAIN_DISPATCHER)),
+        get(named(IO_DISPATCHER)),
         get(),
         get(),
         get(),
@@ -36,7 +36,7 @@ val viewModelModule = module {
         get(),
         get(),
         get(),
-        get(name = PREF_ALWAYS_SHOW_CONTROLS)
+        get(named(PREF_ALWAYS_SHOW_CONTROLS))
     )
   }
 }

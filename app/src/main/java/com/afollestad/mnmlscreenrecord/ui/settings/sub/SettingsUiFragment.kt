@@ -29,6 +29,7 @@ import com.afollestad.mnmlscreenrecord.ui.settings.dialogs.TimeCallback
 import com.afollestad.mnmlscreenrecord.ui.settings.dialogs.TimePickerDialog
 import com.afollestad.rxkprefs.Pref
 import org.koin.android.ext.android.inject
+import org.koin.core.qualifier.named
 import java.text.DateFormat
 import java.util.Calendar
 import java.util.Calendar.HOUR_OF_DAY
@@ -38,10 +39,10 @@ import java.util.Locale
 /** @author Aidan Follestad (@afollestad) */
 class SettingsUiFragment : BaseSettingsFragment(), TimeCallback {
 
-  private val darkModePref by inject<Pref<Boolean>>(name = PREF_DARK_MODE)
-  private val darkModeAutoPref by inject<Pref<Boolean>>(name = PREF_DARK_MODE_AUTOMATIC)
-  private val darkModeStartPref by inject<Pref<String>>(name = PREF_DARK_MODE_START)
-  private val darkModeEndPref by inject<Pref<String>>(name = PREF_DARK_MODE_END)
+  private val darkModePref by inject<Pref<Boolean>>(named(PREF_DARK_MODE))
+  private val darkModeAutoPref by inject<Pref<Boolean>>(named(PREF_DARK_MODE_AUTOMATIC))
+  private val darkModeStartPref by inject<Pref<String>>(named(PREF_DARK_MODE_START))
+  private val darkModeEndPref by inject<Pref<String>>(named(PREF_DARK_MODE_END))
 
   override fun onCreatePreferences(
     savedInstanceState: Bundle?,
@@ -109,7 +110,7 @@ class SettingsUiFragment : BaseSettingsFragment(), TimeCallback {
     hour: Int,
     minute: Int
   ) {
-    val pref by inject<Pref<String>>(name = key)
+    val pref by inject<Pref<String>>(named(key))
     pref.set("$hour:$minute")
   }
 }

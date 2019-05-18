@@ -21,11 +21,11 @@ import android.content.Context.NOTIFICATION_SERVICE
 import com.afollestad.mnmlscreenrecord.common.misc.systemService
 import com.afollestad.mnmlscreenrecord.notifications.providers.NotificationChannelBuilder
 import com.afollestad.mnmlscreenrecord.notifications.providers.RealNotificationChannelBuilder
-import org.koin.dsl.module.module
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 /** @author Aidan Follestad (@afollestad) */
 val notificationsModule = module {
-
   factory<NotificationManager> {
     get<Application>().systemService(NOTIFICATION_SERVICE)
   }

@@ -30,13 +30,14 @@ import com.afollestad.mnmlscreenrecord.ui.settings.showNumberSelector
 import com.afollestad.mnmlscreenrecord.ui.settings.showOutputFolderSelector
 import com.afollestad.rxkprefs.Pref
 import org.koin.android.ext.android.inject
+import org.koin.core.qualifier.named
 
 /** @author Aidan Follestad (@afollestad) */
 class SettingsRecordingFragment : BaseSettingsFragment() {
 
-  private val countdownPref by inject<Pref<Int>>(name = PREF_COUNTDOWN)
-  private val recordAudioPref by inject<Pref<Boolean>>(name = PREF_RECORD_AUDIO)
-  internal val recordingsFolderPref by inject<Pref<String>>(name = PREF_RECORDINGS_FOLDER)
+  private val countdownPref by inject<Pref<Int>>(named(PREF_COUNTDOWN))
+  private val recordAudioPref by inject<Pref<Boolean>>(named(PREF_RECORD_AUDIO))
+  internal val recordingsFolderPref by inject<Pref<String>>(named(PREF_RECORDINGS_FOLDER))
 
   override fun onCreatePreferences(
     savedInstanceState: Bundle?,

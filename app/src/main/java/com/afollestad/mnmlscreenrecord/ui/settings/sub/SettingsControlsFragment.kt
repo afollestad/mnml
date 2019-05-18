@@ -32,21 +32,18 @@ import com.afollestad.mnmlscreenrecord.engine.permission.OverlayExplanationDialo
 import com.afollestad.mnmlscreenrecord.ui.settings.base.BaseSettingsFragment
 import com.afollestad.rxkprefs.Pref
 import org.koin.android.ext.android.inject
+import org.koin.core.qualifier.named
 
 /** @author Aidan Follestad (@afollestad) */
 class SettingsControlsFragment : BaseSettingsFragment(), OverlayExplanationCallback {
-  companion object {
-    private const val DRAW_OVER_OTHER_APP_PERMISSION = 68
-  }
 
   private val permissionChecker by inject<PermissionChecker>()
-
-  private val stopOnScreenOffPref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SCREEN_OFF)
+  private val stopOnScreenOffPref by inject<Pref<Boolean>>(named(PREF_STOP_ON_SCREEN_OFF))
   private val alwaysShowControlsPref by inject<Pref<Boolean>>(
-      name = PREF_ALWAYS_SHOW_CONTROLS
+      named(PREF_ALWAYS_SHOW_CONTROLS)
   )
-  private val stopOnShakePref by inject<Pref<Boolean>>(name = PREF_STOP_ON_SHAKE)
-  private val floatingControlsPref by inject<Pref<Boolean>>(name = PREF_FLOATING_CONTROLS)
+  private val stopOnShakePref by inject<Pref<Boolean>>(named(PREF_STOP_ON_SHAKE))
+  private val floatingControlsPref by inject<Pref<Boolean>>(named(PREF_FLOATING_CONTROLS))
 
   override fun onCreatePreferences(
     savedInstanceState: Bundle?,
@@ -134,5 +131,9 @@ class SettingsControlsFragment : BaseSettingsFragment(), OverlayExplanationCallb
         .distinctUntilChanged()
         .subscribe { stopOnShakeEntry.isChecked = it }
         .attachLifecycle(this)
+  }
+
+  companion object {
+    private const val DRAW_OVER_OTHER_APP_PERMISSION = 68
   }
 }

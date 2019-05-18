@@ -23,7 +23,9 @@ import com.afollestad.mnmlscreenrecord.common.providers.RealSdkProvider
 import com.afollestad.mnmlscreenrecord.common.providers.SdkProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import org.koin.dsl.module.module
+import org.koin.core.qualifier.named
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 object Qualifiers {
   const val MAIN_DISPATCHER = "main_dispatcher"
@@ -33,9 +35,9 @@ object Qualifiers {
 /** @author Aidan Follestad (@afollestad) */
 val commonModule = module {
 
-  factory<CoroutineDispatcher>(name = MAIN_DISPATCHER) { Dispatchers.Main }
+  factory<CoroutineDispatcher>(named(MAIN_DISPATCHER)) { Dispatchers.Main }
 
-  factory(name = IO_DISPATCHER) { Dispatchers.IO }
+  factory(named(IO_DISPATCHER)) { Dispatchers.IO }
 
   factory { RealPermissionChecker(get()) } bind PermissionChecker::class
 

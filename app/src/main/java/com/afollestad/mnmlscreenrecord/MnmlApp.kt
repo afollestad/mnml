@@ -30,7 +30,9 @@ import com.afollestad.mnmlscreenrecord.notifications.notificationsModule
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import org.koin.android.ext.android.inject
-import org.koin.android.ext.android.startKoin
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -47,18 +49,18 @@ class MnmlApp : Application() {
     Timber.plant(FabricTree())
     Fabric.with(this, Crashlytics())
 
-    val modules = listOf(
-        commonModule,
-        notificationsModule,
-        prefModule,
-        engineModule,
-        mainModule,
-        viewModelModule
-    )
-    startKoin(
-        androidContext = this,
-        modules = modules
-    )
+    startKoin {
+      androidLogger()
+      androidContext(this@MnmlApp)
+      modules(
+          commonModule,
+          notificationsModule,
+          prefModule,
+          engineModule,
+          mainModule,
+          viewModelModule
+      )
+    }
 
     val notifications by inject<Notifications>()
     notifications.createChannels()

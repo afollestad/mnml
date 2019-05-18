@@ -28,16 +28,17 @@ import com.afollestad.mnmlscreenrecord.ui.settings.base.BaseSettingsFragment
 import com.afollestad.mnmlscreenrecord.ui.settings.bitRateString
 import com.afollestad.rxkprefs.Pref
 import org.koin.android.ext.android.inject
+import org.koin.core.qualifier.named
 
 /** @author Aidan Follestad (@afollestad) */
 class SettingsQualityFragment : BaseSettingsFragment() {
 
-  private val frameRatePref by inject<Pref<Int>>(name = PREF_FRAME_RATE)
-  //private val resolutionWidthPref by inject<Pref<Int>>(name = PREF_RESOLUTION_WIDTH)
-  //private val resolutionHeightPref by inject<Pref<Int>>(name = PREF_RESOLUTION_HEIGHT)
-  private val videoBitRatePref by inject<Pref<Int>>(name = PREF_VIDEO_BIT_RATE)
-  private val audioBitRatePref by inject<Pref<Int>>(name = PREF_AUDIO_BIT_RATE)
-  private val recordAudioPref by inject<Pref<Boolean>>(name = PREF_RECORD_AUDIO)
+  private val frameRatePref by inject<Pref<Int>>(named(PREF_FRAME_RATE))
+  //private val resolutionWidthPref by inject<Pref<Int>>(named(PREF_RESOLUTION_WIDTH))
+  //private val resolutionHeightPref by inject<Pref<Int>>(named(PREF_RESOLUTION_HEIGHT))
+  private val videoBitRatePref by inject<Pref<Int>>(named(PREF_VIDEO_BIT_RATE))
+  private val audioBitRatePref by inject<Pref<Int>>(named(PREF_AUDIO_BIT_RATE))
+  private val recordAudioPref by inject<Pref<Boolean>>(named(PREF_RECORD_AUDIO))
 
   override fun onCreatePreferences(
     savedInstanceState: Bundle?,

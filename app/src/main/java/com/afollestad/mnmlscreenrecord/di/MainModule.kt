@@ -17,10 +17,11 @@ package com.afollestad.mnmlscreenrecord.di
 
 import com.afollestad.mnmlscreenrecord.engine.service.BackgroundService.Companion.MAIN_ACTIVITY_CLASS
 import com.afollestad.mnmlscreenrecord.ui.main.MainActivity
-import org.koin.dsl.module.module
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
 /** @author Aidan Follestad (@afollestad) */
 val mainModule = module {
 
-  single<Class<*>>(name = MAIN_ACTIVITY_CLASS) { MainActivity::class.java }
+  single<Class<*>>(named(MAIN_ACTIVITY_CLASS)) { MainActivity::class.java }
 }

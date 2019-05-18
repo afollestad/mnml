@@ -31,16 +31,17 @@ import com.afollestad.rxkprefs.Pref
 import io.reactivex.Observable.combineLatest
 import io.reactivex.functions.Function4
 import org.koin.android.ext.android.inject
+import org.koin.core.qualifier.named
 import timber.log.Timber.d as log
 
 /** @author Aidan Follestad (afollestad) */
 abstract class DarkModeSwitchActivity : AppCompatActivity() {
 
   private var isDarkModeEnabled: Boolean = false
-  private val darkModePref by inject<Pref<Boolean>>(name = PREF_DARK_MODE)
-  private val darkModeAutomaticPref by inject<Pref<Boolean>>(name = PREF_DARK_MODE_AUTOMATIC)
-  private val darkModeStartPref by inject<Pref<String>>(name = PREF_DARK_MODE_START)
-  private val darkModeEndPref by inject<Pref<String>>(name = PREF_DARK_MODE_END)
+  private val darkModePref by inject<Pref<Boolean>>(named(PREF_DARK_MODE))
+  private val darkModeAutomaticPref by inject<Pref<Boolean>>(named(PREF_DARK_MODE_AUTOMATIC))
+  private val darkModeStartPref by inject<Pref<String>>(named(PREF_DARK_MODE_START))
+  private val darkModeEndPref by inject<Pref<String>>(named(PREF_DARK_MODE_END))
 
   override fun onCreate(savedInstanceState: Bundle?) {
     isDarkModeEnabled = isDarkMode()
