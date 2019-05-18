@@ -38,6 +38,7 @@
         android:background="?android:selectableItemBackground"
         android:contentDescription="@string/cd_start_recording"
         android:src="@drawable/ic_record_32dp"
+        android:tint="@color/notification_icon_tint"
         />
 
     <ImageButton
@@ -48,6 +49,7 @@
         android:background="?android:selectableItemBackground"
         android:contentDescription="@string/cd_stop_recording"
         android:src="@drawable/ic_stop_32dp"
+        android:tint="@color/notification_icon_tint"
         />
 
     <ImageButton
@@ -57,6 +59,7 @@
         android:background="?android:selectableItemBackground"
         android:contentDescription="@string/cd_stop_service"
         android:src="@drawable/ic_close_32dp"
+        android:tint="@color/notification_icon_tint"
         />
 
   </LinearLayout>
