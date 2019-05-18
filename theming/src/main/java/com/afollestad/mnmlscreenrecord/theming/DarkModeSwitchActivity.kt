@@ -15,18 +15,14 @@
  */
 package com.afollestad.mnmlscreenrecord.theming
 
-import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.BuildCompat
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_AUTOMATIC
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_END
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_DARK_MODE_START
 import com.afollestad.mnmlscreenrecord.common.rx.attachLifecycle
-import com.afollestad.mnmlscreenrecord.theming.NightMode.DISABLED
-import com.afollestad.mnmlscreenrecord.theming.NightMode.ENABLED
-import com.afollestad.mnmlscreenrecord.theming.NightMode.UNKNOWN
 import com.afollestad.rxkprefs.Pref
 import io.reactivex.Observable.combineLatest
 import io.reactivex.functions.Function4
@@ -53,7 +49,8 @@ abstract class DarkModeSwitchActivity : AppCompatActivity() {
     val darkModeStart = darkModeStartPref.observe()
     val darkModeEnd = darkModeEndPref.observe()
 
-    if (getCurrentNightMode() == UNKNOWN) {
+    if (!BuildCompat.isAtLeastQ()) {
+      // Below Q, we do not base dark theming on the system dark mode
       combineLatest(darkMode, darkModeAutomatic, darkModeStart, darkModeEnd,
           Function4<Boolean, Boolean, String, String, DarkModeSettings> { on, auto, start, end ->
             DarkModeSettings(on, auto, start, end)
@@ -67,24 +64,11 @@ abstract class DarkModeSwitchActivity : AppCompatActivity() {
     }
   }
 
-  fun getCurrentNightMode(): NightMode {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-      return UNKNOWN
-    }
-    val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-    return when (currentNightMode) {
-      Configuration.UI_MODE_NIGHT_YES -> return ENABLED
-      Configuration.UI_MODE_NIGHT_NO -> return DISABLED
-      else -> UNKNOWN
-    }
-  }
-
   private fun isDarkMode(): Boolean {
-    val nightMode = getCurrentNightMode()
-    if (nightMode != UNKNOWN) {
-      return nightMode == ENABLED
+    if (BuildCompat.isAtLeastQ()) {
+      // Let the system handle it with resource qualifiers
+      return false
     }
-
     val settings = DarkModeSettings(
         on = darkModePref.get(),
         auto = darkModeAutomaticPref.get(),

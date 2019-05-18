@@ -1,0 +1,13 @@
+<resources>
+
+  <!-- These are both the same since the qualifier here is -night -->
+  <style name="AppTheme" parent="AppThemeParent.Dark">
+    <item name="android:navigationBarColor">@color/colorPrimaryDark_darkTheme</item>
+    <item name="android:windowLightNavigationBar">false</item>
+  </style>
+  <style name="AppTheme.Dark" parent="AppThemeParent.Dark">
+    <item name="android:navigationBarColor">@color/colorPrimaryDark_darkTheme</item>
+    <item name="android:windowLightNavigationBar">false</item>
+  </style>
+
+</resources>
