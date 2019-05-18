@@ -3,8 +3,8 @@ ext.versions = [
     minSdk              : 23,
     compileSdk          : 28,
     buildTools          : '28.0.3',
-    publishVersion      : '1.0.12',
-    publishVersionCode  : 28,
+    publishVersion      : '1.0.13',
+    publishVersionCode  : 29,
 
     // Plugins
     gradlePlugin        : '3.4.1',
@@ -36,7 +36,7 @@ ext.versions = [
     materialDialogs     : '3.0.0-alpha3',
     rxkPrefs            : '1.2.5',
     assent              : '2.3.0',
-    recyclical          : '0.9.1',
+    recyclical          : '1.0.0-RC1',
     inlineActivityResult: '0.1.0',
 
     // RxJava
