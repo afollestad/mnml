@@ -68,7 +68,10 @@ class SettingsUiFragment : BaseSettingsFragment(), TimeCallback {
 
     val darkModeAutomaticEntry = findPreference(PREF_DARK_MODE_AUTOMATIC) as SwitchPreference
     darkModeAutomaticEntry.setOnPreferenceChangeListener { _, newValue ->
-      darkModeAutoPref.set(newValue as Boolean)
+      if (newValue as Boolean) {
+        darkModeEntry.isChecked = true
+      }
+      darkModeAutoPref.set(newValue)
       true
     }
     darkModeAutoPref.observe()
@@ -88,7 +91,7 @@ class SettingsUiFragment : BaseSettingsFragment(), TimeCallback {
         .subscribe {
           val formattedTime = timeFormatter().format(currentDateWithTime(it))
           darkModeStartEntry.summary =
-              getString(R.string.setting_dark_mode_automatic_start_desc, formattedTime)
+            getString(R.string.setting_dark_mode_automatic_start_desc, formattedTime)
         }
         .attachLifecycle(this)
 
@@ -100,7 +103,7 @@ class SettingsUiFragment : BaseSettingsFragment(), TimeCallback {
         .subscribe {
           val formattedTime = timeFormatter().format(currentDateWithTime(it))
           darkModeEndEntry.summary =
-              getString(R.string.setting_dark_mode_automatic_end_desc, formattedTime)
+            getString(R.string.setting_dark_mode_automatic_end_desc, formattedTime)
         }
         .attachLifecycle(this)
   }
