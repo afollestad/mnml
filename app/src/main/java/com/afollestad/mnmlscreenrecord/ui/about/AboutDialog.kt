@@ -22,9 +22,13 @@ import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.mnmlscreenrecord.BuildConfig.VERSION_NAME
 import com.afollestad.mnmlscreenrecord.R
+import com.afollestad.mnmlscreenrecord.common.intent.UrlLauncher
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 /** @author Aidan Follestad (afollestad) */
 class AboutDialog : DialogFragment() {
+  private val urlLauncher by inject<UrlLauncher> { parametersOf(activity!!) }
 
   companion object {
     private const val TAG = "[ABOUT_DIALOG]"
@@ -43,11 +47,10 @@ class AboutDialog : DialogFragment() {
     val context = activity ?: throw IllegalStateException("Oh no!")
     return MaterialDialog(context)
         .title(text = getString(R.string.about_title, VERSION_NAME))
-        .message(
-            res = R.string.about_body,
-            html = true,
-            lineHeightMultiplier = 1.4f
-        )
+        .message(res = R.string.about_body) {
+          html { urlLauncher.viewUrl(it) }
+          lineSpacing(1.4f)
+        }
         .positiveButton(R.string.dismiss)
   }
 }
