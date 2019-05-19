@@ -34,13 +34,7 @@ class AboutDialog : DialogFragment() {
     private const val TAG = "[ABOUT_DIALOG]"
 
     /** Shows the about dialog inside of [context]. */
-    fun show(context: AppCompatActivity) {
-      val dialog = AboutDialog()
-      dialog.show(
-          context.supportFragmentManager,
-          TAG
-      )
-    }
+    fun show(context: AppCompatActivity) = AboutDialog().show(context.supportFragmentManager, TAG)
   }
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
