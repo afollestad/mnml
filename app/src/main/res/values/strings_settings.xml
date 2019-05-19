@@ -61,11 +61,17 @@
   <string name="setting_recordings_folder">Recordings Folder</string>
   <string name="setting_recordings_folder_desc">Recordings are saved to \"%1$s\"</string>
 
-  <string name="setting_show_touches">Show Touches</string>
+  <string name="setting_show_touches">Show Taps</string>
   <string name="setting_show_touches_desc">
-    MNML targets the latest versions of Android and Google now restricts access to this
-    setting, unfortunately. You can manually enable it from your phone\'s settings.
+    MNML targets the latest versions of Android, which restricts access to this
+    setting. You can manually enable it from your phone\'s settings.
   </string>
+  <string name="settings_show_touches_dev_options">Developer Mode Needed</string>
+  <string name="settings_show_touches_dev_options_desc">
+    You must put your phone into developer mode so that MNML can show you developer options.
+    Developer options allow you to enable \'Show Taps\' manually.
+  </string>
+  <string name="settings_show_touches_dev_options_how">Show Me How</string>
 
   <!-- Controls -->
   <string name="setting_category_controls">Controls</string>

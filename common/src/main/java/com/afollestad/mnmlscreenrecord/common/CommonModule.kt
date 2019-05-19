@@ -15,8 +15,11 @@
  */
 package com.afollestad.mnmlscreenrecord.common
 
+import android.app.Activity
 import com.afollestad.mnmlscreenrecord.common.Qualifiers.IO_DISPATCHER
 import com.afollestad.mnmlscreenrecord.common.Qualifiers.MAIN_DISPATCHER
+import com.afollestad.mnmlscreenrecord.common.intent.RealUrlLauncher
+import com.afollestad.mnmlscreenrecord.common.intent.UrlLauncher
 import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
 import com.afollestad.mnmlscreenrecord.common.permissions.RealPermissionChecker
 import com.afollestad.mnmlscreenrecord.common.providers.RealSdkProvider
@@ -42,4 +45,6 @@ val commonModule = module {
   factory { RealPermissionChecker(get()) } bind PermissionChecker::class
 
   factory { RealSdkProvider() } bind SdkProvider::class
+
+  factory { (activity: Activity) -> RealUrlLauncher(activity) } bind UrlLauncher::class
 }

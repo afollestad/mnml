@@ -15,12 +15,17 @@
  */
 package com.afollestad.mnmlscreenrecord.ui.settings.sub
 
+import android.content.Intent
 import android.content.pm.PackageManager.FEATURE_MICROPHONE
 import android.os.Bundle
+import android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS
 import androidx.preference.SwitchPreference
 import com.afollestad.assent.Permission.RECORD_AUDIO
 import com.afollestad.assent.runWithPermissions
+import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.mnmlscreenrecord.R
+import com.afollestad.mnmlscreenrecord.common.intent.UrlLauncher
+import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_COUNTDOWN
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORDINGS_FOLDER
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_RECORD_AUDIO
@@ -30,11 +35,14 @@ import com.afollestad.mnmlscreenrecord.ui.settings.showNumberSelector
 import com.afollestad.mnmlscreenrecord.ui.settings.showOutputFolderSelector
 import com.afollestad.rxkprefs.Pref
 import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 
 /** @author Aidan Follestad (@afollestad) */
 class SettingsRecordingFragment : BaseSettingsFragment() {
 
+  private val permissionChecker by inject<PermissionChecker>()
+  private val urlLauncher by inject<UrlLauncher> { parametersOf(activity!!) }
   private val countdownPref by inject<Pref<Int>>(named(PREF_COUNTDOWN))
   private val recordAudioPref by inject<Pref<Boolean>>(named(PREF_RECORD_AUDIO))
   internal val recordingsFolderPref by inject<Pref<String>>(named(PREF_RECORDINGS_FOLDER))
@@ -48,6 +56,21 @@ class SettingsRecordingFragment : BaseSettingsFragment() {
     setupCountdownPref()
     setupRecordAudioPref()
     setupRecordingsFolderPref()
+
+    findPreference("show_touches").setOnPreferenceClickListener {
+      if (permissionChecker.hasDeveloperOptions()) {
+        startActivity(Intent(ACTION_APPLICATION_DEVELOPMENT_SETTINGS))
+      } else {
+        MaterialDialog(activity!!).show {
+          title(R.string.settings_show_touches_dev_options)
+          message(R.string.settings_show_touches_dev_options_desc)
+          positiveButton(R.string.settings_show_touches_dev_options_how) {
+            urlLauncher.viewUrl(HOW_TO_DEV_OPTIONS_URL)
+          }
+        }
+      }
+      true
+    }
   }
 
   private fun setupCountdownPref() {
@@ -118,5 +141,10 @@ class SettingsRecordingFragment : BaseSettingsFragment() {
           )
         }
         .attachLifecycle(this)
+  }
+
+  private companion object {
+    private const val HOW_TO_DEV_OPTIONS_URL =
+      "https://developer.android.com/studio/debug/dev-options"
   }
 }

@@ -21,7 +21,6 @@ import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
 import androidx.preference.SwitchPreference
 import com.afollestad.mnmlscreenrecord.R
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
-import com.afollestad.mnmlscreenrecord.common.permissions.PermissionChecker
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_ALWAYS_SHOW_CONTROLS
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SCREEN_OFF
 import com.afollestad.mnmlscreenrecord.common.prefs.PrefNames.PREF_STOP_ON_SHAKE
@@ -34,8 +33,6 @@ import org.koin.core.qualifier.named
 
 /** @author Aidan Follestad (@afollestad) */
 class SettingsControlsFragment : BaseSettingsFragment(), OverlayExplanationCallback {
-
-  private val permissionChecker by inject<PermissionChecker>()
   private val stopOnScreenOffPref by inject<Pref<Boolean>>(named(PREF_STOP_ON_SCREEN_OFF))
   private val alwaysShowControlsPref by inject<Pref<Boolean>>(
       named(PREF_ALWAYS_SHOW_CONTROLS)

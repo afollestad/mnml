@@ -23,7 +23,6 @@ import android.content.Intent.ACTION_VIEW
 import android.content.Intent.EXTRA_STREAM
 import android.os.Bundle
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.Observer
 import com.afollestad.assent.Permission.WRITE_EXTERNAL_STORAGE
 import com.afollestad.assent.askForPermissions
@@ -31,8 +30,8 @@ import com.afollestad.inlineactivityresult.startActivityForResult
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.afollestad.materialdialogs.callbacks.onDismiss
-import com.afollestad.materialdialogs.utils.MDUtil.resolveColor
 import com.afollestad.mnmlscreenrecord.R
+import com.afollestad.mnmlscreenrecord.common.intent.UrlLauncher
 import com.afollestad.mnmlscreenrecord.common.misc.startActivity
 import com.afollestad.mnmlscreenrecord.common.misc.toUri
 import com.afollestad.mnmlscreenrecord.common.misc.toast
@@ -67,7 +66,9 @@ import kotlinx.android.synthetic.main.activity_main.fab
 import kotlinx.android.synthetic.main.activity_main.list
 import kotlinx.android.synthetic.main.include_appbar.toolbar
 import kotlinx.android.synthetic.main.list_item_recording.view.thumbnail
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlinx.android.synthetic.main.include_appbar.app_toolbar as appToolbar
 import kotlinx.android.synthetic.main.include_appbar.toolbar_title as toolbarTitle
 
@@ -75,6 +76,8 @@ import kotlinx.android.synthetic.main.include_appbar.toolbar_title as toolbarTit
 class MainActivity : DarkModeSwitchActivity(), OverlayExplanationCallback {
 
   private val viewModel by viewModel<MainViewModel>()
+  private val urlLauncher by inject<UrlLauncher> { parametersOf(this) }
+
   private val dataSource =
     emptySelectableDataSourceTyped<Recording>().apply {
       onSelectionChange {
@@ -191,7 +194,9 @@ class MainActivity : DarkModeSwitchActivity(), OverlayExplanationCallback {
     setOnMenuItemDebouncedClickListener { item ->
       when (item.itemId) {
         R.id.about -> AboutDialog.show(this@MainActivity)
-        R.id.provide_feedback -> viewUrl("https://github.com/afollestad/mnml/issues/new/choose")
+        R.id.provide_feedback -> urlLauncher.viewUrl(
+            "https://github.com/afollestad/mnml/issues/new/choose"
+        )
         R.id.settings -> startActivity<SettingsActivity>()
         R.id.share -> shareRecording(dataSource.getSelectedItems().single())
         R.id.delete -> {
@@ -258,19 +263,6 @@ class MainActivity : DarkModeSwitchActivity(), OverlayExplanationCallback {
       setDataAndType(uri, "video/*")
       putExtra(EXTRA_STREAM, uri)
     })
-  }
-
-  private fun viewUrl(url: String) {
-    val customTabsIntent = CustomTabsIntent.Builder()
-        .apply {
-          setToolbarColor(resolveColor(this@MainActivity, attr = R.attr.colorPrimary))
-        }
-        .build()
-    try {
-      customTabsIntent.launchUrl(this, url.toUri())
-    } catch (_: ActivityNotFoundException) {
-      toast(R.string.install_web_browser)
-    }
   }
 
   private fun checkForMediaProjectionAvailability() {

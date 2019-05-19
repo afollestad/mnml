@@ -24,6 +24,7 @@ dependencies {
 
   // Google/AndroidX
   api 'androidx.appcompat:appcompat:' + versions.androidxCore
+  api 'androidx.browser:browser:' + versions.androidxBrowser
   implementation 'androidx.recyclerview:recyclerview:' + versions.androidxRecyclerView
 
   // Koin
