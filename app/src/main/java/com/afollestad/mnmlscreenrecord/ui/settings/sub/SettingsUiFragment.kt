@@ -70,6 +70,9 @@ class SettingsUiFragment : BaseSettingsFragment(), TimeCallback {
     darkModeAutomaticEntry.setOnPreferenceChangeListener { _, newValue ->
       if (newValue as Boolean) {
         darkModeEntry.isChecked = true
+        darkModeEntry.isEnabled = false
+      } else {
+        darkModeEntry.isEnabled = true
       }
       darkModeAutoPref.set(newValue)
       true
