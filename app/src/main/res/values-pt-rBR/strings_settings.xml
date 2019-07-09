@@ -1,0 +1,106 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+  <!-- UI -->
+  <string name="setting_category_ui">UI</string>
+  <string name="setting_category_ui_desc">Modify the app\'s UI theming.</string>
+
+  <string name="setting_dark_mode">Modo Noturno</string>
+  <string name="setting_dark_mode_on">Dark mode is enabled.</string>
+  <string name="setting_dark_mode_off">Dark mode is disabled.</string>
+
+  <string name="setting_dark_mode_automatic">Automatic Dark Mode</string>
+  <string name="setting_dark_mode_automatic_on">Dark mode turns itself on and off based on the time of day.</string>
+  <string name="setting_dark_mode_automatic_off">Dark mode is only enabled when you switch it on and remains on until you switch it off.</string>
+
+  <string name="setting_dark_mode_automatic_start">Dark Mode Start</string>
+  <string name="setting_dark_mode_automatic_start_desc">Dark mode turns itself on at %1$s.</string>
+  <string name="setting_dark_mode_automatic_end">Dark Mode End</string>
+  <string name="setting_dark_mode_automatic_end_desc">Dark mode turns itself off at %1$s.</string>
+
+  <!-- Quality -->
+  <string name="setting_category_quality">Quality</string>
+  <string name="setting_category_quality_desc">Modify audio and video quality such as frame rate and bit rate.</string>
+
+  <string name="setting_bitrate">Video Bit Rate</string>
+  <string name="setting_bitrate_desc">Screen capture will record at %1$s</string>
+
+  <string name="setting_audio_bitrate">Audio Bit Rate</string>
+  <string name="setting_audio_bitrate_desc">Audio capture will record at %1$s</string>
+
+  <string name="setting_framerate">Frame Rate</string>
+  <string name="setting_framerate_desc" tools:ignore="PluralsCandidate">
+    Screen capture will record at %1$d frames per second.
+  </string>
+
+  <string name="setting_resolution">Resolution</string>
+  <string name="setting_resolution_desc">Recording resolution set to %1$dx%2$d.</string>
+  <string name="setting_resolution_current_screen">Recording resolution will match your screen resolution</string>
+  <string name="use_screen_resolution">Use screen resolution</string>
+
+  <!-- Recording -->
+  <string name="setting_category_recording">Recording</string>
+  <string name="setting_category_recording_desc">Modify recording behavior, such as a start countdown, the output folder, etc.</string>
+
+  <string name="setting_countdown">Countdown</string>
+  <string name="setting_countdown_disabled">Recording will begin immediately.</string>
+  <plurals name="setting_countdown_desc">
+    <item quantity="zero" translatable="false">@string/setting_countdown_disabled</item>
+    <item quantity="one">%1$d second before recording begins.</item>
+    <item quantity="other">%1$d seconds before recording begins.</item>
+  </plurals>
+  <string name="setting_countdown_zero_note">When set to 0, the countdown is disabled.</string>
+
+  <string name="setting_record_audio">Record Audio</string>
+  <string name="setting_record_audio_on">
+    Audio will be recorded from your microphone during capture. Google does not allow apps to
+    record internal audio.
+  </string>
+  <string name="setting_record_audio_off">Audio will not be recorded during capture. Note that Google does not allow internal audio to be recorded, only from your microphone.</string>
+  <string name="setting_record_audio_no_mic">Your device does not have a microphone and cannot record audio.</string>
+
+  <string name="setting_recordings_folder">Recordings Folder</string>
+  <string name="setting_recordings_folder_desc">Recordings are saved to \"%1$s\"</string>
+
+  <string name="setting_show_touches">Show Taps</string>
+  <string name="setting_show_touches_desc">
+    MNML targets the latest versions of Android, which restricts access to this
+    setting. You can manually enable it from your phone\'s settings.
+  </string>
+  <string name="settings_show_touches_dev_options">Developer Mode Needed</string>
+  <string name="settings_show_touches_dev_options_desc">
+    You must put your phone into developer mode so that MNML can show you developer options.
+    Developer options allow you to enable \'Show Taps\' manually.
+  </string>
+  <string name="settings_show_touches_dev_options_how">Show Me How</string>
+
+  <!-- Controls -->
+  <string name="setting_category_controls">Controls</string>
+  <string name="setting_category_controls_desc">Modify recording controls, such as stop on shake, stop on screen off, etc.</string>
+
+  <string name="setting_stop_on_screen_off">Stop on Screen Off</string>
+  <string name="setting_stop_on_screen_off_desc_on">
+    When your screen is turned off, any active screen recording will stop.
+  </string>
+  <string name="setting_stop_on_screen_off_desc_off">
+    When your screen is turned off, nothing special will happen.
+  </string>
+
+  <string name="setting_stop_on_shake">Stop on Shake</string>
+  <string name="setting_stop_on_shake_on">
+    Shaking your device will stop any active screen recording.
+  </string>
+  <string name="setting_stop_on_shake_off">
+    Shaking your device won\'t do anything special.
+  </string>
+
+  <string name="setting_always_show_controls">Always Show Controls</string>
+  <string name="setting_always_show_controls_on">
+    Controls such as the notification &amp; the floating button are shown when the app is launched,
+    and won\'t go away until you dismiss the notification or floating button.
+  </string>
+  <string name="setting_always_show_controls_off">Controls are only shown when capture is in-progress.</string>
+
+  <!-- Misc -->
+  <string name="select">Select</string>
+
+</resources>
