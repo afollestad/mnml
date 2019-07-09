@@ -2,105 +2,104 @@
 
   <!-- UI -->
   <string name="setting_category_ui">UI</string>
-  <string name="setting_category_ui_desc">Modify the app\'s UI theming.</string>
+  <string name="setting_category_ui_desc">Modifica o tema da interface.</string>
 
   <string name="setting_dark_mode">Modo Noturno</string>
-  <string name="setting_dark_mode_on">Dark mode is enabled.</string>
-  <string name="setting_dark_mode_off">Dark mode is disabled.</string>
+  <string name="setting_dark_mode_on">Modo Noturno está habilitado.</string>
+  <string name="setting_dark_mode_off">Modo Noturno está desabilitado.</string>
 
-  <string name="setting_dark_mode_automatic">Automatic Dark Mode</string>
-  <string name="setting_dark_mode_automatic_on">Dark mode turns itself on and off based on the time of day.</string>
-  <string name="setting_dark_mode_automatic_off">Dark mode is only enabled when you switch it on and remains on until you switch it off.</string>
+  <string name="setting_dark_mode_automatic">Modo Noturno Automático</string>
+  <string name="setting_dark_mode_automatic_on">O modo noturno é ativado ou desativado automaticamente baseado na hora do dia.</string>
+  <string name="setting_dark_mode_automatic_off">O modo noturno apenas é ativado quando você o liga e permanece ativado até que você o desative.</string>
 
-  <string name="setting_dark_mode_automatic_start">Dark Mode Start</string>
-  <string name="setting_dark_mode_automatic_start_desc">Dark mode turns itself on at %1$s.</string>
-  <string name="setting_dark_mode_automatic_end">Dark Mode End</string>
-  <string name="setting_dark_mode_automatic_end_desc">Dark mode turns itself off at %1$s.</string>
+  <string name="setting_dark_mode_automatic_start">Início do Modo Noturno</string>
+  <string name="setting_dark_mode_automatic_start_desc">O Modo Noturno inicia ás %1$s.</string>
+  <string name="setting_dark_mode_automatic_end">Fim do Modo Noturno</string>
+  <string name="setting_dark_mode_automatic_end_desc">>O Modo Noturno termina ás %1$s.</string>
 
   <!-- Quality -->
-  <string name="setting_category_quality">Quality</string>
-  <string name="setting_category_quality_desc">Modify audio and video quality such as frame rate and bit rate.</string>
+  <string name="setting_category_quality">Qualidade</string>
+  <string name="setting_category_quality_desc">Modifica a qualidade de áudio e vídeo como frame rate e bit rate.</string>
 
-  <string name="setting_bitrate">Video Bit Rate</string>
-  <string name="setting_bitrate_desc">Screen capture will record at %1$s</string>
+  <string name="setting_bitrate">Bit Rate do vídeo</string>
+  <string name="setting_bitrate_desc">Captura da tela será feita em %1$s</string>
 
-  <string name="setting_audio_bitrate">Audio Bit Rate</string>
-  <string name="setting_audio_bitrate_desc">Audio capture will record at %1$s</string>
+  <string name="setting_audio_bitrate">Bit Rate do áudio</string>
+  <string name="setting_audio_bitrate_desc">Captura do áudio será feita em %1$s</string>
 
   <string name="setting_framerate">Frame Rate</string>
   <string name="setting_framerate_desc" tools:ignore="PluralsCandidate">
-    Screen capture will record at %1$d frames per second.
+    Captura da tela será feita em %1$d quadros por segundo.
   </string>
 
-  <string name="setting_resolution">Resolution</string>
-  <string name="setting_resolution_desc">Recording resolution set to %1$dx%2$d.</string>
-  <string name="setting_resolution_current_screen">Recording resolution will match your screen resolution</string>
-  <string name="use_screen_resolution">Use screen resolution</string>
+  <string name="setting_resolution">Resolução</string>
+  <string name="setting_resolution_desc">Configurar resolução da gravação para %1$dx%2$d.</string>
+  <string name="setting_resolution_current_screen">A gravação será feita na resolução da sua tela</string>
+  <string name="use_screen_resolution">Usar resolução da tela</string>
 
   <!-- Recording -->
-  <string name="setting_category_recording">Recording</string>
-  <string name="setting_category_recording_desc">Modify recording behavior, such as a start countdown, the output folder, etc.</string>
+  <string name="setting_category_recording">Gravação</string>
+  <string name="setting_category_recording_desc">Modifica o comportamento da gravação, Contagem regressiva para início, local de armazenamento, etc.</string>
 
-  <string name="setting_countdown">Countdown</string>
-  <string name="setting_countdown_disabled">Recording will begin immediately.</string>
+  <string name="setting_countdown">Contagem regressiva</string>
+  <string name="setting_countdown_disabled">Gravação será feita imediatamente.</string>
   <plurals name="setting_countdown_desc">
     <item quantity="zero" translatable="false">@string/setting_countdown_disabled</item>
-    <item quantity="one">%1$d second before recording begins.</item>
-    <item quantity="other">%1$d seconds before recording begins.</item>
+    <item quantity="one">%1$d segundo antes da gravação começar.</item>
+    <item quantity="other">%1$d segundos antes da gravação começar.</item>
   </plurals>
-  <string name="setting_countdown_zero_note">When set to 0, the countdown is disabled.</string>
+  <string name="setting_countdown_zero_note">Se definido como 0, a contagem regressiva é desativada.</string>
 
-  <string name="setting_record_audio">Record Audio</string>
+  <string name="setting_record_audio">Gravação de Áudio</string>
   <string name="setting_record_audio_on">
-    Audio will be recorded from your microphone during capture. Google does not allow apps to
-    record internal audio.
+    O áudio será gravado a partir do seu microfone durante a captura. O Google não permite que aplicativos gravem o áudio interno.
   </string>
-  <string name="setting_record_audio_off">Audio will not be recorded during capture. Note that Google does not allow internal audio to be recorded, only from your microphone.</string>
-  <string name="setting_record_audio_no_mic">Your device does not have a microphone and cannot record audio.</string>
+  <string name="setting_record_audio_off">O áudio não será gravado durante a captura. Observe que o Google não permite que o áudio interno seja gravado, somente a partir do seu microfone.</string>
+  <string name="setting_record_audio_no_mic">Seu dispositivo não possui um microfone e não pode gravar o áudio.</string>
 
-  <string name="setting_recordings_folder">Recordings Folder</string>
-  <string name="setting_recordings_folder_desc">Recordings are saved to \"%1$s\"</string>
+  Aqui
+  <string name="setting_recordings_folder">Pasta das gravações</string>
+  <string name="setting_recordings_folder_desc">As gravações serão salvas em \"%1$s\"</string>
 
-  <string name="setting_show_touches">Show Taps</string>
+  <string name="setting_show_touches">Mostrar toques</string>
   <string name="setting_show_touches_desc">
-    MNML targets the latest versions of Android, which restricts access to this
-    setting. You can manually enable it from your phone\'s settings.
+    O app MNML tem como alvo as versões mais recentes do Android, o que limita o acesso a dessa
+    configuração. Você pode ativá-la manualmente nas configurações do seu telefone.
   </string>
-  <string name="settings_show_touches_dev_options">Developer Mode Needed</string>
+  <string name="settings_show_touches_dev_options">O modo desenvolvedor é necessário</string>
   <string name="settings_show_touches_dev_options_desc">
-    You must put your phone into developer mode so that MNML can show you developer options.
-    Developer options allow you to enable \'Show Taps\' manually.
+    Você deve colocar seu telefone em modo de desenvolvedor para que o MNML possa mostrar as opções do desenvolvedor.  As opções do desenvolvedor permitem que você ative \"Mostrar toques \" manualmente.
   </string>
-  <string name="settings_show_touches_dev_options_how">Show Me How</string>
+  <string name="settings_show_touches_dev_options_how">Me mostre como</string>
 
   <!-- Controls -->
-  <string name="setting_category_controls">Controls</string>
-  <string name="setting_category_controls_desc">Modify recording controls, such as stop on shake, stop on screen off, etc.</string>
+  <string name="setting_category_controls">Controles</string>
+  <string name="setting_category_controls_desc">Modifica os controles de gravação, como parar ao agitar, parar ao desligar a tela, etc.</string>
 
-  <string name="setting_stop_on_screen_off">Stop on Screen Off</string>
+  <string name="setting_stop_on_screen_off">Parar ao desligar a tela</string>
   <string name="setting_stop_on_screen_off_desc_on">
-    When your screen is turned off, any active screen recording will stop.
+    Quando a tela está apagada, qualquer gravação ativa na tela será interrompida.
   </string>
   <string name="setting_stop_on_screen_off_desc_off">
-    When your screen is turned off, nothing special will happen.
+    Quando sua tela está desligada, nada de especial vai acontecer.
   </string>
 
-  <string name="setting_stop_on_shake">Stop on Shake</string>
+  <string name="setting_stop_on_shake">Parar ao agitar</string>
   <string name="setting_stop_on_shake_on">
-    Shaking your device will stop any active screen recording.
+    Agitar o seu dispositivo irá parar qualquer gravação ativa.
   </string>
   <string name="setting_stop_on_shake_off">
     Shaking your device won\'t do anything special.
   </string>
 
-  <string name="setting_always_show_controls">Always Show Controls</string>
+  <string name="setting_always_show_controls">Sempre mostrar controles</string>
   <string name="setting_always_show_controls_on">
-    Controls such as the notification &amp; the floating button are shown when the app is launched,
-    and won\'t go away until you dismiss the notification or floating button.
+    Controles como notificação &amp; o botão flutuante é mostrado quando o aplicativo é iniciado,
+    e não desaparece até que você descarte a notificação ou o botão.
   </string>
-  <string name="setting_always_show_controls_off">Controls are only shown when capture is in-progress.</string>
+  <string name="setting_always_show_controls_off">Os controles são exibidos apenas quando a captura está em andamento.</string>
 
   <!-- Misc -->
-  <string name="select">Select</string>
+  <string name="select">Selecione</string>
 
 </resources>
