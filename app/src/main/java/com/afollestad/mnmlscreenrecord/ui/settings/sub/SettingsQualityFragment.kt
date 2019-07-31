@@ -34,8 +34,8 @@ import org.koin.core.qualifier.named
 class SettingsQualityFragment : BaseSettingsFragment() {
 
   private val frameRatePref by inject<Pref<Int>>(named(PREF_FRAME_RATE))
-  //private val resolutionWidthPref by inject<Pref<Int>>(named(PREF_RESOLUTION_WIDTH))
-  //private val resolutionHeightPref by inject<Pref<Int>>(named(PREF_RESOLUTION_HEIGHT))
+  // private val resolutionWidthPref by inject<Pref<Int>>(named(PREF_RESOLUTION_WIDTH))
+  // private val resolutionHeightPref by inject<Pref<Int>>(named(PREF_RESOLUTION_HEIGHT))
   private val videoBitRatePref by inject<Pref<Int>>(named(PREF_VIDEO_BIT_RATE))
   private val audioBitRatePref by inject<Pref<Int>>(named(PREF_AUDIO_BIT_RATE))
   private val recordAudioPref by inject<Pref<Boolean>>(named(PREF_RECORD_AUDIO))
