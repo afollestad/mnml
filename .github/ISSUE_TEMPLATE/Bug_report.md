@@ -6,7 +6,7 @@ about: Something is crashing or not working as intended
 
 *Please consider making a Pull Request if you are capable of doing so.*
 
-**Library Version:**
+**App Version:**
 
 2.x.x
  
