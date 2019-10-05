@@ -1,0 +1,15 @@
+<resources>
+
+  <string name="app_name" translatable="false">MNML Screen Recorder</string>
+  <string name="app_name_short" translatable="false">MNML</string>
+  <string name="app_name_short_withNumber" translatable="false">MNML (%1$d)</string>
+
+  <string name="recordings_empty_text">Você não tem nenhum vídeo gravado ainda…</string>
+
+  <string name="settings">Configurações</string>
+  <string name="provide_feedback">Feedback</string>
+
+  <string name="install_video_viewer">Por favor instale um vizualizador de fotos, como o Google Fotos.</string>
+  <string name="install_web_browser">Por favor instale um navegador Web, como o Google Chrome.</string>
+
+</resources>

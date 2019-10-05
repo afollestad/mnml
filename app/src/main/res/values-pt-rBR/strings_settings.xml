@@ -1,0 +1,105 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+  <!-- UI -->
+  <string name="setting_category_ui">UI</string>
+  <string name="setting_category_ui_desc">Modifica o tema da interface.</string>
+
+  <string name="setting_dark_mode">Modo Noturno</string>
+  <string name="setting_dark_mode_on">Modo Noturno está habilitado.</string>
+  <string name="setting_dark_mode_off">Modo Noturno está desabilitado.</string>
+
+  <string name="setting_dark_mode_automatic">Modo Noturno Automático</string>
+  <string name="setting_dark_mode_automatic_on">O modo noturno é ativado ou desativado automaticamente baseado na hora do dia.</string>
+  <string name="setting_dark_mode_automatic_off">O modo noturno apenas é ativado quando você o liga e permanece ativado até que você o desative.</string>
+
+  <string name="setting_dark_mode_automatic_start">Início do Modo Noturno</string>
+  <string name="setting_dark_mode_automatic_start_desc">O Modo Noturno inicia ás %1$s.</string>
+  <string name="setting_dark_mode_automatic_end">Fim do Modo Noturno</string>
+  <string name="setting_dark_mode_automatic_end_desc">>O Modo Noturno termina ás %1$s.</string>
+
+  <!-- Quality -->
+  <string name="setting_category_quality">Qualidade</string>
+  <string name="setting_category_quality_desc">Modifica a qualidade de áudio e vídeo como frame rate e bit rate.</string>
+
+  <string name="setting_bitrate">Bit Rate do vídeo</string>
+  <string name="setting_bitrate_desc">Captura da tela será feita em %1$s</string>
+
+  <string name="setting_audio_bitrate">Bit Rate do áudio</string>
+  <string name="setting_audio_bitrate_desc">Captura do áudio será feita em %1$s</string>
+
+  <string name="setting_framerate">Frame Rate</string>
+  <string name="setting_framerate_desc" tools:ignore="PluralsCandidate">
+    Captura da tela será feita em %1$d quadros por segundo.
+  </string>
+
+  <string name="setting_resolution">Resolução</string>
+  <string name="setting_resolution_desc">Configurar resolução da gravação para %1$dx%2$d.</string>
+  <string name="setting_resolution_current_screen">A gravação será feita na resolução da sua tela</string>
+  <string name="use_screen_resolution">Usar resolução da tela</string>
+
+  <!-- Recording -->
+  <string name="setting_category_recording">Gravação</string>
+  <string name="setting_category_recording_desc">Modifica o comportamento da gravação, Contagem regressiva para início, local de armazenamento, etc.</string>
+
+  <string name="setting_countdown">Contagem regressiva</string>
+  <string name="setting_countdown_disabled">Gravação será feita imediatamente.</string>
+  <plurals name="setting_countdown_desc">
+    <item quantity="zero" translatable="false">@string/setting_countdown_disabled</item>
+    <item quantity="one">%1$d segundo antes da gravação começar.</item>
+    <item quantity="other">%1$d segundos antes da gravação começar.</item>
+  </plurals>
+  <string name="setting_countdown_zero_note">Se definido como 0, a contagem regressiva é desativada.</string>
+
+  <string name="setting_record_audio">Gravação de Áudio</string>
+  <string name="setting_record_audio_on">
+    O áudio será gravado a partir do seu microfone durante a captura. O Google não permite que aplicativos gravem o áudio interno.
+  </string>
+  <string name="setting_record_audio_off">O áudio não será gravado durante a captura. Observe que o Google não permite que o áudio interno seja gravado, somente a partir do seu microfone.</string>
+  <string name="setting_record_audio_no_mic">Seu dispositivo não possui um microfone e não pode gravar o áudio.</string>
+
+  Aqui
+  <string name="setting_recordings_folder">Pasta das gravações</string>
+  <string name="setting_recordings_folder_desc">As gravações serão salvas em \"%1$s\"</string>
+
+  <string name="setting_show_touches">Mostrar toques</string>
+  <string name="setting_show_touches_desc">
+    O app MNML tem como alvo as versões mais recentes do Android, o que limita o acesso a dessa
+    configuração. Você pode ativá-la manualmente nas configurações do seu telefone.
+  </string>
+  <string name="settings_show_touches_dev_options">O modo desenvolvedor é necessário</string>
+  <string name="settings_show_touches_dev_options_desc">
+    Você deve colocar seu telefone em modo de desenvolvedor para que o MNML possa mostrar as opções do desenvolvedor.  As opções do desenvolvedor permitem que você ative \"Mostrar toques \" manualmente.
+  </string>
+  <string name="settings_show_touches_dev_options_how">Me mostre como</string>
+
+  <!-- Controls -->
+  <string name="setting_category_controls">Controles</string>
+  <string name="setting_category_controls_desc">Modifica os controles de gravação, como parar ao agitar, parar ao desligar a tela, etc.</string>
+
+  <string name="setting_stop_on_screen_off">Parar ao desligar a tela</string>
+  <string name="setting_stop_on_screen_off_desc_on">
+    Quando a tela está apagada, qualquer gravação ativa na tela será interrompida.
+  </string>
+  <string name="setting_stop_on_screen_off_desc_off">
+    Quando sua tela está desligada, nada de especial vai acontecer.
+  </string>
+
+  <string name="setting_stop_on_shake">Parar ao agitar</string>
+  <string name="setting_stop_on_shake_on">
+    Agitar o seu dispositivo irá parar qualquer gravação ativa.
+  </string>
+  <string name="setting_stop_on_shake_off">
+    Shaking your device won\'t do anything special.
+  </string>
+
+  <string name="setting_always_show_controls">Sempre mostrar controles</string>
+  <string name="setting_always_show_controls_on">
+    Controles como notificação &amp; o botão flutuante é mostrado quando o aplicativo é iniciado,
+    e não desaparece até que você descarte a notificação ou o botão.
+  </string>
+  <string name="setting_always_show_controls_off">Os controles são exibidos apenas quando a captura está em andamento.</string>
+
+  <!-- Misc -->
+  <string name="select">Selecione</string>
+
+</resources>

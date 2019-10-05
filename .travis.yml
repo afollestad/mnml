@@ -9,9 +9,13 @@ android:
     - android-24
     - android-28
     - sys-img-armeabi-v7a-android-24
+    - extra-android-support # because I'm use support library
+    - extra-android-m2repository # because I'm use support library
 
   licenses:
     - '.+'
+
+install: true
 
 env:
   global:
@@ -24,6 +28,7 @@ before_script:
   - emulator -avd test -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
-  -
+  - chmod +x gradlew
+
 script:
-  - ./gradlew build connectedCheck
+  - ./gradlew assembleRelease --stacktrace
