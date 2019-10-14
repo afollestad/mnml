@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="recordings_empty_text">У вас ещё нет записей…</string>
+
+    <string name="settings">Настройки</string>
+    <string name="provide_feedback">Обратная связь</string>
+
+    <string name="install_video_viewer">Установите видео плеер, например Google Photos.</string>
+    <string name="install_web_browser">Установите веб браузер, например Google Chrome.</string>
+
+</resources>

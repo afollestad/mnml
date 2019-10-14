@@ -23,6 +23,7 @@
 
   <string name="setting_bitrate">Video Bit Rate</string>
   <string name="setting_bitrate_desc">Screen capture will record at %1$s</string>
+  <string name="setting_bitrate_disabled">Android makes getting this to work hard. Disabled for now. https://github.com/afollestad/mnml</string>
 
   <string name="setting_audio_bitrate">Audio Bit Rate</string>
   <string name="setting_audio_bitrate_desc">Audio capture will record at %1$s</string>
