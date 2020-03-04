@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="quick_setting_name">Запись экрана</string>
+
+  <string name="overlay_permission_prompt">Разрешение на рисование поверх других приложений</string>
+  <string name="overlay_permission_prompt_desc">MNML требуется разрешение на рисование поверх других приложений для отображения таймера и элементов управленя.</string>
+
+  <string name="storage_permission_prompt">Необходимо разрешение на доступ к файлам</string>
+  <string name="storage_permission_prompt_desc">MNML требуется разрешение на доступ к файлам для сохранения записей.</string>
+
+  <string name="permission_denied_note">Вы не сможете пользоваться MNML пока не дадите это разрешение.</string>
+  <string name="okay">Понятно!</string>
+
+</resources>

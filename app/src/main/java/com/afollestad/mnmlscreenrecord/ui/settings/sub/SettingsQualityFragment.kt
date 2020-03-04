@@ -82,8 +82,7 @@ class SettingsQualityFragment : BaseSettingsFragment() {
   private fun setupResolutionPref() {
     val resolutionEntry = findPreference("resolution")
     resolutionEntry.isEnabled = false
-    resolutionEntry.summary =
-        "Android makes getting this to work hard. Disabled for now. https://github.com/afollestad/mnml"
+    resolutionEntry.summary = getString(R.string.setting_bitrate_disabled)
 
     /*
     resolutionEntry.setOnPreferenceClickListener {
