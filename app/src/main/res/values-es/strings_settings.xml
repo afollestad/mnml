@@ -1,0 +1,83 @@
+﻿<resources xmlns:tools="http://schemas.android.com/tools">
+
+  <!-- UI -->
+  <string name="setting_category_ui">Interfaz de usuario</string>
+  <string name="setting_category_ui_desc">Modifica la apariencia de la interfaz de usuario.</string>
+
+  <string name="setting_dark_mode">Modo oscuro</string>
+  <string name="setting_dark_mode_on">El modo oscuro está habilitado.</string>
+  <string name="setting_dark_mode_off">El modo oscuro está inhabilitado.</string>
+
+  <string name="setting_dark_mode_automatic">Modo oscuro automático</string>
+  <string name="setting_dark_mode_automatic_on">El modo oscuro se activará y desactivará según la hora del día.</string>
+  <string name="setting_dark_mode_automatic_off">El modo oscuro se habilitará solo cuando lo actives y permanecerá así hasta que lo desactives.</string>
+
+  <string name="setting_dark_mode_automatic_start">Hora de inicio del modo oscuro</string>
+  <string name="setting_dark_mode_automatic_start_desc">El modo oscuro se activará automáticamente a las %1$s.</string>
+  <string name="setting_dark_mode_automatic_end">Hora de finalización del modo oscuro</string>
+  <string name="setting_dark_mode_automatic_end_desc">El modo oscuro se desactivará automáticamente a las %1$s.</string>
+
+  <!-- Quality -->
+  <string name="setting_category_quality">Calidad</string>
+  <string name="setting_category_quality_desc">Modifica opciones de calidad de audio y video, como la tasa de cuadros y de bits.</string>
+
+  <string name="setting_bitrate">Tasa de bits de video</string>
+  <string name="setting_bitrate_desc">La captura de pantalla se realizará a %1$s</string>
+
+  <string name="setting_audio_bitrate">Tasa de bits de audio</string>
+  <string name="setting_audio_bitrate_desc">La captura de audio se realizará a %1$s</string>
+
+  <string name="setting_framerate">Tasa de cuadros</string>
+  <string name="setting_framerate_desc" tools:ignore="PluralsCandidate">
+    La captura de pantalla se grabará a %1$d cuadros por segundo.
+  </string>
+
+  <string name="setting_resolution">Resolución</string>
+  <string name="setting_resolution_desc">La resolución de grabación se configuró como %1$d × %2$d.</string>
+  <string name="setting_resolution_current_screen">La resolución de grabación se ajustará a la de tu pantalla.</string>
+  <string name="use_screen_resolution">Usar la resolución de la pantalla.</string>
+
+  <!-- Recording -->
+  <string name="setting_category_recording">Grabación</string>
+  <string name="setting_category_recording_desc">Modifica el comportamiento de las grabaciones, como la cuenta regresiva y la carpeta de salida, entre otras opciones.</string>
+
+  <string name="setting_countdown">Cuenta regresiva</string>
+  <string name="setting_countdown_disabled">Las grabaciones comenzarán de inmediato.</string>
+  <plurals name="setting_countdown_desc">
+    <item quantity="zero" translatable="false">@string/setting_countdown_disabled</item>
+    <item quantity="one">Las grabaciones comenzarán luego de %1$d segundo.</item>
+    <item quantity="other">Las grabaciones comenzarán luego de %1$d segundos.</item>
+  </plurals>
+  <string name="setting_countdown_zero_note">Si la configuras en 0, se inhabilitará.</string>
+
+  <string name="setting_record_audio">Grabar audio</string>
+  <string name="setting_record_audio_on">Se grabará el audio del micrófono durante la captura. Google no permite que las apps graben el audio interno.</string>
+  <string name="setting_record_audio_off">No se grabará ningún audio durante la captura. Ten en cuenta que Google no permite la grabación del audio interno, sino solo el del micrófono.</string>
+  <string name="setting_record_audio_no_mic">Tu dispositivo no tiene micrófono, por lo que no se puede grabar audio.</string>
+
+  <string name="setting_recordings_folder">Carpeta de capturas</string>
+  <string name="setting_recordings_folder_desc">Las capturas se guardarán en \"%1$s\"</string>
+
+  <string name="setting_show_touches">Mostrar toques en la pantalla</string>
+  <string name="setting_show_touches_desc">MNML se orienta a las versiones más recientes de Android. Google ahora limita el acceso a esta opción, por lo que deberás habilitarla manualmente en la configuración de tu dispositivo.</string>
+
+  <!-- Controls -->
+  <string name="setting_category_controls">Controles</string>
+  <string name="setting_category_controls_desc">Modifica los controles de grabación, como agitar el dispositivo para detener y detener la grabación cuando se apague la pantalla, entre otras opciones.</string>
+
+  <string name="setting_stop_on_screen_off">Detener la grabación cuando se apague la pantalla</string>
+  <string name="setting_stop_on_screen_off_desc_on">Si apagas la pantalla, se detendrá la captura de pantalla.</string>
+  <string name="setting_stop_on_screen_off_desc_off">Si apagas la pantalla, no sucederá nada.</string>
+
+  <string name="setting_stop_on_shake">Agitar el dispositivo para detener</string>
+  <string name="setting_stop_on_shake_on">Si agitas el dispositivo, se detendrá la captura de pantalla.</string>
+  <string name="setting_stop_on_shake_off">Si agitas el dispositivo, no sucederá nada.</string>
+
+  <string name="setting_always_show_controls">Mostrar siempre los controles</string>
+  <string name="setting_always_show_controls_on">Los controles, como la notificación y el botón flotante, se mostrarán cuando abras la aplicación y no desaparecerán hasta que los descartes.</string>
+  <string name="setting_always_show_controls_off">Se mostrarán los controles solo mientras estés capturando la pantalla.</string>
+
+  <!-- Misc -->
+  <string name="select">Seleccionar</string>
+
+</resources>
