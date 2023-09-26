@@ -1,0 +1,85 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+  <!-- UI -->
+  <string name="setting_category_ui">Интерфейс</string>
+  <string name="setting_category_ui_desc">Изменить тему оформленя.</string>
+
+  <string name="setting_dark_mode">Тёмная тема</string>
+  <string name="setting_dark_mode_on">Тёмная тема выключена.</string>
+  <string name="setting_dark_mode_off">Тёмная тема включена.</string>
+
+  <string name="setting_dark_mode_automatic">Автоматическая тёмная тема</string>
+  <string name="setting_dark_mode_automatic_on">Тёмная тема включается и выключается в зависимости от времени суток.</string>
+  <string name="setting_dark_mode_automatic_off">Тёмная тема включается и выключается переключателем.</string>
+
+  <string name="setting_dark_mode_automatic_start">Включение тёмной темы</string>
+  <string name="setting_dark_mode_automatic_start_desc">Тёмна тема включается в %1$s.</string>
+  <string name="setting_dark_mode_automatic_end">Выключение тёмной темы</string>
+  <string name="setting_dark_mode_automatic_end_desc">Тёмная тема выключается %1$s.</string>
+
+  <!-- Quality -->
+  <string name="setting_category_quality">Качество</string>
+  <string name="setting_category_quality_desc">Изменить настройки качества видео и звука, такие как частота кадров и бирейт.</string>
+
+  <string name="setting_bitrate">Битрейт видео</string>
+  <string name="setting_bitrate_desc">Видео будет записано с битрейтом %1$s</string>
+  <string name="setting_bitrate_disabled">Андроид не позваляет это сделать. Временно отключено. https://github.com/afollestad/mnml</string>
+
+  <string name="setting_audio_bitrate">Битрейт аудио</string>
+  <string name="setting_audio_bitrate_desc">Аудио будет записано с битрейтом %1$s</string>
+
+  <string name="setting_framerate">Частота кадров</string>
+  <string name="setting_framerate_desc">Видео будет записано с частотой %1$d кадров в секунду</string>
+
+  <string name="setting_resolution">Разрешение</string>
+  <string name="setting_resolution_desc">Разрешение записи — %1$dx%2$d.</string>
+  <string name="setting_resolution_current_screen">Разрешение записи бедет равно разрешению экрана</string>
+  <string name="use_screen_resolution">Использовать разрешение экрана</string>
+
+  <!-- Recording -->
+  <string name="setting_category_recording">Запись</string>
+  <string name="setting_category_recording_desc">Изменить настройки записи, такие как обратный отсчёт, директорию и т.д.</string>
+
+  <string name="setting_countdown">Обратный отсчёт</string>
+  <string name="setting_countdown_disabled">Запись начнётся немедленно.</string>
+  <plurals name="setting_countdown_desc">
+    <item quantity="one">Запись начнётся через %1$d секунду.</item>
+    <item quantity="few">Запись начнётся через %1$d секунды.</item>
+    <item quantity="many">Запись начнётся через %1$d секунд.</item>
+  </plurals>
+  <string name="setting_countdown_zero_note">«0» включает обратный отсчёт.</string>
+
+  <string name="setting_record_audio">Запись звука</string>
+  <string name="setting_record_audio_on">Звук будет записан с микрофона. Андроид не позволяет приложениям записывать звук системы.</string>
+  <string name="setting_record_audio_off">Запись звука выключена. Андроид не позволяет приложениям записывать звук системы, толбко с микрофона.</string>
+  <string name="setting_record_audio_no_mic">У вашего устройства нет микрофона. Запись звука невозможна.</string>
+
+  <string name="setting_recordings_folder">Директория для записей</string>
+  <string name="setting_recordings_folder_desc">Записи сохраняются в «%1$s»</string>
+
+  <string name="setting_show_touches">Показывать нажатия</string>
+  <string name="setting_show_touches_desc">Последние версии Андроида ограничивают доступ к этой функции. Вы должны вручную разрешить доступ в настройках телефона.</string>
+  <string name="settings_show_touches_dev_options">Необходмо включить режим разработчика</string>
+  <string name="settings_show_touches_dev_options_desc">Вы должны переключить телефон в режим разработчика чтобы опция записи нажатий стала доступна.</string>
+  <string name="settings_show_touches_dev_options_how">Показать как</string>
+
+  <!-- Controls -->
+  <string name="setting_category_controls">Управление</string>
+  <string name="setting_category_controls_desc">Изменить настройки управления, такие как остановка при встряхивании или выключении экрана и т.д.</string>
+
+  <string name="setting_stop_on_screen_off">Остановка при выключении экрана</string>
+  <string name="setting_stop_on_screen_off_desc_on">При выключении экрана запись будет остановлена.</string>
+  <string name="setting_stop_on_screen_off_desc_off">Запись не будет остановлена пни выключении экрана.</string>
+
+  <string name="setting_stop_on_shake">Остановка при встряхивании</string>
+  <string name="setting_stop_on_shake_on">Встряхивание устройства остановит запись.</string>
+  <string name="setting_stop_on_shake_off">Встряхивание устройства не повлияет на запись.</string>
+
+  <string name="setting_always_show_controls">Всегда показывать элементы управления</string>
+  <string name="setting_always_show_controls_on">Элементы управления (уведомление и кнопка) будут видны пока приложение запущено, и останутся на экране пока вы их не уберёте.</string>
+  <string name="setting_always_show_controls_off">Элементы управления будут видны только пока идёт запись.</string>
+
+  <!-- Misc -->
+  <string name="select">Выбрать</string>
+
+</resources>

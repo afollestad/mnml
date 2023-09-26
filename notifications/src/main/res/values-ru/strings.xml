@@ -1,0 +1,19 @@
+<resources>
+  <string name="app_name">MNML Screen Recorder</string>
+  <string name="app_name_short">MNML</string>
+
+  <string name="widget_service_notification_text">Сервис записи запущен. Нажмите чтобы открыть приложение.</string>
+
+  <string name="start_recording">Запись</string>
+  <string name="stop_recording">Стоп</string>
+  <string name="recording_notification_text">Идёт запись экрана…</string>
+  <string name="video_recorded_notification_text">Видео записано! Нажмите чтобы посмотреть или поделиться.</string>
+
+  <string name="share">Поделиться</string>
+  <string name="delete">Удалить</string>
+
+  <string name="cd_start_recording">Начать запись</string>
+  <string name="cd_stop_recording">Остановить запись</string>
+  <string name="cd_stop_service">Остановить сервис</string>
+
+</resources>
